@@ -6,7 +6,6 @@ class CommentRepository {
   }
 
   async initializeComments() {
-    // Retrieve movie from data storage
     return this.dataStorage.initializeComments();
   }
 
@@ -14,17 +13,25 @@ class CommentRepository {
     return this.dataStorage.getComments();
   }
   async getCommentsByMovieId(id) {
-    const comments = await this.dataStorage.getComments();
+    const comments = await this.dataStorage.getComments();    
     return comments.response.filter((comment) =>
       comment.movie_id === parseInt(id)
     );
   }
 
-  async addComment(comment) {
-    return await this.dataStorage.addComment(comment);
+  async addComment(id, content, author) {
+    const newComment = {
+      id: 11,
+      movieId: id,
+      content,
+      author,
+    };
+    await this.dataStorage.addComment(newComment);
+    const comments = await this.dataStorage.getComments();
+    return comments.response.filter((comment) =>
+      comment.id === parseInt(newComment.id)
+    );
   }
-
-
 
   async destroyDB() {
     return this.dataStorage.destroyDB();

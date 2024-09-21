@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const movies = require('../controllers/movies');
+const moviesController = require('../controllers/movies');
 const { validatePagination } = require('../middleware');
 
 
-router.get('/', validatePagination, movies.index);
+router.get('/', validatePagination, moviesController.index);
 
-router.get('/search', movies.searchMovies);
+router.get('/search', validatePagination, moviesController.searchMovies);
 
 router.route('/:id')
-    .get(movies.movieDetails)
+    .get(moviesController.movieDetails)
 
 router.route('/:id/comments')
-    .get(validatePagination, movies.getComments)
-    .post(movies.postComment)
+    .get(validatePagination, moviesController.getComments)
+    .post(moviesController.postComment)
 
 router.route('/:id/similar-movies')
-    .get(validatePagination, movies.fetchSimilarMovies)
+    .get(validatePagination, moviesController.fetchSimilarMovies)
 
 module.exports = router;

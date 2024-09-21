@@ -19,13 +19,13 @@ module.exports.index = async (req, res) => {
 // Search for movies
 module.exports.searchMovies = async (req, res) => {
   try {
-    const { q } = req.query;
-    if (q) {
-      const searchedMovies = await movieService.searchMovies(q);
+    const { query } = req.query;
+    if (query) {
+      const searchedMovies = await movieService.searchMovies(query);
       if (searchedMovies.length > 0) {
         res.status(200).json({ response: searchedMovies });
       } else {
-        res.status(404).json({ message: 'movie not found' });
+        res.status(404).json({ message: 'No movies match the search' });
       }
     }
   } catch (err) {
@@ -57,11 +57,13 @@ module.exports.getComments = async (req, res) => {
     const page = parseInt(req.query.page, 10);
     const limit = parseInt(req.query.limit, 10);
     const { id } = req.params;
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginatedComments = await movieService.getCommentsByMovieId(id, page, limit);
-    // console.log(paginatedComments);
-    res.status(200).json(paginatedComments);
+    const movie = await movieService.getMovieById(id);
+    if (movie) {
+      const paginatedComments = await movieService.getCommentsByMovieId(id, page, limit);
+      res.status(200).json(paginatedComments);
+    } else {
+      res.status(404).json({ message: 'movie not found' });
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: 'Internal Server Error' });
@@ -76,8 +78,8 @@ module.exports.postComment = async (req, res) => {
     if (!id || !content || !author) {
       return res.status(400).json({ message: 'Invalid Request' });
     }
-    await movieService.addComment(id, content, author);
-    res.status(201).json({ message: 'comment created successfully' });
+    const comment = await movieService.addComment(id, content, author);
+    res.status(201).json({ response: comment });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Internal Server Error' });
@@ -86,14 +88,24 @@ module.exports.postComment = async (req, res) => {
 };
 
 
+// Fetch similar movies
 module.exports.fetchSimilarMovies = async (req, res) => {
   try {
     const page = parseInt(req.query.page, 10);
     const limit = parseInt(req.query.limit, 10);
     const { id } = req.params;
-    const paginatedComments = await movieService.getSimilarMovies(id, page, limit);
-    console.log('HELP');
-    res.status(200).json(paginatedComments);
+    const movie = await movieService.getMovieById(id);
+    if (movie) {
+      const similarMovies = await movieService.getSimilarMovies(id, page, limit);
+      if (similarMovies.response.length) {
+        res.status(200).json(similarMovies);
+      } else {
+        res.status(404).json({ message: "No similar movies found" });
+      }
+    } else {
+      res.status(400).json({ message: 'Invalid movie id' });
+    }
+
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: 'Internal Server Error' });
