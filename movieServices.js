@@ -8,9 +8,11 @@ class MovieService {
     this.movieRepository = new MovieRepository();
     this.commentRepository = new CommentRepository;
   }
+
   async initializeMovies() {
     return this.movieRepository.initializeMovies();
   }
+  
   async initializeComments() {
     return this.commentRepository.initializeComments();
   }
@@ -41,7 +43,7 @@ class MovieService {
   }
 
   async getCommentsByMovieId(id, page, limit) {
-    const comments = await this.commentRepository.getCommentsByMovieId(id);    
+    const comments = await this.commentRepository.getCommentsByMovieId(id);
     return this.paginateData(comments, page, limit);
   }
 
@@ -66,14 +68,14 @@ class MovieService {
 
 
 
-  async searchMovies(query) {
-
+  async searchMovies(query, page, limit) {
     function levenshtein(a, b) {
       const matrix = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
 
       for (let i = 0; i <= a.length; i++) {
         matrix[i][0] = i;
       }
+
       for (let j = 0; j <= b.length; j++) {
         matrix[0][j] = j;
       }
@@ -88,6 +90,7 @@ class MovieService {
           );
         }
       }
+
       return matrix[a.length][b.length];
     }
 
@@ -106,7 +109,8 @@ class MovieService {
 
     // Combine both results (removing duplicates)
     const uniqueResults = [...new Set([...exactMatches, ...fuzzyMatches])];
-    return uniqueResults;
+
+    return this.paginateData(uniqueResults, page, limit);
   }
 
 

@@ -243,6 +243,7 @@ class DataStorage {
       }
     }
   }
+  
   async getComments() {
     const data = await fs.promises.readFile(this.filePath, 'utf8');
     return JSON.parse(data);
