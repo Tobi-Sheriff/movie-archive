@@ -18,15 +18,20 @@ module.exports.index = async (req, res) => {
 
 // Search for movies
 module.exports.searchMovies = async (req, res) => {
+  const { page, limit } = req.query;
+  const searchQuery = req.query.q || '';
+
+  if (searchQuery === '') {
+    return res.status(400).json({ error: 'Invalid search query' });
+  }
+
   try {
-    const { q } = req.query;
-    if (q) {
-      const searchedMovies = await movieService.searchMovies(q);
-      if (searchedMovies.length > 0) {
-        res.status(200).json({ response: searchedMovies });
-      } else {
-        res.status(404).json({ message: 'movie not found' });
-      }
+
+    const searchedMovies = await movieService.searchMovies(searchQuery, page, limit);
+    if (searchedMovies.response.length > 0) {
+      res.status(200).json(searchedMovies);
+    } else {
+      res.status(404).json({ message: 'No movie match the search' });
     }
   } catch (err) {
     console.log("Express Error");
@@ -37,30 +42,42 @@ module.exports.searchMovies = async (req, res) => {
 
 // Get a movie
 module.exports.movieDetails = async (req, res) => {
+  const { id } = req.params;
+
+  if (!Number.isInteger(parseInt(id, 10)) || parseInt(id, 10) <= 0) {
+    return res.status(400).json({ error: 'Invalid movie ID' });
+  }
+
   try {
-    const { id } = req.params;
     const movie = await movieService.getMovieById(id);
-    if (movie) {
-      res.status(200).json({ response: [movie] });
-    } else {
-      res.status(404).json({ message: 'movie not found' });
+    if (!movie) {
+      return res.status(404).json({ message: 'Movie ID not found' });
     }
+    res.status(200).json({ response: [movie] });
+
   } catch (error) {
     console.log(error)
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
 
 //  Get comments
 module.exports.getComments = async (req, res) => {
+  const page = parseInt(req.query.page, 10);
+  const limit = parseInt(req.query.limit, 10);
+  const { id } = req.params;
+
+  if (!Number.isInteger(parseInt(id, 10)) || parseInt(id, 10) <= 0) {
+    return res.status(400).json({ error: 'Invalid movie ID' });
+  }
+
   try {
-    const page = parseInt(req.query.page, 10);
-    const limit = parseInt(req.query.limit, 10);
-    const { id } = req.params;
-    const start = (page - 1) * limit;
-    const end = start + limit;
+    const movie = await movieService.getMovieById(id);
+    if (!movie) {
+      return res.status(404).json({ message: 'Movie ID not found' });
+    }
     const paginatedComments = await movieService.getCommentsByMovieId(id, page, limit);
-    // console.log(paginatedComments);
     res.status(200).json(paginatedComments);
   } catch (err) {
     console.log(err);
@@ -68,16 +85,24 @@ module.exports.getComments = async (req, res) => {
   }
 };
 
+
 // Post a comment
 module.exports.postComment = async (req, res) => {
+  const { id }= req.params;
+  const { content, author } = req.body;
+
+  if (!Number.isInteger(parseInt(id, 10)) || parseInt(id, 10) <= 0) {
+    return res.status(400).json({ error: 'Invalid movie ID' });
+  } else if (!content) {
+    return res.status(400).json({ error: 'Content cannot be empty' });
+  } else if(!author) {
+    return res.status(400).json({ error: 'Author name is required' });
+  }
+
+
   try {
-    const { id } = req.params;
-    const { content, author } = req.body;
-    if (!id || !content || !author) {
-      return res.status(400).json({ message: 'Invalid Request' });
-    }
-    await movieService.addComment(id, content, author);
-    res.status(201).json({ message: 'comment created successfully' });
+    const comment = await movieService.addComment(id, content, author);
+    res.status(201).json({ response: comment });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Internal Server Error' });
@@ -86,14 +111,23 @@ module.exports.postComment = async (req, res) => {
 };
 
 
+// Fetch similar movies
 module.exports.fetchSimilarMovies = async (req, res) => {
+  const page = parseInt(req.query.page, 10);
+  const limit = parseInt(req.query.limit, 10);
+  const { id } = req.params;
+
+  if (!Number.isInteger(parseInt(id, 10)) || parseInt(id, 10) <= 0) {
+    return res.status(400).json({ error: 'Invalid movie ID' });
+  }
+
   try {
-    const page = parseInt(req.query.page, 10);
-    const limit = parseInt(req.query.limit, 10);
-    const { id } = req.params;
-    const paginatedComments = await movieService.getSimilarMovies(id, page, limit);
-    console.log('HELP');
-    res.status(200).json(paginatedComments);
+    const movie = await movieService.getMovieById(id);
+    if (!movie) {
+      return res.status(404).json({ message: "Movie ID not found" });
+    }
+    const similarMovies = await movieService.getSimilarMovies(id, page, limit);
+    res.status(200).json(similarMovies);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: 'Internal Server Error' });

@@ -10,7 +10,6 @@ class DataStorage {
     try {
       await fs.promises.access(this.filePath);
     } catch (error) {
-      // console.log(' movies DB is created');
       const movies = {
         response: [
           {
@@ -135,7 +134,7 @@ class DataStorage {
             "title": "duplicate2",
             "image": "(link unavailable)",
             "year": 1000,
-            "genres": ["duplicate"],
+            "genres": ["diffDuplicate"],
             "likes": 100,
             "ratings": "1",
             "director": "duplicate",
@@ -152,7 +151,6 @@ class DataStorage {
     try {
       await fs.promises.access(this.filePath);
     } catch (error) {
-      // console.log('comments DB is created');
       const comments = {
         response: [
           {
@@ -235,7 +233,6 @@ class DataStorage {
   async getMovies() {
     try {
       const data = await fs.promises.readFile(this.filePath, 'utf8');
-      // console.log('JSON file contents:', data);
       return JSON.parse(data);
     } catch (err) {
       if (err) {
@@ -246,6 +243,7 @@ class DataStorage {
       }
     }
   }
+  
   async getComments() {
     const data = await fs.promises.readFile(this.filePath, 'utf8');
     return JSON.parse(data);
@@ -262,29 +260,11 @@ class DataStorage {
   }
 
 
-  async clearResponseArray() {
-    try {
-      await fs.promises.access(this.filePath);
-      const data = await fs.promises.readFile(this.filePath, 'utf8');
-      const jsonData = JSON.parse(data);
-      jsonData.response = []; // Clear the response array
-      await fs.promises.writeFile(this.filePath, JSON.stringify({ response: [] }, null, 2));
-    } catch (err) {
-      if (err.code === 'ENOENT') {
-        // File does not exist, create it with empty response array
-        await fs.promises.writeFile(this.filePath, JSON.stringify({ response: [] }, null, 2));
-      } else {
-        console.error(err);
-      }
-    }
-  }
 
   async destroyDB() {
     await fs.promises.unlink(this.filePath);
   }
-  // Implement other data operations
 }
-
 
 
 const instances = {};
@@ -296,9 +276,3 @@ module.exports = {
     return instances[filePath];
   },
 };
-
-// module.exports = { DataStorage };
-
-
-
-
