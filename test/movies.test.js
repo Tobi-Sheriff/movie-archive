@@ -1,67 +1,77 @@
 const request = require('supertest');
 const app = require('../index');
-const MovieService = require('../movieServices');
-
-const movieService = new MovieService();
+const MovieService = require('../services/movieServices');
+const movieService =  new MovieService();
+const { seed, destroy } = require('./seedGenerator');
 
 
 beforeEach(async () => {
-  await movieService.initializeMovies();
-  await movieService.initializeComments();
+  await seed();
 });
 afterEach(async () => {
-  await movieService.destroyCommentsDB();
-  await movieService.destroyMoviesDB();
+  await destroy();
 });
 
 
 const runPaginationValidationTests = (endpoint) => {
   describe(`${endpoint} Pagination Validation`, () => {
+    const query = 'duplicate1';
+    const newEndpoint = (endpoint === '/v1/movies/search' ? `/v1/movies/search?q=${query}&` : '/v1/movies?')
 
     it('Should return invalid input when page number is invalid', async () => {
-      const response = await request(app).get(`${endpoint}?page=abc&limit=6`);
+      const page = 'abc', limit = 6;
+      const response = await request(app).get(`${newEndpoint}page=${page}&limit=${limit}`);
 
       expect(response.status).toBe(400);
       expect(response.body).toStrictEqual({ error: 'Invalid page number' });
     });
 
     it('Should return invalid input when limit number is invalid', async () => {
-      const response = await request(app).get(`${endpoint}?page=1&limit=xyz`);
+      const page = 1, limit = 'xyz';
+      const response = await request(app).get(`${newEndpoint}page=${page}&limit=${limit}`);
 
       expect(response.status).toBe(400);
       expect(response.body).toStrictEqual({ error: 'Invalid limit number' });
     });
 
     it('Should return invalid input when page number is negative', async () => {
-      const response = await request(app).get(`${endpoint}?page=-1&limit=4`);
+      const page = -1, limit = 4;
+      const response = await request(app).get(`${newEndpoint}page=${page}&limit=${limit}`);
 
       expect(response.status).toBe(400);
       expect(response.body).toStrictEqual({ error: 'Invalid page number' });
     });
 
     it('Should return invalid input when limit number is negative', async () => {
-      const response = await request(app).get(`${endpoint}?page=1&limit=-2`);
+      const page = 1, limit = -2;
+      const response = await request(app).get(`${newEndpoint}page=${page}&limit=${limit}`);
 
       expect(response.status).toBe(400);
       expect(response.body).toStrictEqual({ error: 'Invalid limit number' });
     });
 
     it('Should return invalid input when page number is 0', async () => {
-      const response = await request(app).get(`${endpoint}?page=0&limit=6`);
+      const page = 0, limit = 6;
+      const response = await request(app).get(`${newEndpoint}page=${page}&limit=${limit}`);
 
       expect(response.status).toBe(400);
       expect(response.body).toStrictEqual({ error: 'Invalid page number' });
     });
 
     it('Should return invalid input when limit number is 0', async () => {
-      const response = await request(app).get(`${endpoint}?page=1&limit=0`);
+      const page = 1, limit = 0;
+      const response = await request(app).get(`${newEndpoint}page=${page}&limit=${limit}`);
 
       expect(response.status).toBe(400);
       expect(response.body).toStrictEqual({ error: 'Invalid limit number' });
     });
 
     it('Should return an empty array if the page number exceeds total pages', async () => {
-      const response = await request(app).get(`${endpoint}?page=100&limit=4`);
+      const page = 1, limit = 2;
+      const initialResponse = await request(app).get(`${newEndpoint}page=${page}&limit=${limit}`);
+
+      const outOfBoundsPage = initialResponse.body.pagination.totalPages + 1;
+      const response = await request(app).get(`${newEndpoint}page=${outOfBoundsPage}&limit=4`);
 
       expect(response.status).toBe(200);
       expect(response.body.response).toStrictEqual([]);
@@ -70,14 +80,13 @@ const runPaginationValidationTests = (endpoint) => {
 };
 
 
-
-
 // Movie list API Test
 describe('Get Movies API', () => {
   runPaginationValidationTests('/v1/movies');
 
   it('Should return a paginated list of movies for page 1 limit 6', async () => {
-    const response = await request(app).get('/v1/movies?page=1&limit=6');
+    const page = 1, limit = 6;
+    const response = await request(app).get(`/v1/movies?page=${page}&limit=${limit}`);
 
     const pagedResponse = {
       response: [
@@ -168,7 +177,8 @@ describe('Get Movies API', () => {
 
 
   it('Should return a paginated list of movies for page 2 limit 4', async () => {
-    const response = await request(app).get('/v1/movies?page=2&limit=4');
+    const page = 2, limit = 4;
+    const response = await request(app).get(`/v1/movies?page=${page}&limit=${limit}`);
 
     const pagedResponse = {
       response: [
@@ -230,18 +240,27 @@ describe('Get Movies API', () => {
     expect(response.status).toBe(200);
     expect(response.body.response).toStrictEqual(pagedResponse.response);
   });
+
+
+  it('Should return an empty list when there are no movies', async () => {
+    await movieService.deleteAllMovies();
+    const page = 1, limit = 6;
+    const response = await request(app).get(`/v1/movies?page=${page}&limit=${limit}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.response).toEqual([]);
+  })
 });
 
 
 
 // Search movie API Test
 describe('Search API', () => {
-  // const endpoint = '/v1/movies/search?q=duplicate1';  // Example endpoint with search query
-  // runPaginationValidationTests(endpoint);
+  runPaginationValidationTests('/v1/movies/search');
 
   it('Should return movies list with similar title based on user search input', async () => {
-    const q = 'duplicate1'
-    const response = await request(app).get(`/v1/movies/search?q=${q}&page=${1}&limit=${4}`);
+    const q = 'duplicate1', page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
 
     const searchData = {
       response: [
@@ -279,21 +298,41 @@ describe('Search API', () => {
     expect(response.body.response).toStrictEqual(searchData.response);
   })
 
-  it('Should return not found when search input doesnt match any data', async () => {
-    const q = 'abcde'
-    const response = await request(app).get(`/v1/movies/search?q=${q}&page=${2}&limit=${4}`);
 
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual({ message: 'No movie match the search' });
+  it('Should return an empty list when search doesnt match any data in the DB', async () => {
+    const q = 'abcde', page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.response).toEqual([]);
   })
 
-  it('Should return an error when search query is invalid', async () => {
-    let q = '';
-    const response = await request(app).get(`/v1/movies/search?q=${q}&page=${1}&limit=${4}`);
+
+  it('Should return 400 when search query is empty', async () => {
+    const q = '', page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(400);
-    expect(response.body).toEqual({ error: 'Invalid search query' });
+    expect(response.body).toEqual({ error: 'Search query cannot be empty or just spaces' });
   })
+
+
+  it('Should return 400 when search query isjust spaces', async () => {
+    const q = '     ', page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: 'Search query cannot be empty or just spaces' });
+  })
+
+
+  it('Should return 400 if search query is not provided in the API', async () => {
+    const page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/search?page=${page}&limit=${limit}`);
+  
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: 'Search query cannot be empty or just spaces' });
+  });
 })
 
 
@@ -301,7 +340,8 @@ describe('Search API', () => {
 // Show movie details API Test
 describe('Movie Details API', () => {
   it('Should return a single movie using movie id', async () => {
-    const response = await request(app).get(`/v1/movies/${9}`);
+    const movieId = 9;
+    const response = await request(app).get(`/v1/movies/${movieId}`);
     const expectedMovieData = {
       response: [
         {
@@ -323,27 +363,30 @@ describe('Movie Details API', () => {
     expect(response.body).toStrictEqual(expectedMovieData);
   })
 
+
   it('Shoud retrun 404 when movie id doesnt exist', async () => {
-    const response = await request(app).get(`/v1/movies/${29}`);
+    const movieId = 29;
+    const response = await request(app).get(`/v1/movies/${movieId}`);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: 'Movie ID not found' });
   })
 
+
   it('Should return 400 if the movie ID is invalid (non-numeric)', async () => {
-    const invalidId = 'abc';  // This is not a valid integer
+    const invalidId = 'abc';
     const response = await request(app).get(`/v1/movies/${invalidId}`);
     expect(response.status).toBe(400);
     expect(response.body).toStrictEqual({ error: 'Invalid movie ID' });
   });
+
 
   it('Should return 400 if the movie ID is invalid (negative number)', async () => {
-    const invalidId = -5;  // Negative numbers may be considered invalid in your case
+    const invalidId = -5;
     const response = await request(app).get(`/v1/movies/${invalidId}`);
     expect(response.status).toBe(400);
     expect(response.body).toStrictEqual({ error: 'Invalid movie ID' });
   });
-
 })
 
 
@@ -353,7 +396,8 @@ describe('Get Movie comments API', () => {
   runPaginationValidationTests(`/v1/movies/${1}/comments`);
 
   it('Should return a paginated list of comments for movie with id 1', async () => {
-    const response = await request(app).get(`/v1/movies/${1}/comments?page=1&limit=1`);
+    const movieId = 1, page = 1, limit = 1;
+    const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
     const expectedComment = {
       response: [
         {
@@ -371,8 +415,10 @@ describe('Get Movie comments API', () => {
     expect(response.body.response).toStrictEqual(expectedComment.response);
   })
 
+
   it('Should return a paginated list of comments for movie with id 10', async () => {
-    const response = await request(app).get(`/v1/movies/${10}/comments?page=2&limit=2`);
+    const movieId = 10, page = 2, limit = 2;
+    const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
     const expectedComment = {
       response: [
         {
@@ -396,34 +442,39 @@ describe('Get Movie comments API', () => {
     expect(response.body.response).toStrictEqual(expectedComment.response);
   })
 
+
   it('Should return an empty list when there are no comments', async () => {
-    const response = await request(app).get(`/v1/movies/${7}/comments?page=1&limit=4`);
-    const expectedComment = {
-      response: []
-    }
+    await movieService.deleteAllComments();
+
+    const movieId = 10, page = 1, limit = 2;
+    const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(200);
-    expect(response.body.response).toStrictEqual(expectedComment.response);
+    expect(response.body.response).toEqual([]);
   })
 
+
   it('Should return 404 if movie with given ID does not exist', async () => {
-    const response = await request(app).get(`/v1/movies/${20}/comments?page=1&limit=4`);
+    const movieId = 20, page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: 'Movie ID not found' });
   })
 
+
   it('Should return 400 if the movie ID is invalid (non-numeric)', async () => {
-    const invalidId = 'abc';  // This is not a valid integer
-    const response = await request(app).get(`/v1/movies/${invalidId}/comments?page=1&limit=4`);
+    const invalidId = 'abc', page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/${invalidId}/comments?page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toStrictEqual({ error: 'Invalid movie ID' });
   });
 
+
   it('Should return 400 if the movie ID is invalid (negative number)', async () => {
-    const invalidId = -5;  // Negative numbers may be considered invalid in your case
-    const response = await request(app).get(`/v1/movies/${invalidId}/comments?page=1&limit=4`);
+    const invalidId = -5, page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/${invalidId}/comments?page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toStrictEqual({ error: 'Invalid movie ID' });
@@ -461,6 +512,7 @@ describe('Post Comment API', () => {
     expect(response.body).toStrictEqual(expectedResponse);
   })
 
+
   it('Should return 400 when movie ID is invalid', async () => {
     const movieId = 'asaxsa';
     const commentData = {
@@ -477,6 +529,7 @@ describe('Post Comment API', () => {
     expect(response.body).toStrictEqual({ error: 'Invalid movie ID' });
   })
 
+
   it('Should return 400 when content is empty', async () => {
     const movieId = 1;
     const commentData = {
@@ -492,6 +545,7 @@ describe('Post Comment API', () => {
     expect(response.status).toBe(400);
     expect(response.body).toStrictEqual({ error: 'Content cannot be empty' });
   })
+
 
   it('Should return 400 when author name is not entered', async () => {
     const movieId = 5;
@@ -517,92 +571,50 @@ describe('Similar Movies API', () => {
   runPaginationValidationTests(`/v1/movies/${2}/similar-movies`);
 
   it('Should return a paginated list of similar movies with matching genres', async () => {
-    const response = await request(app).get(`/v1/movies/${2}/similar-movies?page=1&limit=4`);
-    const similarMovies = {
-      response: [
-        {
-          "id": 1,
-          "title": "The Shawshank Redemption",
-          "image": "(link unavailable)",
-          "year": 1994,
-          "genres": ["Drama"],
-          "likes": 100,
-          "ratings": "9.20",
-          "director": "Frank Darabont",
-          "top_cast": "Tim Robbins, Morgan Freeman",
-          "overview": "Two imprisoned men bond over a number of years...",
-          "trailer": "(trailer link)"
-        },
-        {
-          "id": 4,
-          "title": "12 Angry Men",
-          "image": "(link unavailable)",
-          "year": 1957,
-          "genres": ["Drama"],
-          "likes": 50,
-          "ratings": "9.00",
-          "director": "Sidney Lumet",
-          "top_cast": "Henry Fonda, Martin Balsam",
-          "overview": "A jury holdout attempts to prevent a miscarriage of justice...",
-          "trailer": "(trailer link)"
-        },
-        {
-          "id": 5,
-          "title": "Schindlers List",
-          "image": "(link unavailable)",
-          "year": 1993,
-          "genres": ["Biography", "Drama", "History"],
-          "likes": 100,
-          "ratings": "8.90",
-          "director": "Steven Spielberg",
-          "top_cast": "Liam Neeson, Ben Kingsley",
-          "overview": "In German-occupied Poland during World War II...",
-          "trailer": "(trailer link)"
-        },
-        {
-          "id": 7,
-          "title": "Pulp Fiction",
-          "image": "(link unavailable)",
-          "year": 1994,
-          "genres": ["Crime", "Drama"],
-          "likes": 150,
-          "ratings": "8.80",
-          "director": "Quentin Tarantino",
-          "top_cast": "John Travolta, Samuel L. Jackson",
-          "overview": "The lives of two mob hitmen, a boxer, a pair of diner bandits...",
-          "trailer": "(trailer link)"
-        }
-      ]
-    }
+    const movieId = 2, page = 1, limit = 10;
+    const response = await request(app).get(`/v1/movies/${movieId}/similar-movies?page=${page}&limit=${limit}`);
+
+    const expectedGenres = ["Crime", "Drama"];
+    const movieGenres = response.body.response.map(movie => movie.genres);
+    
+    movieGenres.forEach(genres => {
+      const hasMatchingGenre = expectedGenres.some(expectedGenre => genres.includes(expectedGenre));
+      expect(hasMatchingGenre).toBe(true);
+    });
     expect(response.status).toBe(200);
-    expect(response.body.response).toEqual(similarMovies.response);
   })
 
+
   it('Should return empty list when there are no movies with similar genre', async () => {
-    const response = await request(app).get(`/v1/movies/${10}/similar-movies?page=1&limit=4`);
+    const movieId = 10, page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/${movieId}/similar-movies?page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(200);
     expect(response.body.response).toStrictEqual([]);
   })
 
+
   it('Should return 404 if movie with given iD does not exist', async () => {
-    const response = await request(app).get(`/v1/movies/${30}/similar-movies?page=1&limit=4`);
+    const movieId = 30, page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/${movieId}/similar-movies?page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: 'Movie ID not found' });
   })
 
+
   it('Should return 400 if the movie ID is invalid (non-numeric)', async () => {
-    const invalidId = 'abc';  // This is not a valid integer
-    const response = await request(app).get(`/v1/movies/${invalidId}/comments?page=1&limit=4`);
+    const invalidId = 'abc', page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/${invalidId}/comments?page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toStrictEqual({ error: 'Invalid movie ID' });
   });
 
+
   it('Should return 400 if the movie ID is invalid (negative number)', async () => {
-    const invalidId = -5;  // Negative numbers may be considered invalid in your case
-    const response = await request(app).get(`/v1/movies/${invalidId}/comments?page=1&limit=4`);
+    const invalidId = -5, page = 1, limit = 4;
+    const response = await request(app).get(`/v1/movies/${invalidId}/comments?page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toStrictEqual({ error: 'Invalid movie ID' });

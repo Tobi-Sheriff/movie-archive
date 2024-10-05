@@ -1,21 +1,10 @@
-const MovieRepository = require('./movieRepository');
-const CommentRepository = require('./commentRepository');
-const { response } = require('.');
+const fs = require('fs');
 
-// movieService.js (business logic layer)
-class MovieService {
-  constructor() {
-    this.movieRepository = new MovieRepository();
-    this.commentRepository = new CommentRepository;
+class MovieRepository {
+  constructor(filePath) {
+    this.filePath = filePath;
   }
 
-  async initializeMovies() {
-    return this.movieRepository.initializeMovies();
-  }
-  
-  async initializeComments() {
-    return this.commentRepository.initializeComments();
-  }
 
   async paginateData(data, page, limit) {
     const totalItems = data.length;
@@ -38,37 +27,39 @@ class MovieService {
 
 
   async getMovies(page, limit) {
-    const movies = await this.movieRepository.getMovies();
-    return this.paginateData(movies.response, page, limit);
-  }
-
-  async getCommentsByMovieId(id, page, limit) {
-    const comments = await this.commentRepository.getCommentsByMovieId(id);
-    return this.paginateData(comments, page, limit);
-  }
-
-  async getComments() {
-    return await this.commentRepository.getComments();
+    try {
+      const data = await fs.promises.readFile(this.filePath, 'utf8');
+      const movies = JSON.parse(data);
+      return this.paginateData(movies.response, page, limit);
+    } catch (err) {
+      if (err) {
+        console.log(err);
+        return { response: [] }; // Return an empty response array if JSON parsing fails
+      } else {
+        throw err;
+      }
+    }
   }
 
 
   async getMovieById(id) {
-    const movies = await this.movieRepository.getMovies();
-    const searchResult = movies.response.find((movie) =>
-      movie.id === parseInt(id));
+    // const movies = await this.getMovies();
+    const data = await fs.promises.readFile(this.filePath, 'utf8');
+    const movies = JSON.parse(data);
+    const searchResult = movies.response.find((movie) => movie.id === parseInt(id));
     return searchResult;
   }
 
-  async addMovie(movie) {
-    return this.movieRepository.addMovie(movie);
-  }
-  async addComment(id, content, author) {
-    return await this.commentRepository.addComment(id, content, author);
-  }
 
+  async addMovie(movie) {
+    const movies = await fs.promises.writeFile(this.filePath, JSON.stringify(movie));
+    movies.response.push(movie);
+    return this.dataStorage.addMovie(movies);
+  }
 
 
   async searchMovies(query, page, limit) {
+   //  The levenshtein distance algorithm
     function levenshtein(a, b) {
       const matrix = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
 
@@ -90,12 +81,12 @@ class MovieService {
           );
         }
       }
-
       return matrix[a.length][b.length];
     }
 
     const maxDistance = 2;
-    const movies = await this.movieRepository.getMovies();
+    const data = await fs.promises.readFile(this.filePath, 'utf8');
+    const movies = JSON.parse(data);
     const lowercaseQuery = query.toLowerCase();
 
     // Exact match
@@ -109,49 +100,36 @@ class MovieService {
 
     // Combine both results (removing duplicates)
     const uniqueResults = [...new Set([...exactMatches, ...fuzzyMatches])];
-
     return this.paginateData(uniqueResults, page, limit);
   }
 
 
   async getSimilarMovies(id, page, limit) {
-    const movies = await this.movieRepository.getMovies();
+    // const movies = await this.getMovies();
+    const data = await fs.promises.readFile(this.filePath, 'utf8');
+    const movies = JSON.parse(data);
     const targetMovie = movies.response.find((movie) => (movie.id) === parseInt(id));
     const targetGenre = targetMovie.genres;
     const similarMovies = movies.response.filter((movie) => {
       return (movie.id) !== parseInt(id) && movie.genres.some((genre) => targetGenre.includes(genre));
     });
-    const totalItems = similarMovies.length;
-    const totalPages = Math.ceil(totalItems / limit);
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-
-    const paginatedSimilarMovies = similarMovies.slice(startIndex, endIndex);
-    const pagination = {
-      totalItems,
-      totalPages,
-      pageSize: limit,
-      currentPage: page,
-    };
-    return {
-      response: paginatedSimilarMovies,
-      pagination,
-    };
+    return this.paginateData(similarMovies, page, limit);
   }
 
 
-  async clearResponseArray() {
-    return this.movieRepository.clearResponseArray();
+  async deleteAllMovies() {
+    try {
+      await fs.promises.writeFile(this.filePath, JSON.stringify({ response: [] }));
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  async destroyMoviesDB() {
-    return this.movieRepository.destroyDB();
-  }
 
-  async destroyCommentsDB() {
-    return this.commentRepository.destroyDB();
+  async destroyDB() {
+    await fs.promises.unlink(this.filePath);
   }
 }
 
 
-module.exports = MovieService;
+module.exports = MovieRepository;

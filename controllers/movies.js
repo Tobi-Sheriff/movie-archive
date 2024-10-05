@@ -1,8 +1,8 @@
-const MovieService = require('../movieServices');
+const MovieService = require('../services/movieServices');
 const movieService = new MovieService();
 
 
-// List movies
+// List Allmovies
 module.exports.index = async (req, res) => {
   try {
     const page = parseInt(req.query.page, 10);
@@ -18,21 +18,17 @@ module.exports.index = async (req, res) => {
 
 // Search for movies
 module.exports.searchMovies = async (req, res) => {
-  const { page, limit } = req.query;
-  const searchQuery = req.query.q || '';
+  const { q = '' } = req.query;
+  const page = parseInt(req.query.page, 10);
+  const limit = parseInt(req.query.limit, 10);
 
-  if (searchQuery === '') {
-    return res.status(400).json({ error: 'Invalid search query' });
+  if (q.trim() === '') {
+    return res.status(400).json({ error: 'Search query cannot be empty or just spaces' });
   }
 
   try {
-
-    const searchedMovies = await movieService.searchMovies(searchQuery, page, limit);
-    if (searchedMovies.response.length > 0) {
-      res.status(200).json(searchedMovies);
-    } else {
-      res.status(404).json({ message: 'No movie match the search' });
-    }
+    const searchedMovies = await movieService.searchMovies(q, page, limit);
+    res.status(200).json(searchedMovies);
   } catch (err) {
     console.log("Express Error");
     res.status(500).json({ message: 'Internal Server Error' });
@@ -88,14 +84,14 @@ module.exports.getComments = async (req, res) => {
 
 // Post a comment
 module.exports.postComment = async (req, res) => {
-  const { id }= req.params;
+  const { id } = req.params;
   const { content, author } = req.body;
 
   if (!Number.isInteger(parseInt(id, 10)) || parseInt(id, 10) <= 0) {
     return res.status(400).json({ error: 'Invalid movie ID' });
   } else if (!content) {
     return res.status(400).json({ error: 'Content cannot be empty' });
-  } else if(!author) {
+  } else if (!author) {
     return res.status(400).json({ error: 'Author name is required' });
   }
 
