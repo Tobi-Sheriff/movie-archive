@@ -1,5 +1,5 @@
-const MovieService = require('../services/movieServices');
-const movieService = new MovieService();
+const movieService = require('../services/movieServices');
+const commentService = require('../services/commentServices');
 
 
 // List Allmovies
@@ -73,7 +73,7 @@ module.exports.getComments = async (req, res) => {
     if (!movie) {
       return res.status(404).json({ message: 'Movie ID not found' });
     }
-    const paginatedComments = await movieService.getCommentsByMovieId(id, page, limit);
+    const paginatedComments = await commentService.getCommentsByMovieId(id, page, limit);
     res.status(200).json(paginatedComments);
   } catch (err) {
     console.log(err);
@@ -97,7 +97,7 @@ module.exports.postComment = async (req, res) => {
 
 
   try {
-    const comment = await movieService.addComment(id, content, author);
+    const comment = await commentService.postComment(id, content, author);
     res.status(201).json({ response: comment });
   } catch (error) {
     console.log(error);

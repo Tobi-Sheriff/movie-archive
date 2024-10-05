@@ -1,6 +1,4 @@
-const fs = require('fs');
-
-const moviesData = {
+module.exports.moviesData = {
   response: [
     {
       "id": 1,
@@ -135,7 +133,7 @@ const moviesData = {
   ]
 };
 
-const commentsData = {
+module.exports.commentsData = {
   response: [
     {
       "id": 1,
@@ -209,22 +207,3 @@ const commentsData = {
     }
   ]
 };
-
-
-module.exports.initializeMovies = async (filePath) => {
-  try {
-    await fs.promises.writeFile(filePath, JSON.stringify(moviesData, null, 2));
-    // console.log("Movies data seeded.");
-  } catch (error) {
-    console.error("Error seeding movies data: ", error);
-  }
-}
-
-module.exports.initializeComments = async (filePath) => {
-  try {
-    await fs.promises.writeFile(filePath, JSON.stringify(commentsData, null, 2));
-    // console.log("Comments data seeded.");
-  } catch (error) {
-    console.error("Error seeding comments data: ", error);
-  }
-}

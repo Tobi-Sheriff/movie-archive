@@ -1,21 +1,35 @@
-const commentRepository = require('../repositories/commentRepository');
+const CommentRepositoryAdapter = require('../repositories/commentRepository');
 
-class MovieService {
-  async getAllComments(id) {
-    return await commentRepository.getAllComments(id);
+class CommentService {
+
+  constructor() {
+    this.commentRepository = CommentRepositoryAdapter.getRepository();
+  }
+
+  async getComments() {
+    return await this.commentRepository.getComments();
   }
 
   async getCommentsByMovieId(id, page, limit) {
-    return await commentRepository.getCommentsByMovieId(id, page, limit);
+    return  await this.commentRepository.getCommentsByMovieId(id, page, limit);    
   }
 
-  async addComment(id, movie_id, contents, author) {
-    return await commentRepository.addComment(id, movie_id, contents, author);
+  async seedComment(comments) {
+    return await this.commentRepository.seedComment(comments);
   }
 
-  async deleteComment(id) {
-    return await commentRepository.deleteMovie(id);
+  async postComment(id, content, author) {
+    return await this.commentRepository.postComment(id, content, author);
   }
+
+  async deleteAllComments() {
+    await this.commentRepository.deleteAllComments();
+  }
+
+  async destroyComments() {
+    return this.commentRepository.destroyDB();
+  }
+
 }
 
-module.exports = new MovieService();
+module.exports = new CommentService();

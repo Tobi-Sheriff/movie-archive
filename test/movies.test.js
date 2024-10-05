@@ -1,15 +1,21 @@
 const request = require('supertest');
-const app = require('../index');
-const MovieService = require('../services/movieServices');
-const movieService =  new MovieService();
+const { app, server } = require('../index');
+const movieService = require('../services/movieServices');
+const commentService = require('../services/commentServices');
 const { seed, destroy } = require('./seedGenerator');
 
 
 beforeEach(async () => {
   await seed();
 });
+
 afterEach(async () => {
   await destroy();
+});
+
+// Close the server after all tests are finished
+afterAll((done) => {
+  server.close(done);  // Close the server to allow Jest to exit
 });
 
 
@@ -78,7 +84,6 @@ const runPaginationValidationTests = (endpoint) => {
     });
   });
 };
-
 
 // Movie list API Test
 describe('Get Movies API', () => {
@@ -252,8 +257,6 @@ describe('Get Movies API', () => {
   })
 });
 
-
-
 // Search movie API Test
 describe('Search API', () => {
   runPaginationValidationTests('/v1/movies/search');
@@ -335,8 +338,6 @@ describe('Search API', () => {
   });
 })
 
-
-
 // Show movie details API Test
 describe('Movie Details API', () => {
   it('Should return a single movie using movie id', async () => {
@@ -388,8 +389,6 @@ describe('Movie Details API', () => {
     expect(response.body).toStrictEqual({ error: 'Invalid movie ID' });
   });
 })
-
-
 
 // Get comments API Test
 describe('Get Movie comments API', () => {
@@ -444,7 +443,7 @@ describe('Get Movie comments API', () => {
 
 
   it('Should return an empty list when there are no comments', async () => {
-    await movieService.deleteAllComments();
+    await commentService.deleteAllComments();
 
     const movieId = 10, page = 1, limit = 2;
     const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
@@ -480,8 +479,6 @@ describe('Get Movie comments API', () => {
     expect(response.body).toStrictEqual({ error: 'Invalid movie ID' });
   });
 })
-
-
 
 // Post a comment API Test
 describe('Post Comment API', () => {
@@ -563,8 +560,6 @@ describe('Post Comment API', () => {
     expect(response.body).toStrictEqual({ error: 'Author name is required' });
   })
 })
-
-
 
 // Get similar movies API Test
 describe('Similar Movies API', () => {
