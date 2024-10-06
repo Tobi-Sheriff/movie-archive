@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { readJson } = require('../utils/fileUtils');
 
 class FileMovieRepository {
 
@@ -7,10 +8,14 @@ class FileMovieRepository {
     const env = process.env.NODE_ENV
 
     if (env == 'test') {
-        this.filePath = path.join(__dirname, '../test/movies.json');
+      this.filePath = path.join(__dirname, '../test/movies.json');
     } else {
-        this.filePath = path.join(__dirname, '../prod/movies.json');
+      this.filePath = path.join(__dirname, '../prod/movies.json');
     }
+  }
+
+  async _fetch_movies() {
+    return readJson(this.filePath);
   }
 
   async paginateData(data, page, limit) {
@@ -32,12 +37,20 @@ class FileMovieRepository {
     };
   }
 
+  async countMovies() {
+    const movies = await this._fetch_movies();
+    return movies.length;
+  }
+
+  async checkIfAnyMoviesExist() {
+    return await this.countMovies() > 0;
+  }
 
   async getMovies(page, limit) {
     try {
-      const data = await fs.promises.readFile(this.filePath, 'utf8');
-      const movies = JSON.parse(data);
-      return this.paginateData(movies.response, page, limit);
+      const movies = await this._fetch_movies();
+
+      return this.paginateData(movies, page, limit);
     } catch (err) {
       if (err) {
         console.log(err);
@@ -48,25 +61,26 @@ class FileMovieRepository {
     }
   }
 
-
   async getMovieById(id) {
-    // const movies = await this.getMovies();
-    const data = await fs.promises.readFile(this.filePath, 'utf8');
-    const movies = JSON.parse(data);
-    const searchResult = movies.response.find((movie) => movie.id === parseInt(id));
+    const movies = await this._fetch_movies();
+    const searchResult = movies.find((movie) => movie.id === parseInt(id));
     return searchResult;
   }
 
-
-  async seedMovie(movie) {
-    const movies = await fs.promises.writeFile(this.filePath, JSON.stringify(movie));
-    // movies.response.push(movie);
-    // return this.dataStorage.addMovie(movies);
+  async addMovie(movie) {
+    const movies = await this._fetch_movies();
+    await movies.push(movie);
+    await fs.promises.writeFile(this.filePath, JSON.stringify(movies));
   }
 
+  async addAllMovies(newMovies) {
+    const movies = await this._fetch_movies();
+    movies.push(...newMovies);
+    await fs.promises.writeFile(this.filePath, JSON.stringify(movies));
+  }
 
   async searchMovies(query, page, limit) {
-   //  The levenshtein distance algorithm
+    //  The levenshtein distance algorithm
     function levenshtein(a, b) {
       const matrix = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
 
@@ -92,15 +106,15 @@ class FileMovieRepository {
     }
 
     const maxDistance = 2;
-    const data = await fs.promises.readFile(this.filePath, 'utf8');
-    const movies = JSON.parse(data);
+    const movies = await this._fetch_movies();
+
     const lowercaseQuery = query.toLowerCase();
 
     // Exact match
-    const exactMatches = movies.response.filter((movie) => movie.title.toLowerCase().includes(lowercaseQuery));
+    const exactMatches = movies.filter((movie) => movie.title.toLowerCase().includes(lowercaseQuery));
 
     // Fuzzy match
-    const fuzzyMatches = movies.response.filter(movie => {
+    const fuzzyMatches = movies.filter(movie => {
       const distance = levenshtein(movie.title.toLowerCase(), lowercaseQuery);
       return distance <= maxDistance;
     });
@@ -110,26 +124,21 @@ class FileMovieRepository {
     return this.paginateData(uniqueResults, page, limit);
   }
 
-
   async getSimilarMovies(id, page, limit) {
     // const movies = await this.getMovies();
-    const data = await fs.promises.readFile(this.filePath, 'utf8');
-    const movies = JSON.parse(data);
-    const targetMovie = movies.response.find((movie) => (movie.id) === parseInt(id));
+    const movies = await this._fetch_movies();
+
+    const targetMovie = movies.find((movie) => (movie.id) === parseInt(id));
     const targetGenre = targetMovie.genres;
-    const similarMovies = movies.response.filter((movie) => {
+    const similarMovies = movies.filter((movie) => {
       return (movie.id) !== parseInt(id) && movie.genres.some((genre) => targetGenre.includes(genre));
     });
     return this.paginateData(similarMovies, page, limit);
   }
 
-
   async deleteAllMovies() {
     try {
-      const data = await fs.promises.readFile(this.filePath, 'utf8');
-      const jsonData = JSON.parse(data);
-      jsonData.response = [];
-      await fs.promises.writeFile(this.filePath, JSON.stringify(jsonData));
+      await fs.promises.writeFile(this.filePath, JSON.stringify([]));
     } catch (err) {
       console.error(err);
     }
@@ -139,6 +148,5 @@ class FileMovieRepository {
     await fs.promises.unlink(this.filePath);
   }
 }
-
 
 module.exports = FileMovieRepository;

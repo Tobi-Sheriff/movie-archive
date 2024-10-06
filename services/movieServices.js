@@ -7,6 +7,10 @@ class MovieService {
     this.movieRepository = MovieRepositoryAdapter.getRepository();
   }
 
+  async checkIfAnyMoviesExist() {
+    return await this.movieRepository.checkIfAnyMoviesExist();
+  }
+  
   async getMovies(page, limit) {
     return await this.movieRepository.getMovies(page, limit);
   }
@@ -15,8 +19,8 @@ class MovieService {
     return await this.movieRepository.getMovieById(id);
   }
 
-  async seedMovie(movie) {
-    return await this.movieRepository.seedMovie(movie);
+  async addAllMovies(movies) {
+    return await this.movieRepository.addAllMovies(movies);
   }
 
   async searchMovies(query, page, limit) {

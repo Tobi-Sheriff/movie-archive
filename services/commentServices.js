@@ -6,6 +6,10 @@ class CommentService {
     this.commentRepository = CommentRepositoryAdapter.getRepository();
   }
 
+  async checkIfAnyMoviesExist() {
+    return await this.movieRepository.checkIfAnyMoviesExist();
+  }
+  
   async getComments() {
     return await this.commentRepository.getComments();
   }
@@ -14,8 +18,8 @@ class CommentService {
     return  await this.commentRepository.getCommentsByMovieId(id, page, limit);    
   }
 
-  async seedComment(comments) {
-    return await this.commentRepository.seedComment(comments);
+  async addAllComments(comments) {
+    return await this.commentRepository.addAllComments(comments);
   }
 
   async postComment(id, content, author) {

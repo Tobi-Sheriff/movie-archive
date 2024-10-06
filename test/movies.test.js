@@ -3,6 +3,7 @@ const { app, server } = require('../index');
 const movieService = require('../services/movieServices');
 const commentService = require('../services/commentServices');
 const { seed, destroy } = require('./seedGenerator');
+const assert = require('assert');
 
 
 beforeEach(async () => {
@@ -75,8 +76,9 @@ const runPaginationValidationTests = (endpoint) => {
     it('Should return an empty array if the page number exceeds total pages', async () => {
       const page = 1, limit = 2;
       const initialResponse = await request(app).get(`${newEndpoint}page=${page}&limit=${limit}`);
-
-      const outOfBoundsPage = initialResponse.body.pagination.totalPages + 1;
+      assert(initialResponse.body.pagination.totalItems > 0, 'Database is empty');
+      
+      const outOfBoundsPage = initialResponse.body.pagination.totalItems + 1;
       const response = await request(app).get(`${newEndpoint}page=${outOfBoundsPage}&limit=4`);
 
       expect(response.status).toBe(200);
@@ -303,6 +305,9 @@ describe('Search API', () => {
 
 
   it('Should return an empty list when search doesnt match any data in the DB', async () => {
+    const check = await movieService.checkIfAnyMoviesExist();
+    assert(check, 'No movies in the DB');
+
     const q = 'abcde', page = 1, limit = 4;
     const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
 
@@ -320,7 +325,7 @@ describe('Search API', () => {
   })
 
 
-  it('Should return 400 when search query isjust spaces', async () => {
+  it('Should return 400 when search query is just spaces', async () => {
     const q = '     ', page = 1, limit = 4;
     const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
 
@@ -405,7 +410,6 @@ describe('Get Movie comments API', () => {
           "author": "Fantastic man",
           "content": "A thought-provoking sci-fi movie.",
           "created_at": "2024-08-12T15:11:27.765Z"
-          // "created_at": "Sun Sep 01 2024 16:03:49 GMT+0100 (West Africa Standard Time)"
         }
       ]
     }

@@ -12,23 +12,17 @@ module.exports.destroy = async () => {
   await movieService.destroyMovies();
 }
 
-async function initializeMovies () {
+async function initializeMovies() {
   try {
-      movieService.seedMovie(moviesData);
-    // for (let i = 0; i < moviesData.response.length; i++) {
-    //   movieService.addMovie(moviesData.response[i]);
-    // }
+    await movieService.addAllMovies(moviesData);
   } catch (error) {
     console.error("Error seeding movies data: ", error);
   }
 }
 
-async function initializeComments (){
+async function initializeComments() {
   try {
-    commentService.seedComment(commentsData);
-    // for (let comment in commentsData) {
-    //   movieService.addComment(comment);
-    // }
+    await commentService.addAllComments(commentsData);
   } catch (error) {
     console.error("Error seeding comments data: ", error);
   }

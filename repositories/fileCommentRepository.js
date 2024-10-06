@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { readJson } = require('../utils/fileUtils');
 
 class FileCommentRepository {
 
@@ -7,12 +8,16 @@ class FileCommentRepository {
     const env = process.env.NODE_ENV
 
     if (env == 'test') {
-        this.filePath = path.join(__dirname, '../test/comments.json');
+      this.filePath = path.join(__dirname, '../test/comments.json');
     } else {
-        this.filePath = path.join(__dirname, '../prod/comments.json');
+      this.filePath = path.join(__dirname, '../prod/comments.json');
     }
   }
 
+  
+  async _fetch_comments() {
+    return readJson(this.filePath);
+  }
 
   async paginateData(data, page, limit) {
     const totalItems = data.length;
@@ -33,55 +38,59 @@ class FileCommentRepository {
     };
   }
 
+  async countMovies() {
+    const comments = await this._fetch_comments();
+    return comments.length;
+  }
 
-  async getComments() {
-    const data = await fs.promises.readFile(this.filePath, 'utf8');
-    return JSON.parse(data);
+  async checkIfAnyMoviesExist() {
+    return this.countMovies > 0;
   }
 
   async getCommentsByMovieId(id, page, limit) {
-    const comments = await this.getComments();    
-    const movieComments = comments.response.filter((comment) =>
+    const comments = await this._fetch_comments();
+
+    const movieComments = comments.filter((comment) =>
       comment.movie_id === parseInt(id)
     );
     return this.paginateData(movieComments, page, limit);
   }
 
-  async seedComment(movie) {
-    await fs.promises.writeFile(this.filePath, JSON.stringify(movie));
+  // async seedComment(comments) {
+  //   await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
+  // }
+  async addAllComments(newComments) {
+    const comments = await this._fetch_comments();
+    comments.push(...newComments);
+    await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
   }
 
   async postComment(id, content, author) {
+    const comments = await this._fetch_comments();
     const newComment = {
-      id: 11,
+      id: comments.length + 1,
       movieId: id,
       content,
       author,
     };
-    const comments = await this.getComments();
-    comments.response.push(newComment);
+    comments.push(newComment);
     await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
-    return comments.response.filter((comment) =>
+    return comments.filter((comment) =>
       comment.id === parseInt(newComment.id)
     );
   }
 
   async deleteAllComments() {
     try {
-      const data = await fs.promises.readFile(this.filePath, 'utf8');
-      const jsonData = JSON.parse(data);
-      jsonData.response = [];
-      await fs.promises.writeFile(this.filePath, JSON.stringify(jsonData))
+      await fs.promises.writeFile(this.filePath, JSON.stringify([]))
     } catch (err) {
       console.error(err);
     }
   }
-  
 
   async destroyDB() {
     await fs.promises.unlink(this.filePath);
   }
 }
-
 
 module.exports = FileCommentRepository;

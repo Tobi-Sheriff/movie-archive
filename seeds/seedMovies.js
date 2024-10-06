@@ -1,5 +1,4 @@
-module.exports.moviesData = {
-  response: [
+module.exports.moviesData = [
     {
       "id": 1,
       "title": "The Shawshank Redemption",
@@ -130,11 +129,9 @@ module.exports.moviesData = {
       "overview": "duplicate...",
       "trailer": "(trailer link)"
     }
-  ]
-};
+  ];
 
-module.exports.commentsData = {
-  response: [
+module.exports.commentsData = [
     {
       "id": 1,
       "movie_id": 3,
@@ -205,5 +202,4 @@ module.exports.commentsData = {
       "content": "The best this month so far.",
       "created_at": "2024-15-12T15:19:00.765Z"
     }
-  ]
-};
+  ];
