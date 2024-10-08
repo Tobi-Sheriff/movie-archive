@@ -6,8 +6,6 @@ on:
     branches:
       - main  # or any branch you want the action to run on
   pull_request:
-    branches:
-      - main
   workflow_dispatch:  # Allows manual triggering from the GitHub Actions UI
 
 # Define the jobs to run
@@ -24,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # You can specify your Node.js version here
+          node-version: '20'  # You can specify your Node.js version here
 
       # Step 3: Install dependencies (npm ci is faster for clean installations)
       - name: Install Dependencies
