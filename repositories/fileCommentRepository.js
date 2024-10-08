@@ -56,9 +56,6 @@ class FileCommentRepository {
     return this.paginateData(movieComments, page, limit);
   }
 
-  // async seedComment(comments) {
-  //   await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
-  // }
   async addAllComments(newComments) {
     const comments = await this._fetch_comments();
     comments.push(...newComments);
