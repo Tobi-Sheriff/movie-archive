@@ -1,0 +1,33 @@
+name: Run Jest Tests
+
+# Triggers the workflow on push, pull request, or manual trigger (workflow_dispatch)
+on:
+  push:
+    branches:
+      - main  # or any branch you want the action to run on
+  pull_request:
+  workflow_dispatch:  # Allows manual triggering from the GitHub Actions UI
+
+# Define the jobs to run
+jobs:
+  test:
+    runs-on: ubuntu-latest  # GitHub action runner, can also be windows-latest or macos-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # You can specify your Node.js version here
+
+      # Step 3: Install dependencies (npm ci is faster for clean installations)
+      - name: Install Dependencies
+        run: npm ci
+
+      # Step 4: Run Jest tests
+      - name: Run Jest Tests
+        run: npm test
