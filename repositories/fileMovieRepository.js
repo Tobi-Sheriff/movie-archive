@@ -3,10 +3,8 @@ const path = require('path');
 const { readJson } = require('../utils/fileUtils');
 
 class FileMovieRepository {
-
   constructor() {
     const env = process.env.NODE_ENV
-
     if (env == 'test') {
       this.filePath = path.join(__dirname, '../test/movies.json');
     } else {
@@ -37,6 +35,16 @@ class FileMovieRepository {
     };
   }
 
+  async randomMovieId() {
+    const movies = await this._fetch_movies();
+    if (!movies) {
+      throw new Error("No movie in the DB");
+    }
+    let maxId = movies[movies.length - 1].id;
+
+    return Math.floor(Math.random() * maxId) + 1;
+  }
+
   async countMovies() {
     const movies = await this._fetch_movies();
     return movies.length;
@@ -54,7 +62,7 @@ class FileMovieRepository {
     } catch (err) {
       if (err) {
         console.log(err);
-        return { response: [] }; // Return an empty response array if JSON parsing fails
+        return { response: [] };
       } else {
         throw err;
       }
@@ -62,21 +70,49 @@ class FileMovieRepository {
   }
 
   async getMovieById(id) {
-    const movies = await this._fetch_movies();
-    const searchResult = movies.find((movie) => movie.id === parseInt(id));
-    return searchResult;
+    try {
+      const movies = await this._fetch_movies();
+      const searchResult = movies.find((movie) => movie.id === parseInt(id));
+      return searchResult;
+    } catch (err) {
+      console.error("Error getting a movie", err.stack);
+    }
   }
 
-  async addMovie(movie) {
-    const movies = await this._fetch_movies();
-    await movies.push(movie);
-    await fs.promises.writeFile(this.filePath, JSON.stringify(movies));
+  async addMovie(newMovie) {
+    try {
+      const movies = await this._fetch_movies();
+
+      const maxId = movies.length > 0 ? movies[movies.length - 1].id : 0;
+      newMovie.id = maxId + 1;
+
+      movies.push(newMovie);
+      await fs.promises.writeFile(this.filePath, JSON.stringify(movies, null, 2));
+
+      return newMovie;
+    } catch (err) {
+      console.error("Error adding movie", err.stack);
+    }
   }
 
   async addAllMovies(newMovies) {
-    const movies = await this._fetch_movies();
-    movies.push(...newMovies);
-    await fs.promises.writeFile(this.filePath, JSON.stringify(movies));
+    try {
+      const movies = await this._fetch_movies();
+      let maxId = movies.length > 0 ? movies[movieServices.length - 1].id : 0;
+
+      newMovies.forEach(movie => {
+        maxId += 1;
+        movie.id = maxId;
+      });
+
+      movies.push(...newMovies);
+
+      await fs.promises.writeFile(this.filePath, JSON.stringify(movies, null, 2));
+
+      return newMovies
+    } catch (err) {
+      console.error("Error adding moovies", err.stack);
+    }
   }
 
   async searchMovies(query, page, limit) {
@@ -107,7 +143,6 @@ class FileMovieRepository {
 
     const maxDistance = 2;
     const movies = await this._fetch_movies();
-
     const lowercaseQuery = query.toLowerCase();
 
     // Exact match
@@ -119,13 +154,11 @@ class FileMovieRepository {
       return distance <= maxDistance;
     });
 
-    // Combine both results (removing duplicates)
     const uniqueResults = [...new Set([...exactMatches, ...fuzzyMatches])];
     return this.paginateData(uniqueResults, page, limit);
   }
 
   async getSimilarMovies(id, page, limit) {
-    // const movies = await this.getMovies();
     const movies = await this._fetch_movies();
 
     const targetMovie = movies.find((movie) => (movie.id) === parseInt(id));
@@ -133,6 +166,7 @@ class FileMovieRepository {
     const similarMovies = movies.filter((movie) => {
       return (movie.id) !== parseInt(id) && movie.genres.some((genre) => targetGenre.includes(genre));
     });
+
     return this.paginateData(similarMovies, page, limit);
   }
 
@@ -142,10 +176,6 @@ class FileMovieRepository {
     } catch (err) {
       console.error(err);
     }
-  }
-
-  async destroyDB() {
-    await fs.promises.unlink(this.filePath);
   }
 }
 
