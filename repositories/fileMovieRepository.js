@@ -75,8 +75,19 @@ class FileMovieRepository {
 
   async addAllMovies(newMovies) {
     const movies = await this._fetch_movies();
+    
+    // Find the current max ID in the movies array to avoid conflicts
+    let maxId = movies.length > 0 ? Math.max(...movies.map(movie => movie.id)) : 0;
+
+    // Dynamically assign an ID to each new movie
+    newMovies.forEach(movie => {
+      maxId += 1; // Increment the ID for each new movie
+      movie.id = maxId;
+    });
+
     movies.push(...newMovies);
-    await fs.promises.writeFile(this.filePath, JSON.stringify(movies));
+
+    await fs.promises.writeFile(this.filePath, JSON.stringify(movies, null, 2));
   }
 
   async searchMovies(query, page, limit) {

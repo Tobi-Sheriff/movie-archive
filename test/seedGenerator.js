@@ -1,10 +1,18 @@
 const { moviesData, commentsData } = require('../seeds/seedMovies');
 const movieService = require('../services/movieServices');
 const commentService = require('../services/commentServices');
+const { checkIfDataExists } = require('../utils/dbUtils');
+
 
 module.exports.seed = async () => {
-  await initializeMovies();
-  await initializeComments();
+  const dataExists = await checkIfDataExists();
+
+  if (!dataExists) {
+    await initializeMovies();
+    await initializeComments();
+  } else {
+    console.log('Database already contains data. Skipping seeding.');
+  }
 }
 
 module.exports.destroy = async () => {

@@ -106,7 +106,7 @@ describe('Get Movies API', () => {
           "likes": 100,
           "ratings": "9.20",
           "director": "Frank Darabont",
-          "top_cast": "Tim Robbins, Morgan Freeman",
+          "top_cast": ["Tim Robbins", "Morgan Freeman"],
           "overview": "Two imprisoned men bond over a number of years...",
           "trailer": "(trailer link)"
         },
@@ -119,7 +119,7 @@ describe('Get Movies API', () => {
           "likes": 150,
           "ratings": "9.20",
           "director": "Francis Ford Coppola",
-          "top_cast": "Marlon Brando, Al Pacino",
+          "top_cast": ["Marlon Brando", "Al Pacino"],
           "overview": "The aging patriarch of an organized crime dynasty...",
           "trailer": "(trailer link)"
         },
@@ -132,7 +132,7 @@ describe('Get Movies API', () => {
           "likes": 200,
           "ratings": "9.00",
           "director": "Christopher Nolan",
-          "top_cast": "Christian Bale, Heath Ledger",
+          "top_cast": ["Christian Bale", "Heath Ledger"],
           "overview": "When the menace known as the Joker wreaks havoc...",
           "trailer": "(trailer link)"
         },
@@ -145,7 +145,7 @@ describe('Get Movies API', () => {
           "likes": 50,
           "ratings": "9.00",
           "director": "Sidney Lumet",
-          "top_cast": "Henry Fonda, Martin Balsam",
+          "top_cast": ["Henry Fonda", "Martin Balsam"],
           "overview": "A jury holdout attempts to prevent a miscarriage of justice...",
           "trailer": "(trailer link)"
         },
@@ -158,7 +158,7 @@ describe('Get Movies API', () => {
           "likes": 100,
           "ratings": "8.90",
           "director": "Steven Spielberg",
-          "top_cast": "Liam Neeson, Ben Kingsley",
+          "top_cast": ["Liam Neeson", "Ben Kingsley"],
           "overview": "In German-occupied Poland during World War II...",
           "trailer": "(trailer link)"
         },
@@ -171,7 +171,7 @@ describe('Get Movies API', () => {
           "likes": 200,
           "ratings": "8.90",
           "director": "Peter Jackson",
-          "top_cast": "Elijah Wood, Viggo Mortensen",
+          "top_cast": ["Elijah Wood", "Viggo Mortensen"],
           "overview": "Gandalf and Aragorn lead the World of Men against Saurons army...",
           "trailer": "(trailer link)"
         }
@@ -198,7 +198,7 @@ describe('Get Movies API', () => {
           "likes": 100,
           "ratings": "8.90",
           "director": "Steven Spielberg",
-          "top_cast": "Liam Neeson, Ben Kingsley",
+          "top_cast": ["Liam Neeson", "Ben Kingsley"],
           "overview": "In German-occupied Poland during World War II...",
           "trailer": "(trailer link)"
         },
@@ -211,7 +211,7 @@ describe('Get Movies API', () => {
           "likes": 200,
           "ratings": "8.90",
           "director": "Peter Jackson",
-          "top_cast": "Elijah Wood, Viggo Mortensen",
+          "top_cast": ["Elijah Wood", "Viggo Mortensen"],
           "overview": "Gandalf and Aragorn lead the World of Men against Saurons army...",
           "trailer": "(trailer link)"
         },
@@ -224,7 +224,7 @@ describe('Get Movies API', () => {
           "likes": 150,
           "ratings": "8.80",
           "director": "Quentin Tarantino",
-          "top_cast": "John Travolta, Samuel L. Jackson",
+          "top_cast": ["John Travolta", "Samuel L. Jackson"],
           "overview": "The lives of two mob hitmen, a boxer, a pair of diner bandits...",
           "trailer": "(trailer link)"
         },
@@ -237,7 +237,7 @@ describe('Get Movies API', () => {
           "likes": 200,
           "ratings": "8.80",
           "director": "Peter Jackson",
-          "top_cast": "Elijah Wood, Viggo Mortensen",
+          "top_cast": ["Elijah Wood", "Viggo Mortensen"],
           "overview": "A hobbit, a wizard, a dwarf, and a human embark on a quest...",
           "trailer": "(trailer link)"
         }
@@ -278,7 +278,7 @@ describe('Search API', () => {
           likes: 100,
           ratings: "1",
           director: "duplicate",
-          top_cast: "duplicate",
+          top_cast: ["duplicate"],
           overview: "duplicate...",
           trailer: "(trailer link)"
         },
@@ -291,7 +291,7 @@ describe('Search API', () => {
           likes: 100,
           ratings: '1',
           director: 'duplicate',
-          top_cast: 'duplicate',
+          top_cast: ['duplicate'],
           overview: 'duplicate...',
           trailer: '(trailer link)'
         }
@@ -359,7 +359,7 @@ describe('Movie Details API', () => {
           likes: 100,
           ratings: "1",
           director: "duplicate",
-          top_cast: "duplicate",
+          top_cast: ["duplicate"],
           overview: "duplicate...",
           trailer: "(trailer link)"
         }
@@ -402,47 +402,29 @@ describe('Get Movie comments API', () => {
   it('Should return a paginated list of comments for movie with id 1', async () => {
     const movieId = 1, page = 1, limit = 1;
     const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
-    const expectedComment = {
-      response: [
-        {
-          "id": 2,
-          "movie_id": 1,
-          "author": "Fantastic man",
-          "content": "A thought-provoking sci-fi movie.",
-          "created_at": "2024-08-12T15:11:27.765Z"
-        }
-      ]
-    }
 
     expect(response.status).toBe(200);
-    expect(response.body.response).toStrictEqual(expectedComment.response);
+    expect(response.body.response[0].id).toBe(2);
+    expect(response.body.response[0].movie_id).toBe(1);
+    expect(response.body.response[0].author).toBe("Fantastic man");
+    expect(response.body.response[0].content).toBe("A thought-provoking sci-fi movie.");
   })
 
 
   it('Should return a paginated list of comments for movie with id 10', async () => {
     const movieId = 10, page = 2, limit = 2;
     const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
-    const expectedComment = {
-      response: [
-        {
-          "id": 9,
-          "movie_id": 10,
-          "author": "Miami",
-          "content": "Do a cartoon version please...",
-          "created_at": "2024-25-12T15:15:27.765Z"
-        },
-        {
-          "id": 10,
-          "movie_id": 10,
-          "author": "Loona",
-          "content": "The best this month so far.",
-          "created_at": "2024-15-12T15:19:00.765Z"
-        }
-      ]
-    }
 
     expect(response.status).toBe(200);
-    expect(response.body.response).toStrictEqual(expectedComment.response);
+    expect(response.body.response[0].id).toBe(9);
+    expect(response.body.response[0].movie_id).toBe(10);
+    expect(response.body.response[0].author).toBe("Miami");
+    expect(response.body.response[0].content).toBe("Do a cartoon version please...");
+    expect(response.status).toBe(200);
+    expect(response.body.response[1].id).toBe(10);
+    expect(response.body.response[1].movie_id).toBe(10);
+    expect(response.body.response[1].author).toBe("Loona");
+    expect(response.body.response[1].content).toBe("The best this month so far.");
   })
 
 

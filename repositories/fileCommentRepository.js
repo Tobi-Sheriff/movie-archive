@@ -14,7 +14,7 @@ class FileCommentRepository {
     }
   }
 
-  
+
   async _fetch_comments() {
     return readJson(this.filePath);
   }
@@ -58,7 +58,18 @@ class FileCommentRepository {
 
   async addAllComments(newComments) {
     const comments = await this._fetch_comments();
+
+    // Find the current max ID in the movies array to avoid conflicts
+    let maxId = comments.length > 0 ? Math.max(...comments.map(movie => movie.id)) : 0;
+
+    // Dynamically assign an ID to each new movie
+    newComments.forEach(comment => {
+      maxId += 1; // Increment the ID for each new movie
+      comment.id = maxId;
+    });
+
     comments.push(...newComments);
+
     await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
   }
 
