@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'test') {
 const express = require('express');
 const app = express();
 const moviesRoutes = require('./routes/movies');
-const { seed } = require('./test/seedGenerator');
+const { seed } = require('./seeds/seedGenerator');
 
 const PORT = process.env.NODE_ENV === 'test' ? 8001 : 8000;
 
