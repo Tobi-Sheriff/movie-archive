@@ -1,4 +1,6 @@
 const { Movie } = require('../models');
+const { Op, literal } = require('sequelize');
+const { sequelize } = require('../models');
 
 class DBMovieRepository {
   async paginateData(data, page, limit) {
@@ -57,33 +59,53 @@ class DBMovieRepository {
   }
 
   async addAllMovies(newMovies) {
-    return await Movie.bulkCreate(newMovies);
+    try {
+      const movies = await Movie.bulkCreate(newMovies);  // bulkCreate needs to be called on the Movie model
+
+      return movies;
+    } catch (error) {
+      console.error('Error seeding movies data:', error);
+    }
   }
 
   async searchMovies(query, page, limit) {
-    const offset = (page - 1) * limit;
+    try {
+        const offset = (page - 1) * limit;
 
-    const { count: totalCount, rows: movies } = await Movie.findAndCountAll({
-      where: {
-        title: {
-          [Op.iLike]: `%${query}%`,
+      // const { count: totalCount, rows: movies } = await Movie.findAndCountAll({
+      //   where: {
+      //     title: {
+      //       [Op.iLike]: `%${query}%`,
+      //     },
+      //   },
+      //   limit,
+      //   offset,
+      // });
+      const fuzzyMatches = await Movie.findAll({
+        where: literal(`levenshtein(lower(title), '${query.toLowerCase()}') <= 2`),  // Levenshtein distance with threshold 2
+        limit,
+        offset,
+        raw: true,
+      });
+
+      // console.log(fuzzyMatches);
+
+      // Pagination logic
+      const totalPages = Math.ceil(fuzzyMatches.length / limit);
+      // const paginatedResults = combinedResults.slice(offset, offset + limit);
+
+      return {
+        response: fuzzyMatches,
+        pagination: {
+          totalPages,
+          currentPage: page,
+          hasNextPage: page < totalPages,
+          hasPreviousPage: page > 1,
         },
-      },
-      limit,
-      offset,
-    });
-
-    const totalPages = Math.ceil(totalCount / limit);
-
-    return {
-      response: movies,
-      pagination: {
-        totalPages,
-        currentPage: page,
-        hasNextPage: page < totalPages,
-        hasPreviousPage: page > 1,
-      },
-    };
+      };
+    } catch (err) {
+      console.error("Error Searching for movie", err.message)
+    }
   }
 
   async getSimilarMovies(id, page, limit) {
@@ -120,7 +142,17 @@ class DBMovieRepository {
   }
 
   async deleteAllMovies() {
-    await Movie.destroy({ where: {}, truncate: true });
+    // await Movie.destroy({ where: {}, truncate: true });
+    try {
+      await sequelize.query('TRUNCATE TABLE "Movies" RESTART IDENTITY CASCADE');
+
+      // Reset the sequence manually
+      // await sequelize.query('ALTER SEQUENCE "Movies_id_seq" RESTART WITH 1');
+
+    } catch (error) {
+      console.error('Error during movie deletion:', error);
+      throw error;
+    }
   }
 
   async destroyDB() {

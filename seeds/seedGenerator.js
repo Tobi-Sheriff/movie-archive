@@ -21,8 +21,8 @@ module.exports.seed = async () => {
 }
 
 module.exports.destroy = async () => {
-  await commentService.destroyComments();
-  await movieService.destroyMovies();
+  await commentService.deleteAllComments();
+  await movieService.deleteAllMovies();
 }
 
 async function initializeMovies() {

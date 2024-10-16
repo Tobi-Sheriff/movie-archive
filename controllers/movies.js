@@ -98,7 +98,7 @@ module.exports.postComment = async (req, res) => {
 
   try {
     const comment = await commentService.postComment(id, content, author);
-    res.status(201).json({ response: comment });
+    res.status(201).json({ response: [ comment ] });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Internal Server Error' });
