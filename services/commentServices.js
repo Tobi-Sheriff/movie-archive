@@ -6,8 +6,8 @@ class CommentService {
     this.commentRepository = CommentRepositoryAdapter.getRepository();
   }
 
-  async checkIfAnyMoviesExist() {
-    return await this.movieRepository.checkIfAnyMoviesExist();
+  async checkIfAnyCommentsExist() {
+    return await this.commentRepository.checkIfAnyCommentsExist();
   }
   
   async getComments() {
