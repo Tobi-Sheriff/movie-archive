@@ -354,24 +354,22 @@ describe('Movie Details API', () => {
     const movieId = 9;
     const response = await request(app).get(`/v1/movies/${movieId}`);
     const expectedMovieData = {
-      response: [
-        {
-          id: 9,
-          title: "duplicate1",
-          image: "(link unavailable)",
-          year: 1000,
-          genres: ["duplicate"],
-          likes: 100,
-          ratings: 1,
-          director: "duplicate",
-          top_cast: ["duplicate"],
-          overview: "duplicate...",
-          trailer: "(trailer link)"
-        }
-      ]
+      response: {
+        id: 9,
+        title: "duplicate1",
+        image: "(link unavailable)",
+        year: 1000,
+        genres: ["duplicate"],
+        likes: 100,
+        ratings: 1,
+        director: "duplicate",
+        top_cast: ["duplicate"],
+        overview: "duplicate...",
+        trailer: "(trailer link)"
+      }
     }
     expect(response.status).toBe(200);
-    expect(response.body).toStrictEqual(expectedMovieData);
+    expect(response.body.response).toStrictEqual(expectedMovieData.response);
   })
 
 
@@ -500,19 +498,17 @@ describe('Post Comment API', () => {
       .send(commentData);
 
     const pagedResponse = {
-      response: [
-        {
-          id: 11,
-          movie_id: 3,
-          author: 'Boss',
-          content: 'I love comments'
-        }
-      ]
+      response: {
+        id: 11,
+        movie_id: 3,
+        author: 'Boss',
+        content: 'I love comments'
+      }
     }
 
     expect(response.status).toBe(201);
-    expect(response.body.response[0]).toEqual(
-      expect.objectContaining(pagedResponse.response[0])
+    expect(response.body.response).toEqual(
+      expect.objectContaining(pagedResponse.response)
     );
   })
 

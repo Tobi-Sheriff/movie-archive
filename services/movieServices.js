@@ -34,11 +34,6 @@ class MovieService {
   async deleteAllMovies() {
     await this.movieRepository.deleteAllMovies();
   }
-
-  async destroyMovies() {
-    await this.movieRepository.destroyDB();
-  }
-
 }
 
 module.exports = new MovieService();

@@ -3,7 +3,6 @@ const path = require('path');
 const { readJson } = require('../utils/fileUtils');
 
 class FileCommentRepository {
-
   constructor(filePath) {
     const env = process.env.NODE_ENV
 
@@ -14,28 +13,8 @@ class FileCommentRepository {
     }
   }
 
-
   async _fetch_comments() {
     return readJson(this.filePath);
-  }
-
-  async paginateData(data, page, limit) {
-    const totalItems = data.length;
-    const totalPages = Math.ceil(totalItems / limit);
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-
-    const paginatedData = data.slice(startIndex, endIndex);
-    const pagination = {
-      totalItems,
-      totalPages,
-      pageSize: limit,
-      currentPage: page,
-    };
-    return {
-      response: paginatedData,
-      pagination,
-    };
   }
 
   async countMovies() {
@@ -43,49 +22,71 @@ class FileCommentRepository {
     return comments.length;
   }
 
-  async checkIfAnyMoviesExist() {
+  async checkIfAnyCommentsExist() {
     return this.countMovies > 0;
   }
 
-  async getCommentsByMovieId(id, page, limit) {
+  async getCommentsByMovieId(movieId, page, limit) {
     const comments = await this._fetch_comments();
-
     const movieComments = comments.filter((comment) =>
-      comment.movie_id === parseInt(id)
+      comment.movie_id === parseInt(movieId)
     );
-    return this.paginateData(movieComments, page, limit);
-  }
 
-  async addAllComments(newComments) {
-    const comments = await this._fetch_comments();
+    const totalItems = movieComments.length;
+    const totalPages = Math.ceil(totalItems / limit);
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
 
-    // Find the current max ID in the movies array to avoid conflicts
-    let maxId = comments.length > 0 ? Math.max(...comments.map(movie => movie.id)) : 0;
-
-    // Dynamically assign an ID to each new movie
-    newComments.forEach(comment => {
-      maxId += 1; // Increment the ID for each new movie
-      comment.id = maxId;
-    });
-
-    comments.push(...newComments);
-
-    await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
-  }
-
-  async postComment(id, content, author) {
-    const comments = await this._fetch_comments();
-    const newComment = {
-      id: comments.length + 1,
-      movieId: id,
-      content,
-      author,
+    const paginatedData = movieComments.slice(startIndex, endIndex);
+    return {
+      response: paginatedData,
+      pagination: {
+        totalItems,
+        totalPages,
+        pageSize: limit,
+        currentPage: page,
+      }
     };
-    comments.push(newComment);
-    await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
-    return comments.filter((comment) =>
-      comment.id === parseInt(newComment.id)
-    );
+  }
+
+  async addAllComments(newComments, seededMovies) {
+    try {
+      const comments = await this._fetch_comments();
+
+      let maxId = comments.length > 0 ? comments[comments.length - 1].id : 0;
+
+      newComments.forEach(comment => {
+        maxId += 1;
+        comment.id = maxId;
+        comment.movie_id = maxId;
+      });
+
+      comments.push(...newComments);
+
+      return await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
+    } catch (err) {
+      console.error("error seeding comments", err.stack);
+    }
+  }
+
+  async postComment(movieId, content, author) {
+    try {
+      const comments = await this._fetch_comments();
+      const newComment = {
+        id: comments.length + 1,
+        movie_id: parseInt(movieId),
+        content,
+        author,
+        created_at: new Date()
+      };
+
+      comments.push(newComment);
+      await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
+
+      return newComment;
+    } catch (err) {
+      console.error("Error possting comment", err.stack)
+    }
   }
 
   async deleteAllComments() {
@@ -94,10 +95,6 @@ class FileCommentRepository {
     } catch (err) {
       console.error(err);
     }
-  }
-
-  async destroyDB() {
-    await fs.promises.unlink(this.filePath);
   }
 }
 

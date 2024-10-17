@@ -15,7 +15,7 @@ seed();
 app.use(express.json());
 app.use('/v1/movies', moviesRoutes);
 
-const server = app.listen(PORT, async () => {
+const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 })
 

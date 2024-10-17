@@ -6,14 +6,12 @@ const env = process.env.NODE_ENV || 'development';
 
 module.exports.seed = async () => {
   if (env === 'test') {
-    await initializeMovies();
-    await initializeComments();
+    await seedData();
   } else if (env === 'development') {
     const dataExists = await checkIfDataExists();
 
     if (!dataExists) {
-      await initializeMovies();
-      await initializeComments();
+      await seedData();
     } else {
       console.log('Database already contains data. Skipping seeding.');
     }
@@ -25,18 +23,17 @@ module.exports.destroy = async () => {
   await movieService.deleteAllMovies();
 }
 
-async function initializeMovies() {
-  try {
-    await movieService.addAllMovies(moviesData);
-  } catch (error) {
-    console.error("Error seeding movies data: ", error);
-  }
-}
 
-async function initializeComments() {
+// moviesData and commentsData should be arrays of movie and comment objects respectively
+async function seedData() {
   try {
-    await commentService.addAllComments(commentsData);
+    // Step 1: Seed the movies
+    const seededMovies = await movieService.addAllMovies(moviesData);
+
+    // Step 3: Seed the comments
+    await commentService.addAllComments(commentsData, seededMovies);
+    
   } catch (error) {
-    console.error("Error seeding comments data: ", error);
+    console.error("Error seeding movies and comments data: ", error.message);
   }
 }

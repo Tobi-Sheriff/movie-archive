@@ -44,20 +44,12 @@ class DBCommentRepository {
       // Extract movie IDs into an array
       const movieIds = movies.map(movie => movie.id);
 
-      // Determine if we're running in a test environment
-      const isTestEnv = process.env.NODE_ENV === 'test';
-
       // Assign a random movie_id to each comment
       const commentsWithMovieIds = newComments.map((comment, index) => {
-        const movieId = (
-          isTestEnv ?
-            movieIds[index % movieIds.length] :
-            movieIds[Math.floor(Math.random() * movieIds.length)]
-        );
+        const movieId = (movieIds[index % movieIds.length]);
         return {
           ...comment, // Spread the existing comment details
           movie_id: movieId, // Assign random movie_id
-          // created_at: new Date(), // If you want to set created_at dynamically
         };
       });
 
@@ -89,16 +81,11 @@ class DBCommentRepository {
 
   async deleteAllComments() {
     try {
-      await sequelize.query('TRUNCATE "Comments" RESTART IDENTITY CASCADE'); // Ensure sequelize is not undefined here
-      // await Comment.destroy({ where: {}, truncate: true });
+      await Comment.destroy({ where: {}, truncate: true });
     } catch (err) {
       console.error('Error during movie deletion:', err);
       throw err;
     }
-  }
-
-  async destroyDB() {
-    await Comment.drop();
   }
 }
 

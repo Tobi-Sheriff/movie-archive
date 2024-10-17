@@ -49,7 +49,7 @@ module.exports.movieDetails = async (req, res) => {
     if (!movie) {
       return res.status(404).json({ message: 'Movie ID not found' });
     }
-    res.status(200).json({ response: [movie] });
+    res.status(200).json({ response: movie });
 
   } catch (error) {
     console.log(error)
@@ -98,7 +98,7 @@ module.exports.postComment = async (req, res) => {
 
   try {
     const comment = await commentService.postComment(id, content, author);
-    res.status(201).json({ response: [ comment ] });
+    res.status(201).json({ response: comment });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Internal Server Error' });

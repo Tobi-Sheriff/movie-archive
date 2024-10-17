@@ -9,31 +9,22 @@ class CommentService {
   async checkIfAnyCommentsExist() {
     return await this.commentRepository.checkIfAnyCommentsExist();
   }
-  
-  async getComments() {
-    return await this.commentRepository.getComments();
+
+  async getCommentsByMovieId(movieId, page, limit) {
+    return  await this.commentRepository.getCommentsByMovieId(movieId, page, limit);    
   }
 
-  async getCommentsByMovieId(id, page, limit) {
-    return  await this.commentRepository.getCommentsByMovieId(id, page, limit);    
+  async addAllComments(commentsData, seededMovies) {
+    return await this.commentRepository.addAllComments(commentsData, seededMovies);
   }
 
-  async addAllComments(comments) {
-    return await this.commentRepository.addAllComments(comments);
-  }
-
-  async postComment(id, content, author) {
-    return await this.commentRepository.postComment(id, content, author);
+  async postComment(movieId, content, author) {
+    return await this.commentRepository.postComment(movieId, content, author);
   }
 
   async deleteAllComments() {
     await this.commentRepository.deleteAllComments();
   }
-
-  async destroyComments() {
-    return this.commentRepository.destroyDB();
-  }
-
 }
 
 module.exports = new CommentService();
