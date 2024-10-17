@@ -15,6 +15,17 @@ class DBMovieRepository {
     };
   }
 
+  async randomMovieId () {
+    const movies = await Movie.findAll({raw: true});
+    
+    if (!movies) {
+      throw new Error("No movie in the DB");
+    }
+    let maxId = movies[movies.length - 1].id;
+
+    return Math.floor(Math.random() * maxId) + 1;
+  }
+
   async countMovies() {
     return await Movie.count();
   }
@@ -48,7 +59,7 @@ class DBMovieRepository {
 
   async addAllMovies(newMovies) {
     try {
-      return await Movie.bulkCreate(newMovies);  // bulkCreate needs to be called on the Movie model
+      return await Movie.bulkCreate(newMovies);
     } catch (err) {
       console.error('Error seeding movies data:', err.stack);
     }

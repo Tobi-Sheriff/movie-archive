@@ -35,6 +35,16 @@ class FileMovieRepository {
     };
   }
 
+  async randomMovieId () {
+    const movies = await this._fetch_movies();
+    if (!movies) {
+      throw new Error("No movie in the DB");
+    }
+    let maxId = movies[movies.length - 1].id;
+
+    return Math.floor(Math.random() * maxId) + 1;
+  }
+
   async countMovies() {
     const movies = await this._fetch_movies();
     return movies.length;
@@ -72,7 +82,7 @@ class FileMovieRepository {
   async addAllMovies(newMovies) {
     try {
       const movies = await this._fetch_movies();
-      let maxId = movies.length > 0 ? Math.max(...movies.map(movie => movie.id)) : 0;
+      let maxId = movies.length > 0 ? movies[movieServices.length - 1].id : 0;
 
       newMovies.forEach(movie => {
         maxId += 1;

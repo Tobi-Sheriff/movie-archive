@@ -15,7 +15,7 @@ class CommentService {
   }
 
   async addAllComments(commentsData, seededMovies) {
-    return await this.commentRepository.addAllComments(commentsData, seededMovies);
+    await this.commentRepository.addAllComments(commentsData, seededMovies);
   }
 
   async postComment(movieId, content, author) {

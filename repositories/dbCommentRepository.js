@@ -32,10 +32,10 @@ class DBCommentRepository {
     };
   }
 
-  async addAllComments(newComments) {
+  async addAllComments(newComments, seededMovies) {
     try {
       // Fetch all movie IDs from the movies table
-      const movies = await Movie.findAll({ attributes: ['id'] });
+      const movies = await Movie.findAll({ raw: true });
 
       if (movies.length === 0) {
         throw new Error('No movies available to associate with comments.');
@@ -44,12 +44,16 @@ class DBCommentRepository {
       // Extract movie IDs into an array
       const movieIds = movies.map(movie => movie.id);
 
+      let movieMaxId = seededMovies[seededMovies.length - 1].dataValues.id;
+
       // Assign a random movie_id to each comment
       const commentsWithMovieIds = newComments.map((comment, index) => {
-        const movieId = (movieIds[index % movieIds.length]);
+        // const movieId = (movieIds[index % movieIds.length]);
+        const randomMovieId = Math.floor(Math.random() * movieMaxId) + 1;
+
         return {
           ...comment, // Spread the existing comment details
-          movie_id: movieId, // Assign random movie_id
+          movie_id: randomMovieId, // Assign random movie_id
         };
       });
 

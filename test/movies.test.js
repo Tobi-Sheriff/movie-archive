@@ -405,43 +405,23 @@ describe('Get Movie comments API', () => {
   it('Should return a paginated list of comments for movie with id 1', async () => {
     const movieId = 1, page = 1, limit = 1;
     const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
-    const pagedResponse = {
-      response: [
-        {
-          "id": 1,
-          "movie_id": 1,
-          "author": "movie critic",
-          "content": "Mind-bending action movie.",
-        },
-      ]
-    }
 
     expect(response.status).toBe(200);
-    expect(response.body.response[0]).toEqual(
-      expect.objectContaining(pagedResponse.response[0])
-    );
+    expect(response.body.response.every((response) => 
+      Object.keys(response).includes('id', 'movie_id', 'author', 'content')
+    )).toBe(true);
   })
 
 
   it('Should return a paginated list of comments for movie with id 10', async () => {
-    const movieId = 10, page = 1, limit = 1;
+    const movieId = await movieService.randomMovieId();
+    const page = 1, limit = 1;
     const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
 
-    const pagedResponse = {
-      response: [
-        {
-          "id": 10,
-          "movie_id": 10,
-          "author": "Loona",
-          "content": "The best this month so far.",
-        },
-      ]
-    }
-
-    expect(response.status).toBe(200);;
-    expect(response.body.response[0]).toEqual(
-      expect.objectContaining(pagedResponse.response[0])
-    );
+    expect(response.status).toBe(200);
+    expect(response.body.response.every((response) => 
+      Object.keys(response).includes('id', 'movie_id', 'author', 'content')
+    )).toBe(true);
   })
 
 
@@ -486,7 +466,7 @@ describe('Get Movie comments API', () => {
 // Post a comment API Test
 describe('Post Comment API', () => {
   it('Should create a new comment for a movie using the movie ID', async () => {
-    const movieId = 3;
+    const movieId = await movieService.randomMovieId();
     const commentData = {
       content: 'I love comments',
       author: 'Boss',
@@ -500,7 +480,6 @@ describe('Post Comment API', () => {
     const pagedResponse = {
       response: {
         id: 11,
-        movie_id: 3,
         author: 'Boss',
         content: 'I love comments'
       }

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { readJson } = require('../utils/fileUtils');
+const { log } = require('console');
 
 class FileCommentRepository {
   constructor(filePath) {
@@ -53,17 +54,19 @@ class FileCommentRepository {
     try {
       const comments = await this._fetch_comments();
 
-      let maxId = comments.length > 0 ? comments[comments.length - 1].id : 0;
+      let commentMaxId = comments.length > 0 ? comments[comments.length - 1].id : 0;
+      let movieMaxId = seededMovies[seededMovies.length - 1].id;
 
       newComments.forEach(comment => {
-        maxId += 1;
-        comment.id = maxId;
-        comment.movie_id = maxId;
+      let randomMovieId = Math.floor(Math.random() * movieMaxId) + 1;
+        commentMaxId += 1;
+        comment.id = commentMaxId;
+        comment.movie_id = randomMovieId;
       });
-
+      
       comments.push(...newComments);
 
-      return await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
+      await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
     } catch (err) {
       console.error("error seeding comments", err.stack);
     }
