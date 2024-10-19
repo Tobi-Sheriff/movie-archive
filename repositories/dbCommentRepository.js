@@ -10,54 +10,44 @@ class DBCommentRepository {
   }
 
   async getCommentsByMovieId(movieId, page, limit) {
-    const offset = (page - 1) * limit;
-
-    const { count: totalCount, rows: comments } = await Comment.findAndCountAll({
-      where: { movie_id: movieId },
-      limit,
-      offset,
-      raw: true,
-    });
-
-    const totalPages = Math.ceil(totalCount / limit);
-
-    return {
-      response: comments,
-      pagination: {
-        totalPages,
-        currentPage: page,
-        hasNextPage: page < totalPages,
-        hasPreviousPage: page > 1,
-      },
-    };
-  }
-
-  async addAllComments(newComments, seededMovies) {
     try {
-      // Fetch all movie IDs from the movies table
-      const movies = await Movie.findAll({ raw: true });
+      const offset = (page - 1) * limit;
 
-      if (movies.length === 0) {
-        throw new Error('No movies available to associate with comments.');
-      }
-
-      // Extract movie IDs into an array
-      const movieIds = movies.map(movie => movie.id);
-
-      let movieMaxId = seededMovies[seededMovies.length - 1].dataValues.id;
-
-      // Assign a random movie_id to each comment
-      const commentsWithMovieIds = newComments.map((comment, index) => {
-        // const movieId = (movieIds[index % movieIds.length]);
-        const randomMovieId = Math.floor(Math.random() * movieMaxId) + 1;
-
-        return {
-          ...comment, // Spread the existing comment details
-          movie_id: randomMovieId, // Assign random movie_id
-        };
+      const { count: totalCount, rows: comments } = await Comment.findAndCountAll({
+        where: { movie_id: movieId },
+        limit,
+        offset,
+        raw: true,
       });
 
-      return await Comment.bulkCreate(commentsWithMovieIds);
+      const totalPages = Math.ceil(totalCount / limit);
+      
+      return {
+        response: comments,
+        pagination: {
+          totalPages,
+          currentPage: page,
+          hasNextPage: page < totalPages,
+          hasPreviousPage: page > 1,
+        },
+      };
+    } catch (err) {
+      console.error("Error getting comments", err.stack);
+      
+    }
+  }
+
+  async addComment(commentData) {
+    try {
+      await Comment.create(commentData)
+    } catch (err) {
+      console.error("Error adding a Movie", err.stack);
+    }
+  }
+
+  async addAllComments(newComments) {
+    try {
+      return await Comment.bulkCreate(newComments);
     } catch (err) {
       console.error('Error seeding comments data:', err);
     }
@@ -65,10 +55,6 @@ class DBCommentRepository {
 
   async postComment(movieId, content, author) {
     try {
-      // const randomMovie = await Movie.findOne({
-      //   order: Sequelize.literal('RANDOM()'),
-      // });
-
       const newComment = {
         movie_id: movieId,
         author,
@@ -79,7 +65,7 @@ class DBCommentRepository {
 
       return createdComment.dataValues;
     } catch (err) {
-      console.error("Error creating comment:", err.message);
+      console.error("Error posting comment:", err.stack);
     }
   }
 

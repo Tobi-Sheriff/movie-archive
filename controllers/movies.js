@@ -73,6 +73,7 @@ module.exports.getComments = async (req, res) => {
     if (!movie) {
       return res.status(404).json({ message: 'Movie ID not found' });
     }
+    
     const paginatedComments = await commentService.getCommentsByMovieId(id, page, limit);
     res.status(200).json(paginatedComments);
   } catch (err) {

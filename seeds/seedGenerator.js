@@ -3,13 +3,17 @@ const movieService = require('../services/movieServices');
 const commentService = require('../services/commentServices');
 const { checkIfDataExists } = require('../utils/dbUtils');
 const env = process.env.NODE_ENV || 'development';
+const { sequelize } = require('../models')
 
 module.exports.seed = async () => {
   if (env === 'test') {
+    sequelize.options.logging = false;
+
     await seedData();
   } else if (env === 'development') {
-    const dataExists = await checkIfDataExists();
+    sequelize.options.logging = true;
 
+    const dataExists = await checkIfDataExists();
     if (!dataExists) {
       await seedData();
     } else {
@@ -28,12 +32,15 @@ module.exports.destroy = async () => {
 async function seedData() {
   try {
     // Step 1: Seed the movies
-    const seededMovies = await movieService.addAllMovies(moviesData);
+    for (let i = 0; i < moviesData.length; i++) {
+      const seededMovies = await movieService.addMovie(moviesData[i]);
 
-    // Step 3: Seed the comments
-    await commentService.addAllComments(commentsData, seededMovies);
+      commentsData[i].movie_id = seededMovies.dataValues.id;
+    }
+    await commentService.addAllComments(commentsData);
+
     
   } catch (error) {
-    console.error("Error seeding movies and comments data: ", error.message);
+    console.error("Error seeding movies and comments data: ", error.stack);
   }
 }

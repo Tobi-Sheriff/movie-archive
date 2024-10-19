@@ -5,7 +5,6 @@ const commentService = require('../services/commentServices');
 const { seed, destroy } = require('../seeds/seedGenerator');
 const assert = require('assert');
 
-
 beforeEach(async () => {
   await seed();
 });
@@ -101,10 +100,9 @@ describe('Get Movies API', () => {
     const page = 1, limit = 6;
     const response = await request(app).get(`/v1/movies?page=${page}&limit=${limit}`);
 
-    const pagedResponse = {
+    const expectedResponse = {
       response: [
         {
-          "id": 1,
           "title": "The Shawshank Redemption",
           "image": "(link unavailable)",
           "year": 1994,
@@ -117,7 +115,6 @@ describe('Get Movies API', () => {
           "trailer": "(trailer link)"
         },
         {
-          "id": 2,
           "title": "The Godfather",
           "image": "(link unavailable)",
           "year": 1972,
@@ -130,7 +127,6 @@ describe('Get Movies API', () => {
           "trailer": "(trailer link)"
         },
         {
-          "id": 3,
           "title": "The Dark Knight",
           "image": "(link unavailable)",
           "year": 2008,
@@ -143,7 +139,6 @@ describe('Get Movies API', () => {
           "trailer": "(trailer link)"
         },
         {
-          "id": 4,
           "title": "12 Angry Men",
           "image": "(link unavailable)",
           "year": 1957,
@@ -156,7 +151,6 @@ describe('Get Movies API', () => {
           "trailer": "(trailer link)"
         },
         {
-          "id": 5,
           "title": "Schindlers List",
           "image": "(link unavailable)",
           "year": 1993,
@@ -169,7 +163,6 @@ describe('Get Movies API', () => {
           "trailer": "(trailer link)"
         },
         {
-          "id": 6,
           "title": "The Lord of the Rings: The Return of the King",
           "image": "(link unavailable)",
           "year": 2003,
@@ -185,7 +178,8 @@ describe('Get Movies API', () => {
     };
 
     expect(response.status).toBe(200);
-    expect(response.body.response).toStrictEqual(pagedResponse.response);
+    const actualResponse = response.body.response.map(({ id, ...rest }) => rest);
+    expect(actualResponse).toEqual(expectedResponse.response);
   });
 
 
@@ -193,10 +187,9 @@ describe('Get Movies API', () => {
     const page = 2, limit = 4;
     const response = await request(app).get(`/v1/movies?page=${page}&limit=${limit}`);
 
-    const pagedResponse = {
+    const expectedResponse = {
       response: [
         {
-          "id": 5,
           "title": "Schindlers List",
           "image": "(link unavailable)",
           "year": 1993,
@@ -209,7 +202,6 @@ describe('Get Movies API', () => {
           "trailer": "(trailer link)"
         },
         {
-          "id": 6,
           "title": "The Lord of the Rings: The Return of the King",
           "image": "(link unavailable)",
           "year": 2003,
@@ -222,7 +214,6 @@ describe('Get Movies API', () => {
           "trailer": "(trailer link)"
         },
         {
-          "id": 7,
           "title": "Pulp Fiction",
           "image": "(link unavailable)",
           "year": 1994,
@@ -235,7 +226,6 @@ describe('Get Movies API', () => {
           "trailer": "(trailer link)"
         },
         {
-          "id": 8,
           "title": "The Lord of the Rings: The Fellowship of the Ring",
           "image": "(link unavailable)",
           "year": 2001,
@@ -251,7 +241,8 @@ describe('Get Movies API', () => {
     };
 
     expect(response.status).toBe(200);
-    expect(response.body.response).toStrictEqual(pagedResponse.response);
+    const actualResponse = response.body.response.map(({ id, ...rest }) => rest);
+    expect(actualResponse).toEqual(expectedResponse.response);
   });
 
 
@@ -276,7 +267,6 @@ describe('Search API', () => {
     const searchData = {
       response: [
         {
-          id: 9,
           title: "duplicate1",
           image: "(link unavailable)",
           year: 1000,
@@ -289,7 +279,6 @@ describe('Search API', () => {
           trailer: "(trailer link)"
         },
         {
-          id: 10,
           title: 'duplicate2',
           image: '(link unavailable)',
           year: 1000,
@@ -306,7 +295,8 @@ describe('Search API', () => {
     }
 
     expect(response.status).toBe(200);
-    expect(response.body.response).toStrictEqual(searchData.response);
+    const actualResponse = response.body.response.map(({ id, ...rest }) => rest);
+    expect(actualResponse).toEqual(searchData.response);
   })
 
 
@@ -351,25 +341,29 @@ describe('Search API', () => {
 // Show movie details API Test
 describe('Movie Details API', () => {
   it('Should return a single movie using movie id', async () => {
-    const movieId = 9;
+    const page = 2, limit = 4;
+    const movie = await movieService.getMovies(page, limit);
+    const movieId = movie.response[0].id;
+
     const response = await request(app).get(`/v1/movies/${movieId}`);
-    const expectedMovieData = {
+    const expectedResponse = {
       response: {
-        id: 9,
-        title: "duplicate1",
-        image: "(link unavailable)",
-        year: 1000,
-        genres: ["duplicate"],
-        likes: 100,
-        ratings: 1,
-        director: "duplicate",
-        top_cast: ["duplicate"],
-        overview: "duplicate...",
-        trailer: "(trailer link)"
+        "id": movieId,
+        "title": 'Schindlers List',
+        "image": '(link unavailable)',
+        "year": 1993,
+        "genres": ['Biography', 'Drama', 'History'],
+        "likes": 100,
+        "ratings": 8.9,
+        "director": 'Steven Spielberg',
+        "top_cast": ['Liam Neeson', 'Ben Kingsley'],
+        "overview": 'In German-occupied Poland during World War II...',
+        "trailer": '(trailer link)'
       }
     }
+
     expect(response.status).toBe(200);
-    expect(response.body.response).toStrictEqual(expectedMovieData.response);
+    expect(response.body.response).toStrictEqual(expectedResponse.response);
   })
 
 
@@ -402,33 +396,52 @@ describe('Movie Details API', () => {
 describe('Get Movie comments API', () => {
   runPaginationValidationTests(`/v1/movies/${1}/comments`);
 
-  it('Should return a paginated list of comments for movie with id 1', async () => {
-    const movieId = 1, page = 1, limit = 1;
+  it('Should return a paginated list of comments for a movie', async () => {
+    const page = 1, limit = 2;
+    const movie = await movieService.getMovies(page, limit);
+    const movieId = movie.response[0].id;
     const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
 
+    const expectedResponse = [
+      {
+        movie_id: movieId,
+        author: 'movie critic',
+        content: 'Mind-bending action movie.',
+      }
+    ]
+
     expect(response.status).toBe(200);
-    expect(response.body.response.every((response) => 
-      Object.keys(response).includes('id', 'movie_id', 'author', 'content')
-    )).toBe(true);
+    const actualResponse = response.body.response.map(({ id, created_at, ...rest }) => rest);
+    expect(actualResponse).toEqual(expectedResponse);
   })
 
 
-  it('Should return a paginated list of comments for movie with id 10', async () => {
-    const movieId = await movieService.randomMovieId();
-    const page = 1, limit = 1;
+  it('Should return a paginated list of comments for a movie', async () => {
+    const page = 1, limit = 2;
+    const movie = await movieService.getMovies(page, limit);
+    const movieId = movie.response[0].id;
     const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
 
+    const expectedResponse = [
+      {
+        movie_id: movieId,
+        author: 'movie critic',
+        content: 'Mind-bending action movie.',
+      }
+    ]
     expect(response.status).toBe(200);
-    expect(response.body.response.every((response) => 
-      Object.keys(response).includes('id', 'movie_id', 'author', 'content')
-    )).toBe(true);
+    expect(response.status).toBe(200);
+    const actualResponse = response.body.response.map(({ id, created_at, ...rest }) => rest);
+    expect(actualResponse).toEqual(expectedResponse);
   })
 
 
   it('Should return an empty list when there are no comments', async () => {
     await commentService.deleteAllComments();
 
-    const movieId = 10, page = 1, limit = 2;
+    const page = 1, limit = 2;
+    const movie = await movieService.getMovies(page, limit);
+    const movieId = movie.response[0].id;
     const response = await request(app).get(`/v1/movies/${movieId}/comments?page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(200);
@@ -466,7 +479,8 @@ describe('Get Movie comments API', () => {
 // Post a comment API Test
 describe('Post Comment API', () => {
   it('Should create a new comment for a movie using the movie ID', async () => {
-    const movieId = await movieService.randomMovieId();
+    const movie = await movieService.getMovies(1, 2);
+    const movieId = movie.response[0].id;
     const commentData = {
       content: 'I love comments',
       author: 'Boss',
@@ -477,9 +491,9 @@ describe('Post Comment API', () => {
       .set("Content-Type", "application/json")
       .send(commentData);
 
-    const pagedResponse = {
+    const expectedResponse = {
       response: {
-        id: 11,
+        movie_id: movieId,
         author: 'Boss',
         content: 'I love comments'
       }
@@ -487,7 +501,7 @@ describe('Post Comment API', () => {
 
     expect(response.status).toBe(201);
     expect(response.body.response).toEqual(
-      expect.objectContaining(pagedResponse.response)
+      expect.objectContaining(expectedResponse.response)
     );
   })
 
@@ -548,22 +562,27 @@ describe('Similar Movies API', () => {
   runPaginationValidationTests(`/v1/movies/${2}/similar-movies`);
 
   it('Should return a paginated list of similar movies with matching genres', async () => {
-    const movieId = 2, page = 1, limit = 10;
+    const page = 1, limit = 10;
+    const movie = await movieService.getMovies(page, limit);
+    const movieId = movie.response[1].id;
     const response = await request(app).get(`/v1/movies/${movieId}/similar-movies?page=${page}&limit=${limit}`);
 
     const expectedGenres = ["Crime", "Drama"];
     const movieGenres = response.body.response.map(movie => movie.genres);
 
+    expect(response.status).toBe(200);
     movieGenres.forEach(genres => {
       const hasMatchingGenre = expectedGenres.some(expectedGenre => genres.includes(expectedGenre));
       expect(hasMatchingGenre).toBe(true);
     });
-    expect(response.status).toBe(200);
   })
 
 
   it('Should return empty list when there are no movies with similar genre', async () => {
-    const movieId = 10, page = 1, limit = 4;
+    const page = 3, limit = 4;
+    const movie = await movieService.getMovies(page, limit);
+
+    const movieId = movie.response[movie.response.length - 1].id;
     const response = await request(app).get(`/v1/movies/${movieId}/similar-movies?page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(200);

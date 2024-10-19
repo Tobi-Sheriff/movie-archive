@@ -49,8 +49,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     top_cast: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
     },
     overview: {
       type: DataTypes.TEXT,

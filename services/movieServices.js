@@ -10,15 +10,17 @@ class MovieService {
   async checkIfAnyMoviesExist() {
     return await this.movieRepository.checkIfAnyMoviesExist();
   }
-  async randomMovieId() {
-    return await this.movieRepository.randomMovieId();
-  }
+
   async getMovies(page, limit) {
     return await this.movieRepository.getMovies(page, limit);
   }
 
   async getMovieById(id) {
     return await this.movieRepository.getMovieById(id);
+  }
+
+  async addMovie(movie) {
+    return await this.movieRepository.addMovie(movie);
   }
 
   async addAllMovies(movies) {

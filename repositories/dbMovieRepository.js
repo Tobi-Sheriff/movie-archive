@@ -15,17 +15,6 @@ class DBMovieRepository {
     };
   }
 
-  async randomMovieId () {
-    const movies = await Movie.findAll({raw: true});
-    
-    if (!movies) {
-      throw new Error("No movie in the DB");
-    }
-    let maxId = movies[movies.length - 1].id;
-
-    return Math.floor(Math.random() * maxId) + 1;
-  }
-
   async countMovies() {
     return await Movie.count();
   }
@@ -40,8 +29,9 @@ class DBMovieRepository {
       const { count: totalCount, rows: movies } = await Movie.findAndCountAll({
         limit,
         offset,
+        raw: true,
       });
-  
+      
       const totalPages = Math.ceil(totalCount / limit);
       return this.paginateData(movies, page, totalPages);
     } catch (err) {
@@ -51,9 +41,19 @@ class DBMovieRepository {
 
   async getMovieById(id) {
     try {
-      return await Movie.findByPk(id);
+      const movie = await Movie.findByPk(id, { raw: true });
+      
+      return movie;
     } catch (err) {
       console.error('Error getting a movie:', err.stack);
+    }
+  }
+
+  async addMovie(movieData) {
+    try {
+      return await Movie.create(movieData);
+    } catch (err) {
+      console.error("Error adding a Movie", err.stack);
     }
   }
 
@@ -113,7 +113,7 @@ class DBMovieRepository {
 
   async deleteAllMovies() {
     try {
-      await sequelize.query('TRUNCATE TABLE "Movies" RESTART IDENTITY CASCADE');
+      await sequelize.query('TRUNCATE TABLE "Movies" CASCADE');
     } catch (error) {
       console.error('Error during movie deletion:', error);
       throw error;
