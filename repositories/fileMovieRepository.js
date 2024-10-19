@@ -35,7 +35,7 @@ class FileMovieRepository {
     };
   }
 
-  async randomMovieId () {
+  async randomMovieId() {
     const movies = await this._fetch_movies();
     if (!movies) {
       throw new Error("No movie in the DB");
@@ -78,6 +78,25 @@ class FileMovieRepository {
       console.error("Error getting a movie", err.stack);
     }
   }
+
+  async addMovie(newMovie) {
+    try {
+      const movies = await this._fetch_movies();
+
+      const maxId = movies.length > 0 ? movies[movies.length - 1].id : 0;
+
+      newMovie.id = maxId + 1;
+
+      movies.push(newMovie);
+
+      await fs.promises.writeFile(this.filePath, JSON.stringify(movies, null, 2));
+
+      return newMovie;
+    } catch (err) {
+      console.error("Error adding movie", err.stack);
+    }
+  }
+
 
   async addAllMovies(newMovies) {
     try {

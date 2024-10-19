@@ -50,20 +50,16 @@ class FileCommentRepository {
     };
   }
 
-  async addAllComments(newComments, seededMovies) {
+  async addAllComments(newComments) {
     try {
       const comments = await this._fetch_comments();
-
       let commentMaxId = comments.length > 0 ? comments[comments.length - 1].id : 0;
-      let movieMaxId = seededMovies[seededMovies.length - 1].id;
 
       newComments.forEach(comment => {
-      let randomMovieId = Math.floor(Math.random() * movieMaxId) + 1;
         commentMaxId += 1;
         comment.id = commentMaxId;
-        comment.movie_id = randomMovieId;
       });
-      
+
       comments.push(...newComments);
 
       await fs.promises.writeFile(this.filePath, JSON.stringify(comments));

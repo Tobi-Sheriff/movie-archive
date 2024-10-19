@@ -35,11 +35,21 @@ async function seedData() {
     for (let i = 0; i < moviesData.length; i++) {
       const seededMovies = await movieService.addMovie(moviesData[i]);
 
-      commentsData[i].movie_id = seededMovies.dataValues.id;
+      const store_type = process.env.STORE_TYPE;
+
+      if (!store_type) {
+        throw new Error("STORE type not defined");
+      }
+      
+      if (store_type == 'file') {
+        commentsData[i].movie_id = seededMovies.id;
+      } else if (store_type == 'db') {
+        commentsData[i].movie_id = seededMovies.dataValues.id;
+      }
     }
     await commentService.addAllComments(commentsData);
 
-    
+
   } catch (error) {
     console.error("Error seeding movies and comments data: ", error.stack);
   }
