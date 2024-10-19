@@ -1,4 +1,4 @@
-const { Comment } = require('../sequelize/models');
+const { Comment } = require('../models');
 
 class DBCommentRepository {
   async countComments() {

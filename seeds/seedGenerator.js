@@ -3,7 +3,7 @@ const movieService = require('../services/movieServices');
 const commentService = require('../services/commentServices');
 const { checkIfDataExists } = require('../utils/dbUtils');
 const env = process.env.NODE_ENV || 'development';
-const { sequelize } = require('../sequelize/models')
+const { sequelize } = require('../models')
 
 module.exports.seed = async () => {
   if (env === 'test') {

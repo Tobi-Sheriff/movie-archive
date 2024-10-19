@@ -1,6 +1,6 @@
-const { Movie } = require('../sequelize/models');
+const { Movie } = require('../models');
 const { Op, literal } = require('sequelize');
-const { sequelize } = require('../sequelize/models');
+const { sequelize } = require('../models');
 
 class DBMovieRepository {
   paginateData(data, page, totalPages) {

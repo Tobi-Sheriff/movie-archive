@@ -45,7 +45,7 @@ jobs:
 
       # Step 4: Run database migrations
       - name: Run Database Migrations
-        run: npx sequelize-cli db:migrate --config ./sequelize/models/index.js  # or your migration command
+        run: npx sequelize-cli db:migrate  # or your migration command
 
       # Step 5: Run Jest tests
       - name: Run Jest Tests
