@@ -1,0 +1,5 @@
+{
+  "config": "sequelize/config/config.js",
+  "models-path": "sequelize/models",
+  "migrations-path": "sequelize/migrations"
+}
