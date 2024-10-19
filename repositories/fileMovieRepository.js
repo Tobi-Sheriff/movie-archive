@@ -84,11 +84,9 @@ class FileMovieRepository {
       const movies = await this._fetch_movies();
 
       const maxId = movies.length > 0 ? movies[movies.length - 1].id : 0;
-
       newMovie.id = maxId + 1;
 
       movies.push(newMovie);
-
       await fs.promises.writeFile(this.filePath, JSON.stringify(movies, null, 2));
 
       return newMovie;
@@ -96,7 +94,6 @@ class FileMovieRepository {
       console.error("Error adding movie", err.stack);
     }
   }
-
 
   async addAllMovies(newMovies) {
     try {

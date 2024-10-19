@@ -14,17 +14,12 @@ class CommentService {
     return  await this.commentRepository.getCommentsByMovieId(movieId, page, limit);    
   }
 
-  
   async addComment(commentData) {
-    await this.commentRepository.addComment(commentData);
+    return await this.commentRepository.addComment(commentData);
   }
 
-  async addAllComments(commentsData, seededMovies) {
-    await this.commentRepository.addAllComments(commentsData, seededMovies);
-  }
-
-  async postComment(movieId, content, author) {
-    return await this.commentRepository.postComment(movieId, content, author);
+  async addAllComments(commentsData) {
+    await this.commentRepository.addAllComments(commentsData);
   }
 
   async deleteAllComments() {

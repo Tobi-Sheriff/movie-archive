@@ -68,23 +68,19 @@ class FileCommentRepository {
     }
   }
 
-  async postComment(movieId, content, author) {
+  async addComment(newComment) {
     try {
       const comments = await this._fetch_comments();
-      const newComment = {
-        id: comments.length + 1,
-        movie_id: parseInt(movieId),
-        content,
-        author,
-        created_at: new Date()
-      };
+
+      const maxId = comments.length > 0 ? comments[comments.length - 1].id : 0;
+      newComment.id = maxId + 1;
 
       comments.push(newComment);
-      await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
+      await fs.promises.writeFile(this.filePath, JSON.stringify(comments, null, 2));
 
       return newComment;
     } catch (err) {
-      console.error("Error possting comment", err.stack)
+      console.error("Error adding comment", err.stack)
     }
   }
 

@@ -1,4 +1,4 @@
-const { Comment, Movie, sequelize, Sequelize } = require('../models');
+const { Comment } = require('../sequelize/models');
 
 class DBCommentRepository {
   async countComments() {
@@ -12,14 +12,14 @@ class DBCommentRepository {
   async getCommentsByMovieId(movieId, page, limit) {
     try {
       const offset = (page - 1) * limit;
-
+      
       const { count: totalCount, rows: comments } = await Comment.findAndCountAll({
         where: { movie_id: movieId },
         limit,
         offset,
         raw: true,
       });
-
+      
       const totalPages = Math.ceil(totalCount / limit);
       
       return {
@@ -39,7 +39,8 @@ class DBCommentRepository {
 
   async addComment(commentData) {
     try {
-      await Comment.create(commentData)
+      const createdComment = await Comment.create(commentData);      
+      return createdComment.dataValues;
     } catch (err) {
       console.error("Error adding a Movie", err.stack);
     }
@@ -50,22 +51,6 @@ class DBCommentRepository {
       return await Comment.bulkCreate(newComments);
     } catch (err) {
       console.error('Error seeding comments data:', err);
-    }
-  }
-
-  async postComment(movieId, content, author) {
-    try {
-      const newComment = {
-        movie_id: movieId,
-        author,
-        content,
-        created_at: new Date(),
-      };
-      const createdComment = await Comment.create(newComment);
-
-      return createdComment.dataValues;
-    } catch (err) {
-      console.error("Error posting comment:", err.stack);
     }
   }
 

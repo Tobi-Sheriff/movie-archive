@@ -1,6 +1,6 @@
-const { Movie } = require('../models');
+const { Movie } = require('../sequelize/models');
 const { Op, literal } = require('sequelize');
-const { sequelize } = require('../models');
+const { sequelize } = require('../sequelize/models');
 
 class DBMovieRepository {
   paginateData(data, page, totalPages) {
@@ -51,7 +51,9 @@ class DBMovieRepository {
 
   async addMovie(movieData) {
     try {
-      return await Movie.create(movieData);
+      const createdMovie = await Movie.create(movieData);
+      
+      return createdMovie.dataValues;
     } catch (err) {
       console.error("Error adding a Movie", err.stack);
     }

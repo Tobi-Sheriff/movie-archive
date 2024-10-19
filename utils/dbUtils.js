@@ -1,5 +1,5 @@
 // dbUtils.js
-const { Movie, Comment } = require('../models'); // Adjust the path according to your structure
+const { Movie, Comment } = require('../sequelize/models'); // Adjust the path according to your structure
 
 async function checkIfDataExists() {
   const movieCount = await Movie.count();

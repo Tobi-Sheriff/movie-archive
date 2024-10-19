@@ -98,7 +98,13 @@ module.exports.postComment = async (req, res) => {
 
 
   try {
-    const comment = await commentService.postComment(id, content, author);
+    const commentData = {
+      author,
+      content,
+      created_at: new Date(),
+      movie_id: parseInt(id),
+    }
+    const comment = await commentService.addComment(commentData);
     res.status(201).json({ response: comment });
   } catch (error) {
     console.log(error);
