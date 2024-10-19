@@ -6,34 +6,25 @@ class CommentService {
     this.commentRepository = CommentRepositoryAdapter.getRepository();
   }
 
-  async checkIfAnyMoviesExist() {
-    return await this.movieRepository.checkIfAnyMoviesExist();
-  }
-  
-  async getComments() {
-    return await this.commentRepository.getComments();
+  async checkIfAnyCommentsExist() {
+    return await this.commentRepository.checkIfAnyCommentsExist();
   }
 
-  async getCommentsByMovieId(id, page, limit) {
-    return  await this.commentRepository.getCommentsByMovieId(id, page, limit);    
+  async getCommentsByMovieId(movieId, page, limit) {
+    return  await this.commentRepository.getCommentsByMovieId(movieId, page, limit);    
   }
 
-  async addAllComments(comments) {
-    return await this.commentRepository.addAllComments(comments);
+  async addComment(commentData) {
+    return await this.commentRepository.addComment(commentData);
   }
 
-  async postComment(id, content, author) {
-    return await this.commentRepository.postComment(id, content, author);
+  async addAllComments(commentsData) {
+    await this.commentRepository.addAllComments(commentsData);
   }
 
   async deleteAllComments() {
     await this.commentRepository.deleteAllComments();
   }
-
-  async destroyComments() {
-    return this.commentRepository.destroyDB();
-  }
-
 }
 
 module.exports = new CommentService();

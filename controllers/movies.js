@@ -49,7 +49,7 @@ module.exports.movieDetails = async (req, res) => {
     if (!movie) {
       return res.status(404).json({ message: 'Movie ID not found' });
     }
-    res.status(200).json({ response: [movie] });
+    res.status(200).json({ response: movie });
 
   } catch (error) {
     console.log(error)
@@ -73,6 +73,7 @@ module.exports.getComments = async (req, res) => {
     if (!movie) {
       return res.status(404).json({ message: 'Movie ID not found' });
     }
+    
     const paginatedComments = await commentService.getCommentsByMovieId(id, page, limit);
     res.status(200).json(paginatedComments);
   } catch (err) {
@@ -97,7 +98,13 @@ module.exports.postComment = async (req, res) => {
 
 
   try {
-    const comment = await commentService.postComment(id, content, author);
+    const commentData = {
+      author,
+      content,
+      created_at: new Date(),
+      movie_id: parseInt(id),
+    }
+    const comment = await commentService.addComment(commentData);
     res.status(201).json({ response: comment });
   } catch (error) {
     console.log(error);
