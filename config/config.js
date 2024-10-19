@@ -1,21 +1,20 @@
-// config/config.js
 require('dotenv').config(process.env.NODE_ENV === 'test' ? {path: '.env.test'} : {path: '.env'});
 
 module.exports = {
+
   development: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    dialect: "postgres"
+    username: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || 'postgres',
+    database: process.env.DB_NAME || 'movie_db_test',
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'postgres',
   },
   test: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.TEST_DB_NAME,
-    host: process.env.DB_HOST,
-    dialect: "postgres",
-    logging: false
+    username: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || 'postgres',
+    database: process.env.TEST_DB_NAME || 'movie_db_test',
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'postgres',
   },
   production: {
     username: "root",

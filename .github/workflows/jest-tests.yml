@@ -16,6 +16,10 @@ jobs:
     services:
       postgres:
         image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: movie_db_test
         options: >-
           --health-cmd "pg_isready -U postgres"
           --health-interval 10s
@@ -41,18 +45,13 @@ jobs:
 
       # Step 4: Run database migrations
       - name: Run Database Migrations
-        env:
-          DB_HOST: localhost
-          DB_USER: ${{ secrets.POSTGRES_USER }}
-          DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          DB_NAME: ${{ secrets.POSTGRES_DB }}
         run: npx sequelize-cli db:migrate  # or your migration command
 
       # Step 5: Run Jest tests
       - name: Run Jest Tests
         env:
           DB_HOST: localhost
-          DB_USER: ${{ secrets.POSTGRES_USER }}
-          DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          DB_NAME: ${{ secrets.POSTGRES_DB }}
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_NAME: movie_db_test
         run: npm test
