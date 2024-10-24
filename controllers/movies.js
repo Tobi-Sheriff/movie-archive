@@ -1,6 +1,6 @@
 const movieService = require('../services/movieServices');
 const commentService = require('../services/commentServices');
-
+const ExpressError = require('../utils/error');
 
 // List Allmovies
 module.exports.index = async (req, res) => {
@@ -10,8 +10,7 @@ module.exports.index = async (req, res) => {
     const paginatedMovies = await movieService.getMovies(page, limit);
     res.status(200).json(paginatedMovies);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    throw new ExpressError('Internal Server Error', 500);
   }
 };
 
@@ -30,8 +29,7 @@ module.exports.searchMovies = async (req, res) => {
     const searchedMovies = await movieService.searchMovies(q, page, limit);
     res.status(200).json(searchedMovies);
   } catch (err) {
-    console.log("Express Error");
-    res.status(500).json({ message: 'Internal Server Error' });
+    throw new ExpressError('Internal Server Error', 500);
   }
 };
 
@@ -49,11 +47,10 @@ module.exports.movieDetails = async (req, res) => {
     if (!movie) {
       return res.status(404).json({ message: 'Movie ID not found' });
     }
-    res.status(200).json({ response: [movie] });
+    res.status(200).json({ response: movie });
 
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal Server Error' });
+  } catch (err) {
+    throw new ExpressError('Internal Server Error', 500);
   }
 };
 
@@ -73,11 +70,12 @@ module.exports.getComments = async (req, res) => {
     if (!movie) {
       return res.status(404).json({ message: 'Movie ID not found' });
     }
+    
     const paginatedComments = await commentService.getCommentsByMovieId(id, page, limit);
     res.status(200).json(paginatedComments);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    throw new ExpressError('Internal Server Error', 500);
   }
 };
 
@@ -95,14 +93,18 @@ module.exports.postComment = async (req, res) => {
     return res.status(400).json({ error: 'Author name is required' });
   }
 
-
   try {
-    const comment = await commentService.postComment(id, content, author);
+    const commentData = {
+      author,
+      content,
+      created_at: new Date(),
+      movie_id: parseInt(id),
+    }
+    const comment = await commentService.addComment(commentData);
     res.status(201).json({ response: comment });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-
+    console.log(err);
+    throw new ExpressError('Internal Server Error', 500);
   }
 };
 
@@ -126,6 +128,6 @@ module.exports.fetchSimilarMovies = async (req, res) => {
     res.status(200).json(similarMovies);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    throw new ExpressError('Internal Server Error', 500);
   }
 };
