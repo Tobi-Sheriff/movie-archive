@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { readJson } = require('../utils/fileUtils');
+const ExpressError = require('../utils/error');
 
 class FileMovieRepository {
   constructor() {
@@ -13,7 +14,11 @@ class FileMovieRepository {
   }
 
   async _fetch_movies() {
-    return readJson(this.filePath);
+    try {
+      return readJson(this.filePath);
+    } catch (err) {
+      throw new ExpressError(`Error checking if Movies exist: ${err.message}`, 404);
+    }
   }
 
   async paginateData(data, page, limit) {
@@ -35,23 +40,21 @@ class FileMovieRepository {
     };
   }
 
-  async randomMovieId() {
-    const movies = await this._fetch_movies();
-    if (!movies) {
-      throw new Error("No movie in the DB");
-    }
-    let maxId = movies[movies.length - 1].id;
-
-    return Math.floor(Math.random() * maxId) + 1;
-  }
-
   async countMovies() {
-    const movies = await this._fetch_movies();
-    return movies.length;
+    try {
+      const movies = await this._fetch_movies();
+      return movies.length;
+    } catch (err) {
+      throw new ExpressError(`Error Counting Movies ${err.message}`);
+    }
   }
 
   async checkIfAnyMoviesExist() {
-    return await this.countMovies() > 0;
+    try {
+      return (await this.countMovies()) > 0;
+    } catch (err) {
+      throw new ExpressError(`Error checking if Movies exist: ${err.message}`, 404);
+    }
   }
 
   async getMovies(page, limit) {
@@ -61,10 +64,9 @@ class FileMovieRepository {
       return this.paginateData(movies, page, limit);
     } catch (err) {
       if (err) {
-        console.log(err);
         return { response: [] };
       } else {
-        throw err;
+        throw new ExpressError(`Error getting movies List: ${err.message}`, 404);
       }
     }
   }
@@ -75,7 +77,7 @@ class FileMovieRepository {
       const searchResult = movies.find((movie) => movie.id === parseInt(id));
       return searchResult;
     } catch (err) {
-      console.error("Error getting a movie", err.stack);
+      throw new ExpressError(`Error getting a movie: ${err.message}`, 404);
     }
   }
 
@@ -91,7 +93,7 @@ class FileMovieRepository {
 
       return newMovie;
     } catch (err) {
-      console.error("Error adding movie", err.stack);
+      throw new ExpressError(`Error adding a movie: ${err.message}`, 404);
     }
   }
 
@@ -111,7 +113,7 @@ class FileMovieRepository {
 
       return newMovies
     } catch (err) {
-      console.error("Error adding moovies", err.stack);
+      throw new ExpressError(`Error Multiple Movies: ${err.message}`, 404);
     }
   }
 
@@ -141,40 +143,48 @@ class FileMovieRepository {
       return matrix[a.length][b.length];
     }
 
-    const maxDistance = 2;
-    const movies = await this._fetch_movies();
-    const lowercaseQuery = query.toLowerCase();
+    try {
+      const maxDistance = 2;
+      const movies = await this._fetch_movies();
+      const lowercaseQuery = query.toLowerCase();
 
-    // Exact match
-    const exactMatches = movies.filter((movie) => movie.title.toLowerCase().includes(lowercaseQuery));
+      // Exact match
+      const exactMatches = movies.filter((movie) => movie.title.toLowerCase().includes(lowercaseQuery));
 
-    // Fuzzy match
-    const fuzzyMatches = movies.filter(movie => {
-      const distance = levenshtein(movie.title.toLowerCase(), lowercaseQuery);
-      return distance <= maxDistance;
-    });
+      // Fuzzy match
+      const fuzzyMatches = movies.filter(movie => {
+        const distance = levenshtein(movie.title.toLowerCase(), lowercaseQuery);
+        return distance <= maxDistance;
+      });
 
-    const uniqueResults = [...new Set([...exactMatches, ...fuzzyMatches])];
-    return this.paginateData(uniqueResults, page, limit);
+      const uniqueResults = [...new Set([...exactMatches, ...fuzzyMatches])];
+      return this.paginateData(uniqueResults, page, limit);
+    } catch (err) {
+      throw new ExpressError(`Error Searching for movie: ${err.message}`, 404);
+    }
   }
 
   async getSimilarMovies(id, page, limit) {
-    const movies = await this._fetch_movies();
+    try {
+      const movies = await this._fetch_movies();
 
-    const targetMovie = movies.find((movie) => (movie.id) === parseInt(id));
-    const targetGenre = targetMovie.genres;
-    const similarMovies = movies.filter((movie) => {
-      return (movie.id) !== parseInt(id) && movie.genres.some((genre) => targetGenre.includes(genre));
-    });
+      const targetMovie = movies.find((movie) => (movie.id) === parseInt(id));
+      const targetGenre = targetMovie.genres;
+      const similarMovies = movies.filter((movie) => {
+        return (movie.id) !== parseInt(id) && movie.genres.some((genre) => targetGenre.includes(genre));
+      });
 
-    return this.paginateData(similarMovies, page, limit);
+      return this.paginateData(similarMovies, page, limit);
+    } catch (err) {
+      throw new ExpressError(`Error getting similar movies: ${err.message}`, 404);
+    }
   }
 
   async deleteAllMovies() {
     try {
       await fs.promises.writeFile(this.filePath, JSON.stringify([]));
     } catch (err) {
-      console.error(err);
+      throw new ExpressError(`Error during movie deletion: ${err.message}`, 404);
     }
   }
 }

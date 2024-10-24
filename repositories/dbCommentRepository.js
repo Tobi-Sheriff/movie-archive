@@ -1,27 +1,35 @@
 const { Comment } = require('../models');
+const ExpressError = require('../utils/error');
 
 class DBCommentRepository {
   async countComments() {
-    return await Comment.count();
+    try {
+      return await Comment.count();
+    } catch (err) {
+      throw new ExpressError(`Error Counting Comments ${err.message}`);
+    }
   }
 
   async checkIfAnyCommentsExist() {
-    return (await this.countComments()) > 0;
+    try {
+      return (await this.countComments()) > 0;
+    } catch (err) {
+      throw new ExpressError(`Error checking if Cmments exist: ${err.message}`, 404);
+    }
   }
 
   async getCommentsByMovieId(movieId, page, limit) {
     try {
       const offset = (page - 1) * limit;
-      
+
       const { count: totalCount, rows: comments } = await Comment.findAndCountAll({
         where: { movie_id: movieId },
         limit,
         offset,
         raw: true,
       });
-      
+
       const totalPages = Math.ceil(totalCount / limit);
-      
       return {
         response: comments,
         pagination: {
@@ -32,17 +40,16 @@ class DBCommentRepository {
         },
       };
     } catch (err) {
-      console.error("Error getting comments", err.stack);
-      
+      throw new ExpressError(`Error Getting Comments by movie ID: ${err.message}`, 404);
     }
   }
 
   async addComment(commentData) {
     try {
-      const createdComment = await Comment.create(commentData);      
+      const createdComment = await Comment.create(commentData);
       return createdComment.dataValues;
     } catch (err) {
-      console.error("Error adding a Movie", err.stack);
+      throw new ExpressError(`Error Adding a Comments: ${err.message}`, 404);
     }
   }
 
@@ -50,7 +57,7 @@ class DBCommentRepository {
     try {
       return await Comment.bulkCreate(newComments);
     } catch (err) {
-      console.error('Error seeding comments data:', err);
+      throw new ExpressError(`Error Adding Multiple Comments: ${err.message}`, 404);
     }
   }
 
@@ -58,8 +65,7 @@ class DBCommentRepository {
     try {
       await Comment.destroy({ where: {}, truncate: true });
     } catch (err) {
-      console.error('Error during movie deletion:', err);
-      throw err;
+      throw new ExpressError(`Error Deleting Comments: ${err.message}`, 404);
     }
   }
 }

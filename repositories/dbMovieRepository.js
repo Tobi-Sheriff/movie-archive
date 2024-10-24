@@ -1,6 +1,7 @@
 const { Movie } = require('../models');
 const { Op, literal } = require('sequelize');
 const { sequelize } = require('../models');
+const ExpressError = require('../utils/error');
 
 class DBMovieRepository {
   paginateData(data, page, totalPages) {
@@ -16,11 +17,19 @@ class DBMovieRepository {
   }
 
   async countMovies() {
-    return await Movie.count();
+    try {
+      return await Movie.count();
+    } catch (err) {
+      throw new ExpressError(`Error Counting Movies ${err.message}`);
+    }
   }
 
   async checkIfAnyMoviesExist() {
-    return (await this.countMovies()) > 0;
+    try {
+      return (await this.countMovies()) > 0;
+    } catch (err) {
+      throw new ExpressError(`Error checking if Movies exist: ${err.message}`, 404);
+    }
   }
 
   async getMovies(page, limit) {
@@ -31,31 +40,30 @@ class DBMovieRepository {
         offset,
         raw: true,
       });
-      
+
       const totalPages = Math.ceil(totalCount / limit);
       return this.paginateData(movies, page, totalPages);
     } catch (err) {
-      console.error('Error getting movie list:', err.stack);
+      throw new ExpressError(`Error getting movies List: ${err.message}`, 404);
     }
   }
 
   async getMovieById(id) {
     try {
       const movie = await Movie.findByPk(id, { raw: true });
-      
       return movie;
     } catch (err) {
-      console.error('Error getting a movie:', err.stack);
+      throw new ExpressError(`Error getting a movie: ${err.message}`, 404);
     }
   }
 
   async addMovie(movieData) {
     try {
       const createdMovie = await Movie.create(movieData);
-      
+
       return createdMovie.dataValues;
     } catch (err) {
-      console.error("Error adding a Movie", err.stack);
+      throw new ExpressError(`Error adding a movie: ${err.message}`, 404);
     }
   }
 
@@ -63,7 +71,7 @@ class DBMovieRepository {
     try {
       return await Movie.bulkCreate(newMovies);
     } catch (err) {
-      console.error('Error seeding movies data:', err.stack);
+      throw new ExpressError(`Error Multiple Movies: ${err.message}`, 404);
     }
   }
 
@@ -81,7 +89,7 @@ class DBMovieRepository {
       const totalPages = Math.ceil(fuzzyMatches.length / limit);
       return this.paginateData(fuzzyMatches, page, totalPages)
     } catch (err) {
-      console.error("Error Searching for movie", err.message)
+      throw new ExpressError(`Error Searching for movie: ${err.message}`, 404);
     }
   }
 
@@ -89,7 +97,6 @@ class DBMovieRepository {
     try {
       const targetMovie = await this.getMovieById(id);
       if (!targetMovie) return { response: [], pagination: {} };
-
       const { genres } = targetMovie;
       const offset = (page - 1) * limit;
 
@@ -109,16 +116,15 @@ class DBMovieRepository {
       const totalPages = Math.ceil(totalCount / limit);
       return this.paginateData(similarMovies, page, totalPages)
     } catch (err) {
-      console.error("Error getting similar movies", err.stack);
+      throw new ExpressError(`Error getting similar movies: ${err.message}`, 404);
     }
   }
 
   async deleteAllMovies() {
     try {
       await sequelize.query('TRUNCATE TABLE "Movies" CASCADE');
-    } catch (error) {
-      console.error('Error during movie deletion:', error);
-      throw error;
+    } catch (err) {
+      throw new ExpressError(`Error during movie deletion: ${err.message}`, 404);
     }
   }
 }

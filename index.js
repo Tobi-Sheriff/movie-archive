@@ -15,6 +15,11 @@ seed();
 app.use(express.json());
 app.use('/v1/movies', moviesRoutes);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.statusCode || 500).json({ error: err.message });
+});
+
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 })

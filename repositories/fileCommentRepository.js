@@ -1,12 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const { readJson } = require('../utils/fileUtils');
-const { log } = require('console');
+const ExpressError = require('../utils/error');
 
 class FileCommentRepository {
   constructor(filePath) {
     const env = process.env.NODE_ENV
-
     if (env == 'test') {
       this.filePath = path.join(__dirname, '../test/comments.json');
     } else {
@@ -15,39 +14,55 @@ class FileCommentRepository {
   }
 
   async _fetch_comments() {
-    return readJson(this.filePath);
+    try {
+      return readJson(this.filePath);
+    } catch (err) {
+      throw new ExpressError(`Error checking if Comments exist: ${err.message}`, 404);
+    }
   }
 
-  async countMovies() {
-    const comments = await this._fetch_comments();
-    return comments.length;
+  async countComments() {
+    try {
+      const comments = await this._fetch_comments();
+      return comments.length;
+    } catch (err) {
+      throw new ExpressError(`Error Counting Comments ${err.message}`);
+    }
   }
 
   async checkIfAnyCommentsExist() {
-    return this.countMovies > 0;
+    try {
+      return (await this.countComments()) > 0;
+    } catch (err) {
+      throw new ExpressError(`Error checking if Movies exist: ${err.message}`, 404);
+    }
   }
 
   async getCommentsByMovieId(movieId, page, limit) {
-    const comments = await this._fetch_comments();
-    const movieComments = comments.filter((comment) =>
-      comment.movie_id === parseInt(movieId)
-    );
+    try {
+      const comments = await this._fetch_comments();
+      const movieComments = comments.filter((comment) =>
+        comment.movie_id === parseInt(movieId)
+      );
 
-    const totalItems = movieComments.length;
-    const totalPages = Math.ceil(totalItems / limit);
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
+      const totalItems = movieComments.length;
+      const totalPages = Math.ceil(totalItems / limit);
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
 
-    const paginatedData = movieComments.slice(startIndex, endIndex);
-    return {
-      response: paginatedData,
-      pagination: {
-        totalItems,
-        totalPages,
-        pageSize: limit,
-        currentPage: page,
-      }
-    };
+      const paginatedData = movieComments.slice(startIndex, endIndex);
+      return {
+        response: paginatedData,
+        pagination: {
+          totalItems,
+          totalPages,
+          pageSize: limit,
+          currentPage: page,
+        }
+      };
+    } catch (err) {
+      throw new ExpressError(`Error Getting Comments by movie ID: ${err.message}`, 404);
+    }
   }
 
   async addAllComments(newComments) {
@@ -64,7 +79,7 @@ class FileCommentRepository {
 
       await fs.promises.writeFile(this.filePath, JSON.stringify(comments));
     } catch (err) {
-      console.error("error seeding comments", err.stack);
+      throw new ExpressError(`Error Adding Multiple Comments: ${err.message}`, 404);
     }
   }
 
@@ -80,7 +95,7 @@ class FileCommentRepository {
 
       return newComment;
     } catch (err) {
-      console.error("Error adding comment", err.stack)
+      throw new ExpressError(`Error Adding a Comments: ${err.message}`, 404);
     }
   }
 
@@ -88,7 +103,7 @@ class FileCommentRepository {
     try {
       await fs.promises.writeFile(this.filePath, JSON.stringify([]))
     } catch (err) {
-      console.error(err);
+      throw new ExpressError(`Error Deleting Comments: ${err.message}`, 404);
     }
   }
 }
