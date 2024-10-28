@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+      - 'feature/*'
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -11,13 +14,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Deploy to Server
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          script: |
+
+      - name: Deploy to Server via SSH
+        if: github.ref == 'refs/heads/main'
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        run: |
+          echo "$SERVER_PASSWORD" | sshpass ssh -o StrictHostKeyChecking=no "$SERVER_USERNAME@$SERVER_IP" << 'EOF'
             cd /var/www/myproject
             git pull
-            # Other deployment commands
+            npm install
+            npx sequelize-cli db:migrate
+          EOF
