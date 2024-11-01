@@ -4,11 +4,17 @@ on:
   push:
     branches:
       - main
+      - 'feature/code-cleanup'
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DB_USER: ${{ secrets.POSTGRES_USER }}
+      DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      DB_NAME: ${{ secrets.POSTGRES_DB }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -29,9 +35,9 @@ jobs:
             git pull origin main
 
             # 3. Create .env file from secrets
-            echo "DB_USER=${{ secrets.POSTGRES_USER }}" > .env
-            echo "DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
-            echo "DB_NAME=${{ secrets.POSTGRES_DB }}" >> .env
+            echo "DB_USER=${DB_USER}" > .env
+            echo "DB_PASSWORD=${.DB_USER}" >> .env
+            echo "DB_NAME=${.DB_USER}" >> .env
             echo "DB_HOST=localhost" >> .env
             echo "DB_PORT=5432" >> .env
             echo "STORE_TYPE=db" >> .env
