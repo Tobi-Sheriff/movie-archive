@@ -27,14 +27,13 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            export SUDO_ASKPASS=/usr/bin/ssh-askpass
             echo "Deploying on $(whoami)@${{ secrets.SERVER_IP }}"
 
             # 1. Navigate to the project directory
             cd ~/sheriff_project/movie-archive
 
             # 2. Pull the latest code
-            git pull origin main
+            sudo git pull origin main
 
             # 3. Create .env file from secrets
             echo "DB_USER=${{ env.DB_USER }}" > .env
@@ -51,8 +50,7 @@ jobs:
             npx sequelize-cli db:migrate
 
             # 6. Restart your Node.js application (assuming using PM2 or Node directly)
-            sudo -A systemctl restart postgresql
-            sudo -A pm2 restart index.js || pm2 start index.js --name movie-archive
+            pm2 restart index.js || pm2 start index.js --name movie-archive
 
             # Optional: Configure PostgreSQL to start on boot (run once on server)
             sudo systemctl enable postgresql
