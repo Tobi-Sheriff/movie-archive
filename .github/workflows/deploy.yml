@@ -27,7 +27,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            echo "Deploying on $(whoami)@${{ secrets.SERVER_IP }}"
+            echo "Deploying on $(whoami)@${{ secrets.SERVER_IP }} | sudo -S systemctl enable postgresql"
 
             # 1. Navigate to the project directory
             cd ~/sheriff_project/movie-archive
