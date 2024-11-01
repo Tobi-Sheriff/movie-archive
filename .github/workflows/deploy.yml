@@ -21,5 +21,35 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            whoami
-            ls -la
+            echo "Deploying on $(whoami)@${{ secrets.SERVER_IP }}"
+
+            # 1. Navigate to the project directory
+            cd ~/sheriff_project/movie-archive
+
+            # 2. Pull the latest code
+            git pull origin main
+
+            # 3. Create .env file from secrets
+            echo "DB_USER=${{ secrets.POSTGRES_USER }}" > .env
+            echo "DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+            echo "DB_NAME=${{ secrets.POSTGRES_DB }}" >> .env
+            echo "DB_HOST=localhost" >> .env
+            echo "DB_PORT=5432" >> .env
+            echo "STORE_TYPE=db" >> .env
+
+            # 4. Install dependencies
+            npm install
+
+            # 5. Check PostgreSQL status and start if necessary
+            if ! pg_isready -q; then
+              sudo systemctl start postgresql
+            fi
+
+            # 6. Run migrations if needed
+            npx sequelize-cli db:migrate
+
+            # 7. Restart your Node.js application (assuming using PM2 or Node directly)
+            pm2 restart index.js || pm2 start index.js --name movie-archive
+
+            # Optional: Configure PostgreSQL to start on boot (run once on server)
+            sudo systemctl enable postgresql
