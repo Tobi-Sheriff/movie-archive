@@ -46,15 +46,10 @@ jobs:
             # 4. Install dependencies
             npm install
 
-            # 5. Check PostgreSQL status and start if necessary
-            if ! pg_isready -q; then
-              sudo systemctl start postgresql
-            fi
-
-            # 6. Run migrations if needed
+            # 5. Run migrations if needed
             npx sequelize-cli db:migrate
 
-            # 7. Restart your Node.js application (assuming using PM2 or Node directly)
+            # 6. Restart your Node.js application (assuming using PM2 or Node directly)
             pm2 restart index.js || pm2 start index.js --name movie-archive
 
             # Optional: Configure PostgreSQL to start on boot (run once on server)
