@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - 'feature/code-cleanup'
   workflow_dispatch:
 
 jobs:
