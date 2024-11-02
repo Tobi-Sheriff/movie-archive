@@ -1,4 +1,4 @@
-name: Run Jest Tests
+name: Run Build
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 # Define the jobs to run
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     env:
       DB_USER: ${{ secrets.POSTGRES_USER }}
@@ -61,7 +61,7 @@ jobs:
 
       # Step 5: Run database migrations
       - name: Run Database Migrations
-        run: npx sequelize-cli db:migrate  # or your migration command
+        run: npx sequelize-cli db:migrate
 
       # Step 6: Run Jest tests
       - name: Run Jest Tests (DB Storage)
@@ -74,7 +74,7 @@ jobs:
         run: npm test
           
       # Step 7: Run Production deployment
-      - name: Execute Remote SSH Commands Using Password
+      - name: Run Production deployment
         if: github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@v1.1.0
         with:
@@ -94,6 +94,9 @@ jobs:
             # 3. Install dependencies, using ci for faster installation
             npm install
 
-            # 4. Restart your Node.js application (assuming using PM2 or Node directly)
+            # Step 4: Run database migrations
+            npx sequelize-cli db:migrate
+
+            # 5. Restart your Node.js application (assuming using PM2 or Node directly)
             pm2 restart index.js || pm2 start index.js --name movie-archive
 
