@@ -62,7 +62,7 @@ jobs:
             sudo -u postgres psql
             sudo -u postgres createuser --superuser ${{ env.DB_USER }}
             sudo -u postgres createdb ${{ env.DB_NAME }}
-            sudo -u postgres psql -c "ALTER ROLE myuser WITH PASSWORD ${{ env.DB_PASSWORD }};"
+            sudo -u postgres psql -c "ALTER ROLE ${{ env.DB_USER }} WITH PASSWORD ${{ env.DB_PASSWORD }};"
             \q
 
             # Grant privileges (optional)
