@@ -36,38 +36,6 @@ jobs:
             # 2. Pull the latest code
             git pull origin main
 
-            # 3. Create .env file from secrets
-            echo "DB_USER=${{ env.DB_USER }}" > .env
-            echo "DB_PASSWORD=${{ env.DB_PASSWORD }}" >> .env
-            echo "DB_NAME=${{ env.DB_NAME }}" >> .env
-            echo "DB_HOST=localhost" >> .env
-            echo "DB_PORT=5432" >> .env
-            echo "STORE_TYPE=db" >> .env
-            # cat .env
-
-            # 4. Install dependencies, using ci for faster installation
-            npm ci
-            npm audit
-
-            # Install PostgreSQL (if not already installed)
-            sudo apt-get update
-            sudo apt-get install postgresql postgresql-contrib
-
-            # Check PostgreSQL status and start if necessary
-            if ! pg_isready -q; then
-              sudo systemctl start postgresql
-            fi
-
-            # # Create user, database, and password
-            # sudo -u postgres psql
-            # sudo -u postgres createuser --superuser ${{ env.DB_USER }}
-            # sudo -u postgres createdb ${{ env.DB_NAME }}
-            # sudo -u postgres psql -c "ALTER ROLE ${{ env.DB_USER }} WITH PASSWORD ${{ env.DB_PASSWORD }};"
-            # \q
-
-            # Grant privileges (optional)
-            sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ env.DB_NAME }} TO ${{ env.DB_USER }};"
-
             # 5. Run migrations if needed
             npx sequelize-cli db:migrate
 
