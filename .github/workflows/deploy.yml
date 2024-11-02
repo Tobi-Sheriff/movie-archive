@@ -38,8 +38,8 @@ jobs:
 
             # 3. Create .env file from secrets
             echo "DB_USER=${{ env.DB_USER }}" > .env
-            echo "DB_PASSWORD=${{ env.DB_USER }}" >> .env
-            echo "DB_NAME=${{ env.DB_USER }}" >> .env
+            echo "DB_PASSWORD=${{ env.DB_PASSWORD }}" >> .env
+            echo "DB_NAME=${{ env.DB_NAME }}" >> .env
             echo "DB_HOST=localhost" >> .env
             echo "DB_PORT=5432" >> .env
             echo "STORE_TYPE=db" >> .env
