@@ -28,7 +28,6 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             whoami
-            ls -la
             # echo "Deploying on $(whoami)@${{ secrets.SERVER_IP }}"
 
             # # 1. Navigate to the project directory
