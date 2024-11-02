@@ -36,8 +36,11 @@ jobs:
             # 2. Pull the latest code
             git pull origin main
 
-            # 5. Run migrations if needed
-            npx sequelize-cli db:migrate
+            # cat .env
+
+            # 4. Install dependencies, using ci for faster installation
+            npm install
+            npm audit
 
             # # 6. Restart your Node.js application (assuming using PM2 or Node directly)
             # pm2 restart index.js || pm2 start index.js --name movie-archive
