@@ -1,10 +1,10 @@
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV;
 
-if (env === 'test') {
-    require('dotenv').config({ path: '.env.test' });
-} else {
-    require('dotenv').config();
-}
+// if (env === 'test') {
+//     require('dotenv').config({ path: '.env.test' });
+// } else {
+//     require('dotenv').config();
+// }
 
 module.exports = {
     [env]: {
