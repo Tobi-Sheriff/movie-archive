@@ -31,6 +31,7 @@ jobs:
 
             # 1. Navigate to the project directory
             cd ~/sheriff_project/movie-archive
+            pwd
 
             # # 2. Pull the latest code
             # sudo git pull origin main
