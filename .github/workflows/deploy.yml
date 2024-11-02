@@ -49,8 +49,8 @@ jobs:
             npm ci
             npm audit
 
-            # # 5. Run migrations if needed
-            # npx sequelize-cli db:migrate
+            # 5. Run migrations if needed
+            npx sequelize-cli db:migrate
 
             # # 6. Restart your Node.js application (assuming using PM2 or Node directly)
             # pm2 restart index.js || pm2 start index.js --name movie-archive
