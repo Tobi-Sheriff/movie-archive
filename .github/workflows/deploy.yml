@@ -45,10 +45,8 @@ jobs:
             echo "STORE_TYPE=db" >> .env
             # cat .env
 
-            ls -la
-
-            # # 4. Install dependencies
-            # npm install
+            # 4. Install dependencies
+            npm install
 
             # # 5. Run migrations if needed
             # npx sequelize-cli db:migrate
