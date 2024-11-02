@@ -27,30 +27,32 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            echo "Deploying on $(whoami)@${{ secrets.SERVER_IP }}"
+            whoami
+            ls -la
+            # echo "Deploying on $(whoami)@${{ secrets.SERVER_IP }}"
 
-            # 1. Navigate to the project directory
-            cd ~/sheriff_project/movie-archive
+            # # 1. Navigate to the project directory
+            # cd ~/sheriff_project/movie-archive
 
-            # 2. Pull the latest code
-            sudo git pull origin main
+            # # 2. Pull the latest code
+            # sudo git pull origin main
 
-            # 3. Create .env file from secrets
-            echo "DB_USER=${{ env.DB_USER }}" > .env
-            echo "DB_PASSWORD=${{ env.DB_USER }}" >> .env
-            echo "DB_NAME=${{ env.DB_USER }}" >> .env
-            echo "DB_HOST=localhost" >> .env
-            echo "DB_PORT=5432" >> .env
-            echo "STORE_TYPE=db" >> .env
+            # # 3. Create .env file from secrets
+            # echo "DB_USER=${{ env.DB_USER }}" > .env
+            # echo "DB_PASSWORD=${{ env.DB_USER }}" >> .env
+            # echo "DB_NAME=${{ env.DB_USER }}" >> .env
+            # echo "DB_HOST=localhost" >> .env
+            # echo "DB_PORT=5432" >> .env
+            # echo "STORE_TYPE=db" >> .env
 
-            # 4. Install dependencies
-            npm install
+            # # 4. Install dependencies
+            # npm install
 
-            # 5. Run migrations if needed
-            npx sequelize-cli db:migrate
+            # # 5. Run migrations if needed
+            # npx sequelize-cli db:migrate
 
-            # 6. Restart your Node.js application (assuming using PM2 or Node directly)
-            pm2 restart index.js || pm2 start index.js --name movie-archive
+            # # 6. Restart your Node.js application (assuming using PM2 or Node directly)
+            # pm2 restart index.js || pm2 start index.js --name movie-archive
 
-            # Optional: Configure PostgreSQL to start on boot (run once on server)
-            sudo systemctl enable postgresql
+            # # Optional: Configure PostgreSQL to start on boot (run once on server)
+            # sudo systemctl enable postgresql
