@@ -66,7 +66,7 @@ jobs:
             # \q
 
             # Grant privileges (optional)
-            sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydb TO myuser;"
+            sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ env.DB_NAME }} TO ${{ env.DB_USER }};"
 
             # 5. Run migrations if needed
             npx sequelize-cli db:migrate
