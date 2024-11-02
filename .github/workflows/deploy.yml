@@ -10,10 +10,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      DB_USER: ${{ secrets.POSTGRES_USER }}
-      DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      DB_NAME: ${{ secrets.POSTGRES_DB }}
 
     steps:
       - name: Checkout code
@@ -36,14 +32,11 @@ jobs:
             # 2. Pull the latest code
             git pull origin main
 
-            # cat .env
+            ls -la
 
-            # 4. Install dependencies, using ci for faster installation
+            # 3. Install dependencies, using ci for faster installation
             npm install
             npm audit
 
-            # 6. Restart your Node.js application (assuming using PM2 or Node directly)
+            # 4. Restart your Node.js application (assuming using PM2 or Node directly)
             pm2 restart index.js || pm2 start index.js --name movie-archive
-
-            # Optional: Configure PostgreSQL to start on boot (run once on server)
-            sudo systemctl enable postgresql
