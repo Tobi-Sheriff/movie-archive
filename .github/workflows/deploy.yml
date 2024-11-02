@@ -50,7 +50,7 @@ jobs:
             npm audit
 
             # Install PostgreSQL (if not already installed)
-            sudo apt-get update
+            sudo -s apt-get update
             sudo apt-get install postgresql postgresql-contrib
 
             # Check PostgreSQL status and start if necessary
@@ -59,7 +59,7 @@ jobs:
             fi
 
             # Create user, database, and password
-            sudo -u -s postgres psql
+            sudo -u postgres psql
             sudo -u postgres createuser --superuser ${{ env.DB_USER }}
             sudo -u postgres createdb ${{ env.DB_NAME }}
             sudo -u postgres psql -c "ALTER ROLE myuser WITH PASSWORD ${{ env.DB_PASSWORD }};"
