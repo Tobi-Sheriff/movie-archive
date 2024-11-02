@@ -43,6 +43,9 @@ jobs:
             echo "DB_HOST=localhost" >> .env
             echo "DB_PORT=5432" >> .env
             echo "STORE_TYPE=db" >> .env
+            cat .env
+            cat .env.test
+            cat .env.test.save
 
             ls -la
 
