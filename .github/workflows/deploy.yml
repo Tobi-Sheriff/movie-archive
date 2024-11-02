@@ -16,7 +16,6 @@ jobs:
       DB_NAME: ${{ secrets.POSTGRES_DB }}
 
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -30,8 +29,8 @@ jobs:
             whoami
             echo "Deploying on $(whoami)@${{ secrets.SERVER_IP }}"
 
-            # # 1. Navigate to the project directory
-            # cd ~/sheriff_project/movie-archive
+            # 1. Navigate to the project directory
+            cd ~/sheriff_project/movie-archive
 
             # # 2. Pull the latest code
             # sudo git pull origin main
