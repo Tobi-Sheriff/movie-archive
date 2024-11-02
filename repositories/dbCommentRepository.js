@@ -1,72 +1,49 @@
 const { Comment } = require('../models');
-const ExpressError = require('../utils/error');
 
 class DBCommentRepository {
   async countComments() {
-    try {
-      return await Comment.count();
-    } catch (err) {
-      throw new ExpressError(`Error Counting Comments ${err.message}`);
-    }
+    return await Comment.count();
   }
 
   async checkIfAnyCommentsExist() {
-    try {
-      return (await this.countComments()) > 0;
-    } catch (err) {
-      throw new ExpressError(`Error checking if Cmments exist: ${err.message}`, 404);
-    }
+    return (await this.countComments()) > 0;
   }
 
   async getCommentsByMovieId(movieId, page, limit) {
-    try {
-      const offset = (page - 1) * limit;
+    const offset = (page - 1) * limit;
 
-      const { count: totalCount, rows: comments } = await Comment.findAndCountAll({
-        where: { movie_id: movieId },
-        limit,
-        offset,
-        raw: true,
-      });
+    const { count: totalCount, rows: comments } = await Comment.findAndCountAll({
+      where: { movie_id: movieId },
+      limit,
+      offset,
+      raw: true,
+    });
 
-      const totalPages = Math.ceil(totalCount / limit);
-      return {
-        response: comments,
-        pagination: {
-          totalPages,
-          currentPage: page,
-          hasNextPage: page < totalPages,
-          hasPreviousPage: page > 1,
-        },
-      };
-    } catch (err) {
-      throw new ExpressError(`Error Getting Comments by movie ID: ${err.message}`, 404);
-    }
+    const totalPages = Math.ceil(totalCount / limit);
+    return {
+      response: comments,
+      pagination: {
+        totalCount,
+        totalPages,
+        currentPage: page,
+        pageSize: limit,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      }
+    };
   }
 
   async addComment(commentData) {
-    try {
-      const createdComment = await Comment.create(commentData);
-      return createdComment.dataValues;
-    } catch (err) {
-      throw new ExpressError(`Error Adding a Comments: ${err.message}`, 404);
-    }
+    const createdComment = await Comment.create(commentData);
+    return createdComment.dataValues;
   }
 
   async addAllComments(newComments) {
-    try {
-      return await Comment.bulkCreate(newComments);
-    } catch (err) {
-      throw new ExpressError(`Error Adding Multiple Comments: ${err.message}`, 404);
-    }
+    return await Comment.bulkCreate(newComments);
   }
 
   async deleteAllComments() {
-    try {
-      await Comment.destroy({ where: {}, truncate: true });
-    } catch (err) {
-      throw new ExpressError(`Error Deleting Comments: ${err.message}`, 404);
-    }
+    await Comment.destroy({ where: {}, truncate: true });
   }
 }
 
