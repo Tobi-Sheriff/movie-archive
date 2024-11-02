@@ -45,7 +45,7 @@ jobs:
             # echo "STORE_TYPE=db" >> .env
             # cat .env
             # cat .env.test
-            rm .env.test .env.test.save
+            # rm .env.test .env.test.save
             # cat .env.test.save
 
             ls -la
