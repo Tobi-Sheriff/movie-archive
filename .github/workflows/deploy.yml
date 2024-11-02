@@ -22,7 +22,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            whoami
             echo "Deploying on $(whoami)@${{ secrets.SERVER_IP }}"
 
             # 1. Navigate to the project directory
@@ -32,11 +31,8 @@ jobs:
             # 2. Pull the latest code
             git pull origin main
 
-            ls -la
-
             # 3. Install dependencies, using ci for faster installation
             npm install
-            npm audit
 
             # 4. Restart your Node.js application (assuming using PM2 or Node directly)
             pm2 restart index.js || pm2 start index.js --name movie-archive
