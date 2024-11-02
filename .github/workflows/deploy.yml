@@ -49,8 +49,11 @@ jobs:
             npm ci
             npm audit
 
+            # specify ssh-askpass as my helper
+            Path askpass /usr/bin/ssh-askpass
+
             # Install PostgreSQL (if not already installed)
-            sudo -s apt-get update
+            sudo apt-get update
             sudo apt-get install postgresql postgresql-contrib
 
             # Check PostgreSQL status and start if necessary
