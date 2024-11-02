@@ -44,6 +44,8 @@ jobs:
             echo "DB_PORT=5432" >> .env
             echo "STORE_TYPE=db" >> .env
 
+            ls -la
+
             # # 4. Install dependencies
             # npm install
 
