@@ -20,7 +20,7 @@ app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).json({ error: err.message });
 });
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`Listening on port ${PORT}`);
 })
 
