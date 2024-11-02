@@ -16,6 +16,7 @@ jobs:
       DB_NAME: ${{ secrets.POSTGRES_DB }}
 
     steps:
+      
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -48,9 +49,6 @@ jobs:
             # 4. Install dependencies, using ci for faster installation
             npm ci
             npm audit
-
-            # specify ssh-askpass as my helper
-            Path askpass /usr/bin/ssh-askpass
 
             # Install PostgreSQL (if not already installed)
             sudo apt-get update
