@@ -42,8 +42,8 @@ jobs:
             npm install
             npm audit
 
-            # # 6. Restart your Node.js application (assuming using PM2 or Node directly)
-            # pm2 restart index.js || pm2 start index.js --name movie-archive
+            # 6. Restart your Node.js application (assuming using PM2 or Node directly)
+            pm2 restart index.js || pm2 start index.js --name movie-archive
 
-            # # Optional: Configure PostgreSQL to start on boot (run once on server)
-            # sudo systemctl enable postgresql
+            # Optional: Configure PostgreSQL to start on boot (run once on server)
+            sudo systemctl enable postgresql
