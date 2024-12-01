@@ -20,21 +20,33 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    tmdb_movie_id: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    image: {
+    poster: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    year: {
-      type: DataTypes.INTEGER,
+    backdrop: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    release_date: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     genres: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,  // Optional field
+    },
+    overview: {
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
     likes: {
       type: DataTypes.INTEGER,
@@ -46,15 +58,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     director: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     top_cast: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
-    },
-    overview: {
-      type: DataTypes.TEXT,
-      allowNull: false,
     },
     trailer: {
       type: DataTypes.STRING,

@@ -5,14 +5,16 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 const express = require('express');
-const app = express();
 const moviesRoutes = require('./routes/movies');
-const { seed } = require('./seeds/seedGenerator');
+const cors = require('cors'); // Import the cors package
 
+const app = express();
 const PORT = process.env.NODE_ENV === 'test' ? 8001 : 8000;
-
-seed();
 app.use(express.json());
+
+app.use(cors());
+// app.use(cors({ origin: 'http://your-frontend-domain.com' }));
+
 app.use('/v1/movies', moviesRoutes);
 
 app.use((err, req, res, next) => {
@@ -20,9 +22,8 @@ app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).json({ error: err.message });
 });
 
-const server = app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
-})
-
+});
 
 module.exports = { app, server };

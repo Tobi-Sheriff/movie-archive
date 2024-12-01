@@ -2,7 +2,7 @@ const request = require('supertest');
 const { app, server } = require('../index');
 const movieService = require('../services/movieServices');
 const commentService = require('../services/commentServices');
-const { seed, destroy } = require('../seeds/seedGenerator');
+const { seed, destroy } = require('./seeds/seedGenerator');
 const assert = require('assert');
 
 beforeEach(async () => {
