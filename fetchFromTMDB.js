@@ -1,4 +1,3 @@
-require('dotenv').config();
 const axios = require('axios');
 const movieService = require('./services/movieServices');
 
@@ -142,15 +141,15 @@ const seedPopularMovies = async () => {
       tmdb_movie_id: movie.id,
       title: movie.title,
       poster: movie.poster_path,
-      backdrop: movie.backdrops || [],
+      backdrops: movie.backdrops || [],
       release_date: movie.release_date,
       genres: movie.genre_ids,
       overview: movie.overview,
       likes: 0,
       ratings: movie.vote_average,
-      director: movie.directors || [],
-      top_cast: movie.cast || [],
-      trailer: movie.filteredMovieVideo || [],
+      directors: movie.directors || [],
+      top_casts: movie.cast || [],
+      trailers: movie.filteredMovieVideo || [],
     }));
 
     await movieService.addAllMovies(formattedMovies);

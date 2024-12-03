@@ -5,50 +5,63 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Movies', {
       id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
       },
       tmdb_movie_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT,
+        allowNull: false,
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       poster: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
-      backdrop: {
-        type: Sequelize.STRING
+      backdrops: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
       },
       release_date: {
-        type: Sequelize.STRING
+        type: Sequelize.DATEONLY,
+        allowNull: true,
       },
       genres: {
-        type: Sequelize.ARRAY(Sequelize.STRING)  // Specify that the array will hold strings
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        allowNull: true,
       },
       overview: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: true,
       },
       likes: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
       },
       ratings: {
-        type: Sequelize.FLOAT
+        type: Sequelize.DECIMAL(5, 3),
+        allowNull: true,
       },
-      director: {
-        type: Sequelize.STRING
+      directors: {
+        type: Sequelize.JSONB,
+        allowNull: true,
       },
-      top_cast: {
-        type: Sequelize.ARRAY(Sequelize.STRING)  // Another array of strings for cast members
+      top_casts: {
+        type: Sequelize.JSONB,
+        allowNull: true,
       },
-      trailer: {
-        type: Sequelize.STRING
+      trailers: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
       }
     });
   },
-  
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Movies');
   }
