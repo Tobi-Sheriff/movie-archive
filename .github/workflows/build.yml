@@ -71,7 +71,7 @@ jobs:
           DB_PASSWORD: "${{env.DB_PASSWORD}}"
           DB_NAME: "${{env.DB_NAME}}"
           STORE_TYPE: db
-        run: node fetchFromTMDB.js
+        run: NODE_ENV=test node fetchFromTMDB.js
 
       # Step 7: Run Jest tests
       - name: Run Jest Tests (DB Storage)
