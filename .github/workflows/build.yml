@@ -65,6 +65,12 @@ jobs:
 
       # Step 6: Run fetchfromTMDB
       - name: Seed Database
+        env:
+          DB_HOST: localhost
+          DB_USER: "${{env.DB_USER}}"
+          DB_PASSWORD: "${{env.DB_PASSWORD}}"
+          DB_NAME: "${{env.DB_NAME}}"
+          STORE_TYPE: db
         run: node fetchFromTMDB.js
 
       # Step 7: Run Jest tests
