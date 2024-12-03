@@ -63,7 +63,11 @@ jobs:
       - name: Run Database Migrations
         run: npx sequelize-cli db:migrate
 
-      # Step 6: Run Jest tests
+      # Step 6: Run fetchfromTMDB
+      - name: Seed Database
+        run: npx fetchFromTMDB.js
+
+      # Step 7: Run Jest tests
       - name: Run Jest Tests (DB Storage)
         env:
           DB_HOST: localhost
@@ -73,7 +77,7 @@ jobs:
           STORE_TYPE: db
         run: npm test
           
-      # Step 7: Run Production deployment
+      # Step 8: Run Production deployment
       - name: Run Production deployment
         if: github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@v1.1.0
