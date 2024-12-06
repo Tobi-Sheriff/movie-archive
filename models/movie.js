@@ -17,47 +17,57 @@ module.exports = (sequelize, DataTypes) => {
   Movie.init({
     id: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
+      allowNull: false,
       autoIncrement: true,
+      primaryKey: true,
+    },
+    tmdb_movie_id: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
     },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    image: {
+    poster: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    year: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+    backdrops: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
+    release_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
     },
     genres: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,  // Optional field
-    },
-    likes: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-    ratings: {
-      type: DataTypes.DECIMAL(3, 2),
-      allowNull: true,  // Optional field
-    },
-    director: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    top_cast: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
       allowNull: true,
     },
     overview: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    likes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
       allowNull: false,
     },
-    trailer: {
-      type: DataTypes.STRING,
+    ratings: {
+      type: DataTypes.DECIMAL(5, 3),
+      allowNull: true,
+    },
+    directors: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
+    top_casts: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
+    trailers: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     }
   }, {

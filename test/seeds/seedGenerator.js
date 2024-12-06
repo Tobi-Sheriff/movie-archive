@@ -1,6 +1,6 @@
-const { moviesData, commentsData } = require('./seedMovies');
-const movieService = require('../services/movieServices');
-const commentService = require('../services/commentServices');
+const { moviesData, commentsData } = require('./seedDatas');
+const movieService = require('../../services/movieServices');
+const commentService = require('../../services/commentServices');
 
 module.exports.seed = async () => {
   await seedData();

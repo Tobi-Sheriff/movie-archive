@@ -5,44 +5,63 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Movies', {
       id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+      },
+      tmdb_movie_id: {
+        type: Sequelize.BIGINT,
+        allowNull: false,
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
-      image: {
-        type: Sequelize.STRING
+      poster: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
-      year: {
-        type: Sequelize.INTEGER
+      backdrops: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
+      },
+      release_date: {
+        type: Sequelize.DATEONLY,
+        allowNull: true,
       },
       genres: {
-        type: Sequelize.ARRAY(Sequelize.STRING)  // Specify that the array will hold strings
-      },
-      likes: {
-        type: Sequelize.INTEGER
-      },
-      ratings: {
-        type: Sequelize.FLOAT
-      },
-      director: {
-        type: Sequelize.STRING
-      },
-      top_cast: {
-        type: Sequelize.ARRAY(Sequelize.STRING)  // Another array of strings for cast members
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        allowNull: true,
       },
       overview: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: true,
       },
-      trailer: {
-        type: Sequelize.STRING
+      likes: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+      },
+      ratings: {
+        type: Sequelize.DECIMAL(5, 3),
+        allowNull: true,
+      },
+      directors: {
+        type: Sequelize.JSONB,
+        allowNull: true,
+      },
+      top_casts: {
+        type: Sequelize.JSONB,
+        allowNull: true,
+      },
+      trailers: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
       }
     });
   },
-  
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Movies');
   }
