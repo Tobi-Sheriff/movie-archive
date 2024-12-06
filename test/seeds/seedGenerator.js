@@ -1,4 +1,4 @@
-const { moviesData, commentsData } = require('./seedMovies');
+const { moviesData, commentsData } = require('./seedDatas');
 const movieService = require('../../services/movieServices');
 const commentService = require('../../services/commentServices');
 
