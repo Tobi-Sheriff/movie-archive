@@ -58,7 +58,11 @@ module.exports = {
       trailers: {
         type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: true,
-      }
+      },
+      reviews: {
+        type: Sequelize.JSONB,
+        allowNull: true,
+      },
     });
   },
 

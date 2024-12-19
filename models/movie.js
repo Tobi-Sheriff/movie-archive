@@ -69,7 +69,11 @@ module.exports = (sequelize, DataTypes) => {
     trailers: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
-    }
+    },
+    reviews: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
   }, {
     sequelize,
     modelName: 'Movie',

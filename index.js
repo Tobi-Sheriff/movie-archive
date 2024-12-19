@@ -6,14 +6,18 @@ if (process.env.NODE_ENV === 'test') {
 
 const express = require('express');
 const moviesRoutes = require('./routes/movies');
-const cors = require('cors'); // Import the cors package
+const cors = require('cors');
 
 const app = express();
 const PORT = process.env.NODE_ENV === 'test' ? 8001 : 8000;
 app.use(express.json());
 
-app.use(cors());
-// app.use(cors({ origin: 'http://your-frontend-domain.com' }));
+const corsOptions = {
+  origin: process.env.URL,
+  methods: "GET, POST, PUT, DELETE",
+  credentials: true
+}
+app.use(cors(corsOptions));
 
 app.use('/v1/movies', moviesRoutes);
 
