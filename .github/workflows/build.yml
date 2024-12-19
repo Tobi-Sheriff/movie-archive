@@ -97,6 +97,6 @@ jobs:
             # Step 4: Run database migrations
             npx sequelize-cli db:migrate
 
-            # 5. Restart your Node.js application (assuming using PM2 or Node directly)
+            # 5. Restart your Node.js application
             pm2 restart index.js || pm2 start index.js --name movie-archive
 

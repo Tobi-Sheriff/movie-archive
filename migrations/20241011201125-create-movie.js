@@ -13,6 +13,7 @@ module.exports = {
       tmdb_movie_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
+        unique: true,
       },
       title: {
         type: Sequelize.STRING,
@@ -58,9 +59,14 @@ module.exports = {
       trailers: {
         type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: true,
-      }
+      },
+      reviews: {
+        type: Sequelize.JSONB,
+        allowNull: true,
+      },
     });
   },
+
 
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Movies');

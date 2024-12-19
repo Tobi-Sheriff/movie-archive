@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     tmdb_movie_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
+      unique: true,
     },
     title: {
       type: DataTypes.STRING,
@@ -69,7 +70,11 @@ module.exports = (sequelize, DataTypes) => {
     trailers: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
-    }
+    },
+    reviews: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
   }, {
     sequelize,
     modelName: 'Movie',
