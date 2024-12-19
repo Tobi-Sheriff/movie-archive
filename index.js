@@ -9,7 +9,6 @@ const moviesRoutes = require('./routes/movies');
 const cors = require('cors');
 
 const app = express();
-const app = express();
 const PORT = process.env.NODE_ENV === 'test' ? 8001 : 8000;
 app.use(express.json());
 
@@ -29,7 +28,6 @@ app.use((err, req, res, next) => {
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
-});
 });
 
 module.exports = { app, server };

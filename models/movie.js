@@ -18,35 +18,22 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      allowNull: false,
       autoIncrement: true,
       primaryKey: true,
     },
     tmdb_movie_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      primaryKey: true,
-    },
-    tmdb_movie_id: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
+      unique: true,
     },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     poster: {
-    poster: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    backdrops: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
-    },
-    release_date: {
-      type: DataTypes.DATEONLY,
-      allowNull: true,
     backdrops: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
@@ -62,28 +49,16 @@ module.exports = (sequelize, DataTypes) => {
     overview: {
       type: DataTypes.TEXT,
       allowNull: true,
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
-      allowNull: true,
-    },
-    overview: {
-      type: DataTypes.TEXT,
-      allowNull: true,
     },
     likes: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
       allowNull: false,
-      allowNull: false,
     },
     ratings: {
       type: DataTypes.DECIMAL(5, 3),
       allowNull: true,
-      type: DataTypes.DECIMAL(5, 3),
-      allowNull: true,
     },
-    directors: {
-      type: DataTypes.JSONB,
-      allowNull: true,
     directors: {
       type: DataTypes.JSONB,
       allowNull: true,
@@ -100,7 +75,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.JSONB,
       allowNull: true,
     },
-  }, {
     sequelize,
     modelName: 'Movie',
     timestamps: false,
