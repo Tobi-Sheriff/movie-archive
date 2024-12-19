@@ -6,6 +6,7 @@ module.exports = {
     await queryInterface.createTable('Movies', {
       id: {
         type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -14,14 +15,30 @@ module.exports = {
         type: Sequelize.BIGINT,
         allowNull: false,
       },
+      tmdb_movie_id: {
+        type: Sequelize.BIGINT,
+        allowNull: false,
+      },
       title: {
+        type: Sequelize.STRING,
+        allowNull: false,
         type: Sequelize.STRING,
         allowNull: false,
       },
       poster: {
         type: Sequelize.STRING,
         allowNull: false,
+      poster: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
+      backdrops: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
+      },
+      release_date: {
+        type: Sequelize.DATEONLY,
+        allowNull: true,
       backdrops: {
         type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: true,
@@ -37,8 +54,17 @@ module.exports = {
       overview: {
         type: Sequelize.TEXT,
         allowNull: true,
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        allowNull: true,
+      },
+      overview: {
+        type: Sequelize.TEXT,
+        allowNull: true,
       },
       likes: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0,
         allowNull: false,
@@ -46,11 +72,19 @@ module.exports = {
       ratings: {
         type: Sequelize.DECIMAL(5, 3),
         allowNull: true,
+        type: Sequelize.DECIMAL(5, 3),
+        allowNull: true,
       },
       directors: {
         type: Sequelize.JSONB,
         allowNull: true,
+      directors: {
+        type: Sequelize.JSONB,
+        allowNull: true,
       },
+      top_casts: {
+        type: Sequelize.JSONB,
+        allowNull: true,
       top_casts: {
         type: Sequelize.JSONB,
         allowNull: true,
@@ -65,6 +99,7 @@ module.exports = {
       },
     });
   },
+
 
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Movies');
