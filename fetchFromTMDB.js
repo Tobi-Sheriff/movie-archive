@@ -30,7 +30,7 @@ const fetchAdditionalMovieData = async (movie) => {
   try {
     await sleep(300); // Wait to avoid rate-limiting
 
-    const [imageResponse, videoResponse, creditsResponse] = await Promise.all([
+    const [imageResponse, videoResponse, creditsResponse, reviewsResponse] = await Promise.all([
       fetchWithRetry(() =>
         axios.get(`${TMDB_API_URL}/movie/${MOVIE_ID}/images`, {
           params: { api_key: TMDB_API_KEY },
@@ -46,17 +46,17 @@ const fetchAdditionalMovieData = async (movie) => {
           params: { api_key: TMDB_API_KEY },
         })
       ),
+      fetchWithRetry(() =>
+        axios.get(`${TMDB_API_URL}/movie/${MOVIE_ID}/reviews`, {
+          params: { api_key: TMDB_API_KEY },
+        })
+      ),
     ]);
 
     const topBackdrop = imageResponse.data.backdrops
       .reduce((max, current) => {
         return current.vote_count > max.vote_count ? current : max;
       }, imageResponse.data.backdrops[0]).file_path;
-
-    // const topBackdrops = imageResponse.data.backdrops
-    //   .sort((a, b) => b.vote_count - a.vote_count)
-    //   .slice(0, 2)
-    //   .map((backdrop) => backdrop.file_path);
 
     const enBackdrops = imageResponse.data.backdrops
       .filter((image) => image.iso_639_1 === 'en')
@@ -79,7 +79,16 @@ const fetchAdditionalMovieData = async (movie) => {
         profile: director.profile_path || null,
       }));
 
-    return { backdrops, filteredMovieVideo, cast, directors };
+    const reviews = reviewsResponse.data.results
+      .map((review) => ({
+        name: review.author_details.username,
+        avartar: review.author_details.avatar_path || null,
+        rating: review.author_details.rating,
+        content: review.content,
+        id: review.id,
+      }));
+
+    return { backdrops, filteredMovieVideo, cast, directors, reviews };
   } catch (error) {
     console.error(`Failed to fetch additional data for movie ${MOVIE_ID}:`, error.message);
     return {};
@@ -89,7 +98,7 @@ const fetchAdditionalMovieData = async (movie) => {
 // Fetch movies in batches to handle rate limiting
 const fetchBatchedMovies = async (movies, batchSize) => {
   const results = [];
-  for (let i = 1; i <= movies.length; i += batchSize) {
+  for (let i = 0; i < movies.length; i += batchSize) {
     const batch = movies.slice(i, i + batchSize);
     const batchResults = await Promise.all(batch.map(fetchAdditionalMovieData));
     results.push(...batchResults);
@@ -132,8 +141,8 @@ const fetchPopularMovies = async (pages) => {
 
 // Seed popular movies into the database
 const seedPopularMovies = async () => {
-  try {
-    const movies = await fetchPopularMovies(10); // Adjust pages as needed
+  try {    
+    const movies = await fetchPopularMovies(5); // Adjust pages as needed
     console.log(`Fetched ${movies.length} movies. Saving to database...`);
 
     // Transform data to match your database schema
@@ -150,6 +159,7 @@ const seedPopularMovies = async () => {
       directors: movie.directors || [],
       top_casts: movie.cast || [],
       trailers: movie.filteredMovieVideo || [],
+      reviews: movie.reviews || [],
     }));
 
     await movieService.addAllMovies(formattedMovies);
