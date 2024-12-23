@@ -37,6 +37,8 @@ module.exports.movieDetails = async (req, res) => {
   if (!movie) {
     return res.status(404).json({ message: 'Movie ID not found' });
   }
+  console.log(movie);
+  
   res.status(200).json({ response: movie });
 };
 

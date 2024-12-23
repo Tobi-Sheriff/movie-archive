@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     release_date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     genres: {
