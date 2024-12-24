@@ -142,7 +142,7 @@ const fetchPopularMovies = async (pages) => {
 // Seed popular movies into the database
 const seedPopularMovies = async () => {
   try {    
-    const movies = await fetchPopularMovies(5); // Adjust pages as needed
+    const movies = await fetchPopularMovies(3); // Adjust pages as needed
     console.log(`Fetched ${movies.length} movies. Saving to database...`);
 
     // Transform data to match your database schema

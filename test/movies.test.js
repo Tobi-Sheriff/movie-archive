@@ -164,7 +164,7 @@ describe('Search API', () => {
   runPaginationValidationTests('/v1/movies/search');
 
   it('Should return movies list with similar title based on user search input', async () => {
-    const q = 'duplicate1', page = 1, limit = 4;
+    const q = 'one', page = 1, limit = 4;
     const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
 
     expect(response.status).toBe(200);
