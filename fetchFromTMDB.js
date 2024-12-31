@@ -31,7 +31,6 @@ const fetchAdditionalMovieData = async (movie) => {
     await sleep(300); // Wait to avoid rate-limiting
 
     const [imageResponse, videoResponse, creditsResponse, reviewsResponse] = await Promise.all([
-    const [imageResponse, videoResponse, creditsResponse, reviewsResponse] = await Promise.all([
       fetchWithRetry(() =>
         axios.get(`${TMDB_API_URL}/movie/${MOVIE_ID}/images`, {
           params: { api_key: TMDB_API_KEY },
@@ -95,16 +94,6 @@ const fetchAdditionalMovieData = async (movie) => {
       }));
 
     return { backdrops, filteredMovieVideo, cast, directors, reviews };
-    const reviews = reviewsResponse.data.results
-      .map((review) => ({
-        name: review.author_details.username,
-        avartar: review.author_details.avatar_path || null,
-        rating: review.author_details.rating,
-        content: review.content,
-        id: review.id,
-      }));
-
-    return { backdrops, filteredMovieVideo, cast, directors, reviews };
   } catch (error) {
     console.error(`Failed to fetch additional data for movie ${MOVIE_ID}:`, error.message);
     return {};
@@ -114,7 +103,6 @@ const fetchAdditionalMovieData = async (movie) => {
 // Fetch movies in batches to handle rate limiting
 const fetchBatchedMovies = async (movies, batchSize) => {
   const results = [];
-  for (let i = 0; i < movies.length; i += batchSize) {
   for (let i = 0; i < movies.length; i += batchSize) {
     const batch = movies.slice(i, i + batchSize);
     const batchResults = await Promise.all(batch.map(fetchAdditionalMovieData));

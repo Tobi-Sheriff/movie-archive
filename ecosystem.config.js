@@ -1,6 +1,6 @@
 module.exports = {
     apps: [{
-      name: 'movie-archive',
+      name: 'TMA-API',
       script: 'index.js',
       env: {
         NODE_ENV: 'production'
