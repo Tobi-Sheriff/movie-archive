@@ -56,7 +56,7 @@ class DBMovieRepository {
     const offset = (page - 1) * limit;
 
     const { count: totalCount, rows: fuzzyMatches }  = await Movie.findAndCountAll({
-      where: literal(`levenshtein(lower(title), '${query.toLowerCase()}') <= 2`),
+      where: literal(`lower(title) % lower('${query}')`),
       limit,
       offset,
       raw: true,

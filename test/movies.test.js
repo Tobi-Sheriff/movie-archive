@@ -4,7 +4,6 @@ const movieService = require('../services/movieServices');
 const commentService = require('../services/commentServices');
 const { seed, destroy } = require('./seeds/seedGenerator');
 const assert = require('assert');
-const { log } = require('console');
 
 beforeEach(async () => {
   await seed();
@@ -166,8 +165,6 @@ describe('Search API', () => {
   it('Should return movies list with similar title based on user search input', async () => {
     const q = 'The', page = 1, limit = 4;
     const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
-
-    console.log(response.body.response);
     
     expect(response.status).toBe(200);
     response.body.response.forEach(movie => {
