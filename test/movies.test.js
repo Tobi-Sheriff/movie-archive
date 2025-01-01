@@ -167,7 +167,7 @@ describe('Search API', () => {
     const q = 'The', page = 1, limit = 4;
     const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
 
-    console.log(response.body.response);
+    // console.log(response.body.response);
     
     expect(response.status).toBe(200);
     response.body.response.forEach(movie => {
