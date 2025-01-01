@@ -22,6 +22,7 @@ afterAll((done) => {
 const runPaginationValidationTests = (endpoint) => {
   describe(`${endpoint} Pagination Validation`, () => {
     const query = 'Dark';
+    const query = 'Dark';
     const newEndpoint = (endpoint === '/v1/movies/search' ? `/v1/movies/search?q=${query}&` : '/v1/movies?')
 
     const checkIfEmpty = (
@@ -164,6 +165,7 @@ describe('Search API', () => {
   runPaginationValidationTests('/v1/movies/search');
 
   it('Should return movies list with similar title based on user search input', async () => {
+    const q = 'The', page = 1, limit = 4;
     const q = 'The', page = 1, limit = 4;
     const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
 
