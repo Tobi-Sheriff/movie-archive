@@ -3,7 +3,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Comments', {
+    await queryInterface.createTable('comments', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,7 +13,7 @@ module.exports = {
       movie_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Movies', // Reference the Movies table
+          model: 'movies', // Reference the Movies table
           key: 'id'
         },
         onDelete: 'CASCADE' // Ensures comments get deleted if the movie is deleted
@@ -31,7 +31,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Comments');
+  async down(queryInterface) {
+    await queryInterface.dropTable('comments');
   }
 };

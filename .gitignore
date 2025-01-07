@@ -3,3 +3,4 @@ node_modules
 .env.test
 prod/movies.json
 prod/comments.json
+prod/users.json

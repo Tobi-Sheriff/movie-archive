@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Movies',
+        model: 'movies',
         key: 'id',
       },
       onDelete: 'CASCADE',
@@ -44,6 +44,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Comment',
+    tableName: 'comments', // Define the table name explicitly
+    underscored: true, // Use snake_case for database fields
     timestamps: false,
   });
 

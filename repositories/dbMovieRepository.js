@@ -1,6 +1,5 @@
-const { Movie } = require('../models');
+const { Movie, sequelize } = require('../models');
 const { Op, literal } = require('sequelize');
-const { sequelize } = require('../models');
 
 class DBMovieRepository {
   paginateData(data, page, limit, totalCount) {
@@ -88,7 +87,7 @@ class DBMovieRepository {
   }
 
   async deleteAllMovies() {
-    await sequelize.query('TRUNCATE TABLE "Movies" CASCADE');
+    await sequelize.query('TRUNCATE TABLE "movies" CASCADE');
   }
 }
 

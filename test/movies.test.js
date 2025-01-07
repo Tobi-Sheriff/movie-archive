@@ -165,7 +165,7 @@ describe('Search API', () => {
   it('Should return movies list with similar title based on user search input', async () => {
     const q = 'The', page = 1, limit = 4;
     const response = await request(app).get(`/v1/movies/search?q=${q}&page=${page}&limit=${limit}`);
-    
+
     expect(response.status).toBe(200);
     response.body.response.forEach(movie => {
       expect(movie).toEqual(expect.objectContaining({
@@ -468,4 +468,36 @@ describe('Similar Movies API', () => {
     expect(response.status).toBe(400);
     expect(response.body).toStrictEqual({ error: 'Invalid movie ID' });
   });
+})
+
+describe('Users Signup', () => {
+  it('Should return a Success message upon successful signup', async () => {
+    const usersData = {
+      "username": "Check User5",
+      "email": "check@example5.com",
+      "password": "checkpassphrase5"
+    }
+
+    const response = await request(app)
+      .post(`/auth/signup`)
+      .set("Content-Type", "application/json")
+      .send(usersData);
+
+
+    const expectedResponse = {
+      response: {
+        username: 'Check User5',
+        email: 'check@example5.com'
+      }
+    }
+
+    expect(response.status).toBe(201);
+    expect(response.body.user).toEqual(expect.objectContaining({
+      id: expect.any(String),
+      username: expect.any(String),
+      email: expect.any(String),
+    }));
+    expect(response.body.user.username).toBe('Check User5');
+  })
+
 })

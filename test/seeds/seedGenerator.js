@@ -1,6 +1,7 @@
 const { moviesData, commentsData } = require('./seedDatas');
 const movieService = require('../../services/movieServices');
 const commentService = require('../../services/commentServices');
+const authService = require('../../services/authServices');
 
 module.exports.seed = async () => {
   await seedData();
@@ -9,6 +10,7 @@ module.exports.seed = async () => {
 module.exports.destroy = async () => {
   await commentService.deleteAllComments();
   await movieService.deleteAllMovies();
+  await authService.deleteAllUsers();
 }
 
 async function seedData() {

@@ -78,6 +78,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Movie',
+    tableName: 'movies', // Define the table name explicitly
+    underscored: true, // Use snake_case for database fields
     timestamps: false,
   });
 
