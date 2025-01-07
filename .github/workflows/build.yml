@@ -47,6 +47,7 @@ jobs:
         run: 
           PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h localhost -d $DB_NAME -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
           PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h localhost -d $DB_NAME -c "CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;"
+          PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h localhost -d $DB_NAME -c "CREATE EXTENSION IF NOT EXISTS uuid-ossp;"
 
 
       # Step 3: Install dependencies
