@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    password_reset_token: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     sequelize,
     modelName: 'User',
@@ -54,10 +58,24 @@ module.exports = (sequelize, DataTypes) => {
         if (user.password_hash) {
           user.password_hash = await bcrypt.hash(user.password_hash, 10);
         }
+        try {
+          user.email = user.email.toLowerCase();
+          user.username = user.username.toLowerCase();
+        } catch {
+          console.error('Error in beforeCreate hook:', error);
+          throw new Error('Failed to convert strings to lowercase');
+        }
       },
       beforeUpdate: async (user) => {
         if (user.changed('password_hash')) {
           user.password_hash = await bcrypt.hash(user.password_hash, 10);
+        }
+        try {
+          user.email = user.email.toLowerCase();
+          user.username = user.username.toLowerCase();
+        } catch {
+          console.error('Error in beforeCreate hook:', error);
+          throw new Error('Failed to convert strings to lowercase');
         }
       },
     },

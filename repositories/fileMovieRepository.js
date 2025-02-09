@@ -72,7 +72,7 @@ class FileMovieRepository {
 
   async addAllMovies(newMovies) {
     const movies = await this._fetch_movies();
-    let maxId = movies.length > 0 ? movies[movieServices.length - 1].id : 0;
+    let maxId = movies.length > 0 ? movies[movies.length - 1].id : 0;
 
     newMovies.forEach(movie => {
       maxId += 1;
