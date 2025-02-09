@@ -61,6 +61,7 @@ module.exports = (sequelize, DataTypes) => {
         try {
           user.email = user.email.toLowerCase();
           user.username = user.username.toLowerCase();
+          return user;
         } catch {
           console.error('Error in beforeCreate hook:', error);
           throw new Error('Failed to convert strings to lowercase');
@@ -73,6 +74,7 @@ module.exports = (sequelize, DataTypes) => {
         try {
           user.email = user.email.toLowerCase();
           user.username = user.username.toLowerCase();
+          return user;
         } catch {
           console.error('Error in beforeCreate hook:', error);
           throw new Error('Failed to convert strings to lowercase');
