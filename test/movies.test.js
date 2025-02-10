@@ -490,7 +490,6 @@ describe('Similar Movies API', () => {
 // })
 
 
-
 describe('Authentication Tests', () => {
   describe('Users Signup', () => {
     it('Should return a success message upon successful signup', async () => {
