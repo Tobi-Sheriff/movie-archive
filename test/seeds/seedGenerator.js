@@ -1,4 +1,4 @@
-const { moviesData, commentsData } = require('./seedDatas');
+const { moviesData, commentsData, usersData } = require('./seedDatas');
 const movieService = require('../../services/movieServices');
 const commentService = require('../../services/commentServices');
 const authService = require('../../services/authServices');
@@ -20,6 +20,7 @@ async function seedData() {
 
       commentsData[i].movie_id = seededMovies.id;
     }
+    await authService.createUsers(usersData);
     await commentService.addAllComments(commentsData);
   } catch (error) {
     console.error("Error seeding movies and comments data: ", error.stack);

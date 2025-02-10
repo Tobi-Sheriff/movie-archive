@@ -1,47 +1,53 @@
 const jwt = require('jsonwebtoken');
 const authService = require('../services/authServices');
+const { sendPasswordResetEmail } = require('../utils/nodemailer');
 
 // Signup
 module.exports.signup = async (req, res) => {
-  const { username, email, password } = req.body;
+  const username = req.body.username.toLowerCase();
+  const email = req.body.email.toLowerCase();
+  const { password } = req.body;
 
   if (!username || !email || !password) {
-    return res.status(400).json({ error: 'All fields are required.' });
+    return res
+      .status(400)
+      .json({
+        error: 'Invalid request.',
+        message: "All fields are required."
+      });
   }
 
-  const newUser = await authService.signup(username, email, password);
+  if (username.length < 5 || username.length > 15) {
+    return res
+      .status(400)
+      .json({
+        error: 'Invalid Username length.',
+        message: "Username must be between 5 and 15 characters long."
+      });
+  }
+
+  const result = await authService.signup(username, email, password);
+
+  if (result.error) {
+    if (result.existingUser.isEmailMatch) {
+      return res
+        .status(409)
+        .json({
+          error: 'Email is already registered.',
+          message: "Please choose a different email address."
+        });
+    } else if (result.existingUser.isUsernameMatch) {
+      return res
+        .status(409)
+        .json({
+          error: 'Username is already taken.',
+          message: "Please choose a different email address."
+        });
+    }
+  }
 
   res.status(201).json({
-    message: 'User registered successfully!',
-    user: { id: newUser.id, username: newUser.username, email: newUser.email },
+    message: 'User Registered Successfully!',
+    user: result.user
   });
-};
-
-// Login Route
-module.exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const { user, token, secure } = await authService.login(email, password);
-
-    activeTokens.add(token);
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure,
-      sameSite: 'strict', // Protect against CSRF
-      maxAge: 3600000, // 1 hour
-    });
-
-    res.json({ message: 'Login successful', user, token });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'An error occurred during login' });
-  }
-};
-
-// Logout Handler
-module.exports.logout = (req, res) => {
-  res.clearCookie('token');
-  return res.status(200).json({ message: 'Logged out successfully' });
 };
