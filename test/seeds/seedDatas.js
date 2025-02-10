@@ -673,12 +673,5 @@ module.exports.usersData = [
     "password_hash": "checkpassphrase4",
     "created_at": new Date(),
     "updated_at": new Date(),
-  },
-  {
-    "username": "existingUser",
-    "email": "existingUser@example1.com",
-    "password_hash": "existingUserPass",
-    "created_at": new Date(),
-    "updated_at": new Date(),
   }
 ]

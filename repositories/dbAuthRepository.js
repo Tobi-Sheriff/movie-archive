@@ -36,6 +36,7 @@ class DBAuthRepository {
       where: { [Op.or]: [{ email: loweredCaseMail }, { username: loweredCaseUsername }] }
     });
     if (existingUser) {
+<<<<<<< HEAD
       return {
         error: true,
         existingUser: {
@@ -43,6 +44,9 @@ class DBAuthRepository {
           isUsernameMatch: existingUser.username === username
         }
       };
+=======
+      return res.status(409).json({ error: 'Email is already registered.' });
+>>>>>>> parent of 9daac82 (Sign up for auth afresh)
     }
 
     const user = await User.create({
@@ -51,18 +55,18 @@ class DBAuthRepository {
       password_hash: password,
     });
 
-    return { error: false, user: user.dataValues };
+    return user.dataValues;
   }
 
   async login(email, password) {
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return { error: true, message: 'Invalid email or password' };
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     const isPasswordValid = await user.validatePassword(password);
     if (!isPasswordValid) {
-      return { error: true, message: 'Invalid email or password' };
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     const token = jwt.sign(
@@ -72,23 +76,12 @@ class DBAuthRepository {
     );
 
     const userData = {
-      error: false,
       user,
       token,
       secure: process.env.NODE_ENV === 'production'
     }
 
     return userData;
-  }
-
-  async passwordReset(email) {
-    const user = await User.findOne({ where: { email } });
-    return user;
-  }
-
-  async resetPassword(decodedId) {
-    const user = await User.findByPk(decodedId);
-    return user;
   }
 
   async deleteAllUsers() {

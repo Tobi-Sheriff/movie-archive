@@ -2,8 +2,6 @@ const request = require('supertest');
 const { app, server } = require('../index');
 const movieService = require('../services/movieServices');
 const commentService = require('../services/commentServices');
-const authService = require('../services/authServices');
-
 const { seed, destroy } = require('./seeds/seedGenerator');
 const assert = require('assert');
 
@@ -472,8 +470,21 @@ describe('Similar Movies API', () => {
   });
 })
 
+describe('Users Signup', () => {
+  it('Should return a Success message upon successful signup', async () => {
+    const usersData = {
+      "username": "Check User5",
+      "email": "check@example5.com",
+      "password": "checkpassphrase5"
+    }
+
+    const response = await request(app)
+      .post(`/auth/signup`)
+      .set("Content-Type", "application/json")
+      .send(usersData);
 
 
+<<<<<<< HEAD
 describe('Authentication Tests', () => {
   describe('Users Signup', () => {
     it('Should return a success message upon successful signup', async () => {
@@ -481,8 +492,16 @@ describe('Authentication Tests', () => {
         email: 'testuser@example.com',
         username: 'testuser',
         password: process.env.TEST_PASSWORD
+=======
+    const expectedResponse = {
+      response: {
+        username: 'Check User5',
+        email: 'check@example5.com'
+>>>>>>> parent of 9daac82 (Sign up for auth afresh)
       }
+    }
 
+<<<<<<< HEAD
 
       const response = await request(app)
         .post(`/auth/signup`)
@@ -618,6 +637,15 @@ describe('Authentication Tests', () => {
       expect(response.body).toHaveProperty('error', 'Invalid Username length.');
       expect(response.body).not.toHaveProperty('user');
     });
+=======
+    expect(response.status).toBe(201);
+    expect(response.body.user).toEqual(expect.objectContaining({
+      id: expect.any(String),
+      username: expect.any(String),
+      email: expect.any(String),
+    }));
+    expect(response.body.user.username).toBe('Check User5');
+>>>>>>> parent of 9daac82 (Sign up for auth afresh)
   })
 
-});
+})
