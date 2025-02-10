@@ -20,8 +20,8 @@ async function seedData() {
 
       commentsData[i].movie_id = seededMovies.id;
     }
-    await authService.createUsers(usersData);
     await commentService.addAllComments(commentsData);
+    await authService.createUsers(usersData);
   } catch (error) {
     console.error("Error seeding movies and comments data: ", error.stack);
   }

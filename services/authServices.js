@@ -10,10 +10,6 @@ class AuthService {
     return await this.authRepository.createUsers(usersData);
   }
 
-  async createUser(userData) {
-    return await this.authRepository.createUser(userData);
-  }
-
   async findUser(email) {
     return await this.authRepository.findUser(email);
   }

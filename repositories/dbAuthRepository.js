@@ -15,7 +15,7 @@ class DBAuthRepository {
         updated_at: user.updated_at
       };
     });
-
+    
     return await User.bulkCreate(newUsersData);
   }
 
@@ -35,6 +35,7 @@ class DBAuthRepository {
     const existingUser = await User.findOne({
       where: { [Op.or]: [{ email: loweredCaseMail }, { username: loweredCaseUsername }] }
     });
+    
     if (existingUser) {
       return {
         error: true,

@@ -37,19 +37,13 @@ class FileAuthRepository {
     usersData.forEach(user => {
       user.username = user.username.toLowerCase();
       user.email = user.email.toLowerCase();
-      maxId += 1;
-      user.id = maxId;
+      user.id = maxId += 1;
     });
-
+    console.log(usersData);
+    
     users.push(...usersData);
-
     await fs.promises.writeFile(this.filePath, JSON.stringify(users, null, 2));
     return usersData
-  }
-
-  async createUser(userData) {
-    this.findUser(userData.email);
-    await fs.promises.writeFile(this.filePath, JSON.stringify(userData, null, 2));
   }
 
   async signup(username, email, password) {
