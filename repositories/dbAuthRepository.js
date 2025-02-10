@@ -36,7 +36,6 @@ class DBAuthRepository {
       where: { [Op.or]: [{ email: loweredCaseMail }, { username: loweredCaseUsername }] }
     });
     if (existingUser) {
-<<<<<<< HEAD
       return {
         error: true,
         existingUser: {
@@ -44,9 +43,6 @@ class DBAuthRepository {
           isUsernameMatch: existingUser.username === username
         }
       };
-=======
-      return res.status(409).json({ error: 'Email is already registered.' });
->>>>>>> parent of 9daac82 (Sign up for auth afresh)
     }
 
     const user = await User.create({
