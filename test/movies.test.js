@@ -432,19 +432,6 @@ describe('Similar Movies API', () => {
     });
   })
 
-  // it('Should return empty list when there are no movies with similar genre', async () => {
-  //   assert(await movieService.checkIfAnyMoviesExist(), 'No movies in the DB');
-
-  //   const page = 3, limit = 4;
-  //   const movie = await movieService.getMovies(page, limit);
-
-  //   const movieId = movie.response[movie.response.length - 1].id;
-  //   const response = await request(app).get(`/v1/movies/${movieId}/similar-movies?page=${page}&limit=${limit}`);
-
-  //   expect(response.status).toBe(200);
-  //   expect(response.body.response).toStrictEqual([]);
-  // })
-
   it('Should return 404 if movie with given iD does not exist', async () => {
     const movieId = 30, page = 1, limit = 4;
     const response = await request(app).get(`/v1/movies/${movieId}/similar-movies?page=${page}&limit=${limit}`);
