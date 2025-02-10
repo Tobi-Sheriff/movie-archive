@@ -458,37 +458,6 @@ describe('Similar Movies API', () => {
   });
 })
 
-// describe('Users Signup', () => {
-//   it('Should return a Success message upon successful signup', async () => {
-//     const usersData = {
-//       "username": "Check User5",
-//       "email": "check@example5.com",
-//       "password": "checkpassphrase5"
-//     }
-
-//     const response = await request(app)
-//       .post(`/auth/signup`)
-//       .set("Content-Type", "application/json")
-//       .send(usersData);
-
-//     const expectedResponse = {
-//       response: {
-//         username: 'Check User5',
-//         email: 'check@example5.com'
-//       }
-//     }
-
-//     expect(response.status).toBe(201);
-//     expect(response.body.user).toEqual(expect.objectContaining({
-//       id: expect.any(String),
-//       username: expect.any(String),
-//       email: expect.any(String),
-//     }));
-//     expect(response.body.user.username).toBe('Check User5');
-//   })
-
-// })
-
 
 describe('Authentication Tests', () => {
   describe('Users Signup', () => {
