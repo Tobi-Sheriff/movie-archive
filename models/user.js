@@ -54,10 +54,26 @@ module.exports = (sequelize, DataTypes) => {
         if (user.password_hash) {
           user.password_hash = await bcrypt.hash(user.password_hash, 10);
         }
+        try {
+          user.email = user.email.toLowerCase();
+          user.username = user.username.toLowerCase();
+          return user;
+        } catch {
+          console.error('Error in beforeCreate hook:', error);
+          throw new Error('Failed to convert strings to lowercase');
+        }
       },
       beforeUpdate: async (user) => {
         if (user.changed('password_hash')) {
           user.password_hash = await bcrypt.hash(user.password_hash, 10);
+        }
+        try {
+          user.email = user.email.toLowerCase();
+          user.username = user.username.toLowerCase();
+          return user;
+        } catch {
+          console.error('Error in beforeCreate hook:', error);
+          throw new Error('Failed to convert strings to lowercase');
         }
       },
     },

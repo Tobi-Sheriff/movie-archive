@@ -1,13 +1,48 @@
 const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
+const { Op } = require('sequelize');
+
 
 class DBAuthRepository {
+  async createUsers(usersData) {
+    const newUsersData = usersData.map(user => {
+      return {
+        username: user.username.toLowerCase(),
+        email: user.email.toLowerCase(),
+        password_hash: user.password_hash,
+        created_at: user.created_at,
+        updated_at: user.updated_at
+      };
+    });
+
+    return await User.bulkCreate(newUsersData);
+  }
+
+  async findUser(email) {
+    const loweredcaseMail = email.toLowerCase();
+    const userFound = await User.findOne({ where: { email: loweredcaseMail } });
+
+    if (userFound) {
+      return { message: "Email is already registered.", user: userFound.dataValues };
+    }
+  }
 
   async signup(username, email, password) {
-    const existingUser = await User.findOne({ where: { email } });
+    const loweredCaseMail = email.toLowerCase();
+    const loweredCaseUsername = username.toLowerCase();
+
+    const existingUser = await User.findOne({
+      where: { [Op.or]: [{ email: loweredCaseMail }, { username: loweredCaseUsername }] }
+    });
     if (existingUser) {
-      return res.status(409).json({ error: 'Email is already registered.' });
+      return {
+        error: true,
+        existingUser: {
+          isEmailMatch: existingUser.email === email,
+          isUsernameMatch: existingUser.username === username
+        }
+      };
     }
 
     const user = await User.create({
