@@ -480,8 +480,9 @@ describe('Authentication Tests', () => {
       const signupData = {
         email: 'testuser@example.com',
         username: 'testuser',
-        password: 'test9@PASSphrase!'
+        password: process.env.TEST_PASSWORD
       }
+
 
       const response = await request(app)
         .post(`/auth/signup`)
@@ -512,7 +513,7 @@ describe('Authentication Tests', () => {
       const userData = {
         email: '',
         username: 'noneExistingUser',
-        password: 'password1010'
+        password: process.env.TEST_PASSWORD
       }
 
       const response = await request(app)
@@ -528,7 +529,7 @@ describe('Authentication Tests', () => {
       const userData = {
         email: 'noneExistingmail@example.com',
         username: '',
-        password: 'password1010'
+        password: process.env.TEST_PASSWORD
       }
 
       const response = await request(app)
@@ -560,7 +561,7 @@ describe('Authentication Tests', () => {
       const userData = {
         username: 'noneExistUser',
         email: 'existingUser@example1.com',
-        password: 'P@ssw0rd123!'
+        password: process.env.TEST_PASSWORD
       }
       const response = await request(app)
         .post('/auth/signup')
@@ -575,7 +576,7 @@ describe('Authentication Tests', () => {
       const userData = {
         username: 'existingUser',
         email: 'noneExistingUser@example1.com',
-        password: '!pass92ORD$@0'
+        password: process.env.TEST_PASSWORD
       }
       const response = await request(app)
         .post('/auth/signup')
@@ -590,7 +591,7 @@ describe('Authentication Tests', () => {
       const userData = {
         username: 'abc4',
         email: 'shortuser@example.com',
-        password: 'password123'
+        password: process.env.TEST_PASSWORD
       }
       const response = await request(app)
         .post('/auth/signup')
@@ -606,7 +607,7 @@ describe('Authentication Tests', () => {
       const userData = {
         username: 'abc4',
         email: 'shortuser@example.com',
-        password: 'password123'
+        password: process.env.TEST_PASSWORD
       }
       const response = await request(app)
         .post('/auth/signup')
