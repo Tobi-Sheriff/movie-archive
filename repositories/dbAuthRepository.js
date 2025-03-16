@@ -3,56 +3,22 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 const { Op } = require('sequelize');
 
-
 class DBAuthRepository {
   async createUsers(usersData) {
-    const newUsersData = usersData.map(user => {
-      return {
-        username: user.username.toLowerCase(),
-        email: user.email.toLowerCase(),
-        password_hash: user.password_hash,
-        created_at: user.created_at,
-        updated_at: user.updated_at
-      };
-    });
-    
-    return await User.bulkCreate(newUsersData);
+    await User.bulkCreate(usersData);
   }
 
-  async findUser(email) {
-    const loweredcaseMail = email.toLowerCase();
-    const userFound = await User.findOne({ where: { email: loweredcaseMail } });
-
-    if (userFound) {
-      return { message: "Email is already registered.", user: userFound.dataValues };
-    }
+  async findUserByEmail(email) {
+    return await User.findOne({ where: { email: email } });
   }
 
-  async signup(username, email, password) {
-    const loweredCaseMail = email.toLowerCase();
-    const loweredCaseUsername = username.toLowerCase();
+  async findUserByUsername(username) {
+    return await User.findOne({ where: { username: username } });
 
-    const existingUser = await User.findOne({
-      where: { [Op.or]: [{ email: loweredCaseMail }, { username: loweredCaseUsername }] }
-    });
-    
-    if (existingUser) {
-      return {
-        error: true,
-        existingUser: {
-          isEmailMatch: existingUser.email === email,
-          isUsernameMatch: existingUser.username === username
-        }
-      };
-    }
+  }
 
-    const user = await User.create({
-      username,
-      email,
-      password_hash: password,
-    });
-
-    return { error: false, user: user.dataValues };
+  async signup(newUser) {
+    await User.create(newUser);
   }
 
   async login(email, password) {

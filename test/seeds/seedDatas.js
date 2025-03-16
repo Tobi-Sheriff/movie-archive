@@ -48,7 +48,7 @@ module.exports.moviesData = [
         "author": "John Chard",
         "avatar": "/utEXl2EDiXBK6f41wCLsvprvMg4.jpg",
         "rating": 10,
-        "content": "Some birds aren't meant to be caged.\r\n\r\nThe Shawshank Redemption is written and directed by Frank Darabont. It is an adaptation of the Stephen King novella Rita Hayworth and Shawshank Redemption. Starring Tim Robbins and Morgan Freeman, the film portrays the story of Andy Dufresne (Robbins), a banker who is sentenced to two life sentences at Shawshank State Prison for apparently murdering his wife and her lover. However, the arrival of another inmate is going to vastly change things for all of them.\r\n\r\nThere was no fanfare or bunting put out for the release of the film back in 94, with a title that didn't give much inkling to anyone about what it was about, and with Columbia Pictures unsure how to market it, Shawshank Redemption barely registered at the box office. However, come Academy Award time the film received several nominations, and although it won none, it stirred up interest in the film for its home entertainment release. The rest, as they say, is history. For the film finally found an audience that saw the film propelled to almost mythical proportions as an endearing modern day classic. Something that has delighted its fans, whilst simultaneously baffling its detractors. One thing is for sure, though, is that which ever side of the Shawshank fence you sit on, the film continues to gather new fans and simply will never go away or loose that mythical status.\r\n\r\nIt's possibly the simplicity of it all that sends some haters of the film into cinematic spasms. The implausible plot and an apparent sentimental edge that makes a nonsense of prison life, are but two chief complaints from those that dislike the film with a passion. Yet when characters are this richly drawn, and so movingly performed, it strikes me as churlish to do down a human drama that's dealing in hope, friendship and faith. The sentimental aspect is indeed there, but that acts as a counterpoint to the suffering, degradation and shattering of the soul involving our protagonist. Then there's Roger Deakins' lush cinematography as the camera gracefully glides in and out of the prison offering almost ethereal hope to our characters (yes, they are ours). The music pings in conjunction with the emotional flow of the movie too. Thomas Newman's score is mostly piano based, dovetailing neatly with Andy's state of mind, while the excellently selected soundtrack ranges from the likes of Hank Williams to the gorgeous Le Nozze di Figaro by Mozart.\r\n\r\nIf you love Shawshank then it's a love that lasts a lifetime. Every viewing brings the same array of emotions - anger - revilement - happiness - sadness - inspiration and a warmth that can reduce the most hardened into misty eyed wonderment. Above all else, though, Shawshank offers hope - not just for characters in a movie - but for a better life and a better world for all of us. 10/10",
+        "content": "Some birds aren't meant to be caged.\r\n\r\nThe Shawshank Redemption is written and directed by Frank Darabont. It is an adaptation of the Stephen King novella Rita Hayworth and Shawshank Redemption. Starring Tim Robbins and Morgan Freeman, the film portrays the story of Andy Dufresne (Robbins), a banker who is sentenced to two life sentences at Shawshank State Prison for apparently murdering his wife and her lover. Every viewing brings the same array of emotions - anger - revilement - happiness - sadness - inspiration and a warmth that can reduce the most hardened into misty eyed wonderment. Above all else, though, Shawshank offers hope - not just for characters in a movie - but for a better life and a better world for all of us. 10/10",
         "id": "578193f29251417c28001764"
       },
       {
@@ -58,8 +58,7 @@ module.exports.moviesData = [
         "content": "Make way for the best film ever made people. **Make way.**",
         "id": "5a0712aec3a3687914014a4b"
       }
-    ],
-    "id": 1
+    ]
   },
   {
     "tmdb_movie_id": 238,
@@ -103,7 +102,7 @@ module.exports.moviesData = [
         "author": "futuretv",
         "avatar": null,
         "rating": 10,
-        "content": "The Godfather Review by Al Carlson\r\n\r\nThe Godfather is a film considered by most to be one of the greatest ever made. From The American Film Institute to as voted by users on the Internet Movie Database (IMDB) it is consider to be one of the best. As a film that ranks as high as other masterpieces including Citizen Kane, Pulp Fiction and 12 Angry Men, The Godfather is an exceptional piece of cinema excellence that is flawless and is simply the pinnacle crime drama.\r\nThe Godfather revolves around the Corleone’s, an Italian family with deep roots in the New York City mafia. The head of the Corleone’s is Don Vito Corleone, a man who takes care of his family and demands respect in return. His son Michael however, who just returned home from World War II, doesn’t want to become involved with the family business. The Sollozzo’s, a family of drug dealers, confront Don and request protection in exchange for profits from the Sollozzo’s drug sales. But Don declines the offer, for he is against selling narcotics. The rejected offer starts what turns into an all out mafia war between the two families with Michael diving deep into the mafia lifestyle.\r\nThe characters are portrayed by a legendary all-star cast including Marlon Brando as Don, Al Pacino as his son Michael and James Caan as Don’s oldest son Sonny. The casting for this film has been considered by many to be the best casted film in history for their astonishing performances. All three main actors were nominated for an academy award, but only Marlon Brando won an Oscar for best actor in a leading role. It’s fascinating to watch how these characters change over the course of the movie, with one in particular changing drastically.\r\nDirecter Francis Ford Coppola, being raised in an Italian-American family in New York, understood Italian culture exceptionally and made the film very authentically. Everything from the wedding dances to the cuisine to the terms used by the characters in Sicilian come from Coppola’s first-hand knowledge of Italian-American culture. Italian composer Nino Rota did an outstanding job making the soundtrack for the film, despite not getting the Oscar for best music (but he did win an Oscar for his work in the sequel, The Godfather: Part II). Virtually everyone recognizes that iconic trumpet solo once it starts playing. He also wrote the score for another great Italian film 8 1/2. \r\nThis film should be immediately followed up by it’s sequel, The Godfather: Part II, which also won best picture. The series still holds the title of most best picture awards for a film series to this day. They’re both flawless crime dramas and have earned their titles as some of the best pieces of cinema ever. I will guarantee you won’t be able to see this film only once, as it gets better after continual viewings. There is really nothing more to add other than if you haven’t seen this movie yet, it’s about time you did. The Godfather is a movie you can’t refuse.",
+        "content": "The Godfather Review by Al Carlson\r\n\r\nThe Godfather is a film considered by most to be one of the greatest ever made. From The American Film Institute to as voted by users on the Internet Movie Database (IMDB) it is consider to be one of the best. As a film that ranks as high as other masterpieces including Citizen Kane, Pulp Fiction and 12 Angry Men, The Godfather is an exceptional piece of cinema excellence that is flawless and is simply the pinnacle crime drama.\r\nThe Godfather revolves around the Corleone’s, an Italian family with deep roots in the New York City mafia. There is really nothing more to add other than if you haven’t seen this movie yet, it’s about time you did. The Godfather is a movie you can’t refuse.",
         "id": "5346fa840e0a265ffa001e20"
       },
       {
@@ -120,8 +119,7 @@ module.exports.moviesData = [
         "content": "While I'm writing this, The Godfather is still beloved by people who love it simply because they are told they have to love it. \r\nIt's written by a mobster with the sole intention of depicting the lead mobsters as demi gods. Every line and every scene in the movie and the book is meant to intimidate people into thinking the \"Mafia\" and really any mob, is a supernatural force.\r\nThis is a movie glorifying control freaks, and most critics are control freaks, and most critics are either in the mob or think they can join the mob.\r\nThe movie itself is dull and totally uninspiring, not to mention totally uninspired. For fifty years, the sheep have been cowing to the control freaks who tell them to love this movie that degrades them. \r\nThere just isn't anything favorable about this movie. It owes its success to people who have interests in the movie or think they can get brownie points with such people. It's totally Hollywood in its depressing nature, and even in the seventies it was a formula film.",
         "id": "6428fb5f60975000eb3e9c39"
       }
-    ],
-    "id": 2
+    ]
   },
   {
     "tmdb_movie_id": 240,
@@ -179,11 +177,10 @@ module.exports.moviesData = [
         "author": "Geronimo1967",
         "avatar": "/yz2HPme8NPLne0mM8tBnZ5ZWJzf.jpg",
         "rating": 7,
-        "content": "Building on the first volume, this self-adaptation by writer Mario Puzo and director Francis Ford Coppola develops the story of the new Don - \"Michael\" (Al Pacino). His attempts to expand, and to a certain extent legitimise, the family businesses see him associating with the duplicitous \"Hyman Roth\" (Lee Strasberg) in Cuba; subject to betrayal, assassination attempts and fighting what may be a losing battle to keep his own family together - all whilst doing plenty of Machiavellian manipulation of his own. There is an equally strong parallel thread depicting how his father \"Vito\" (Robert de Niro) rose to prominence after fleeing Sicily after the murder of his family at the hands of \"Don Ciccio\". With the principal characters all now well established, we can hit the ground running with a solid and complex set of inter-connected, character-driven storylines. The superior cast deliver this story really effectively - Robert Duvall and Diane Keaton as the consigliere and wife respectively, standing out. The attention to detail alongside the instantly recognisable Nino Rota score add amply to what is just a great story of Michael's efforts to build upon (and honour) his father's legacy, before he loses all of his own, once prevailing, decency. It is long, and it does miss Brando, but Pacino is on super form as the increasingly ruthless and isolated - even lonely - figure and I reckon this is every bit as good at the \"Godfather\" (1972).",
+        "content": "Building on the first volume, this self-adaptation by writer Mario Puzo and director Francis Ford Coppola develops the story of the new Don - \"Michael\" (Al Pacino). His attempts to expand, and to a certain extent legitimise, the family businesses see him associating with the duplicitous \"Hyman Roth\" (Lee Strasberg) in Cuba; subject to betrayal, assassination attempts and fighting what may be a losing battle to keep his own family together - all whilst doing plenty of Machiavellian manipulation of his own. It is long, and it does miss Brando, but Pacino is on super form as the increasingly ruthless and isolated - even lonely - figure and I reckon this is every bit as good at the \"Godfather\" (1972).",
         "id": "624b1f5a1c6329004ec03965"
       }
-    ],
-    "id": 3
+    ]
   },
   {
     "tmdb_movie_id": 424,
@@ -228,18 +225,17 @@ module.exports.moviesData = [
         "author": "Mayurpanchamia",
         "avatar": null,
         "rating": 8,
-        "content": "Directed by Steven Spielberg, the name is enough. He enjoys immense love and justified appreciation. It’s not just a rumour, but his name transcends to million footfalls to theatres and multiple OTT replays. But this movie is special because as a Jew Spielberg felt the pain of Holocaust and thus this was personal. Spielberg’s paternal grandparents were Jews from Ukraine. I really hope things cool down very soon in Ukraine and somebody someday make a film on the crisis in Ukraine.\r\n\r\nAfter watching “The Kashmir Files” I felt like watching the list because I wanted to see how we can make better movies without the propaganda. The Kashmir Files is necessary minus the very few political flaws and propaganda it subtly injects into its viewers. Asking the questions is not anti-national and not all JNU people come with an agenda. Kashmir Files tells many truths and ought to be told but also hides a lot of the actual/factual truths. Just like a dictator it blatantly shows only the side they want to without any iota of balance.\r\n\r\nBut Schindler’s List is different because it never lets the bleakness of the Holocaust overwhelm its important theme of fighting for the common good. But as time went on, he grew to care about his Jewish workers, particularly those with whom he came into contact on a daily basis. Itzhak Stern, played in the movie by Ben Kingsley was one of the most powerful character more of culmination of lot of people at that time. The project has collected the testimony of more than 55,000 survivors and witnesses to the Holocaust as well as other atrocities. “It wouldn’t have happened without Schindler’s List,” he said. “The Shoah Foundation wouldn’t exist.” Something the Hypocritic Vivek Agnihotri should think about. I still stand by that “The Kashmir files” should be shown to everyone without propoganda and only one agenda that this atrocities and “Genocide” should not be repeated on any one anywhere.\r\n\r\nThe film is available on Netflix.",
+        "content": "Directed by Steven Spielberg, the name is enough. He enjoys immense love and justified appreciation. It’s not just a rumour, but his name transcends to million footfalls to theatres and multiple OTT replays. But this movie is special because as a Jew Spielberg felt the pain of Holocaust and thus this was personal. Spielberg’s paternal grandparents were Jews from Ukraine. I really hope things cool down very soon in Ukraine and somebody someday make a film on the crisis in Ukraine.\r\n\r\nAfter watching “The Kashmir Files” I felt like watching the list because I wanted to see how we can make better movies without the propaganda. “It wouldn’t have happened without Schindler’s List,” he said. “The Shoah Foundation wouldn’t exist.” Something the Hypocritic Vivek Agnihotri should think about. I still stand by that “The Kashmir files” should be shown to everyone without propoganda and only one agenda that this atrocities and “Genocide” should not be repeated on any one anywhere.\r\n\r\nThe film is available on Netflix.",
         "id": "62405ad8519bbb0089f4148b"
       },
       {
         "author": "Geronimo1967",
         "avatar": "/yz2HPme8NPLne0mM8tBnZ5ZWJzf.jpg",
         "rating": 7,
-        "content": "There's a powerful little low-budget effort with Ralph Richardson called \"The Silver Fleet\" (1943) that illustrates just how difficult it was for those in the occupied territories to continue to do what was right without looking like a collaborator and/or ending up against a wall of Nazi bullets. Well here, Steven Spielberg takes that dangerous occupation and scales it up somewhat as the eponymous Czech industrialist and arms manufacturer (Liam Neeson) finds his increasing revulsion to the brutality of their new occupying power driving him, with the able assistance of his Jewish factory manager \"Stern\" (Ben Kingsley), to find ways to keep them from being routinely slaughtered. Getting them out is not really an option, so he invents ways of convincing the authorities that they are more useful alive and decently fed/housed - even suggesting the usefulness of children's small fingers to polish shell casings - to avoid them being deported to the now fully functioning Auchwitz extermination camp. The story is history but the manner in which it is delivered here is poignant and potent. Schindler's gradual shift from a venally induced indifference to one of active concern is well handled by Neeson's considered performance and Kingsley works well as his low-level but crucial co-conspirator. Plaudits must also go to Ralph Fiennes with, I think, the best portrayal of his career as the odious Commandant Goeth who combines just about every element of the worst in human nature into one ghastly individual eliciting a palpable degree of loathing. Does it need to be 3¼ hours long? Well I'm not so sure about that, and there are times when the repetitive oppressiveness of their gruelling environment risks de-sensitising the message a little, but for the most part the abusive and terrifying lives led by the Jewish prisoners and the increasingly perilous path being taken by those trying to help is well held together with some stunning cinematography and an untypical John Williams score. It's definitely a big screen occasion - somehow television reduces it's impact, so if you can see it in a cinema. Either way, it does offer some salutary lessons in man's inhumanity, and humanity to our fellow man!",
+        "content": "There's a powerful little low-budget effort with Ralph Richardson called \"The Silver Fleet\" (1943) that illustrates just how difficult it was for those in the occupied territories to continue to do what was right without looking like a collaborator and/or ending up against a wall of Nazi bullets. It's definitely a big screen occasion - somehow television reduces it's impact, so if you can see it in a cinema. Either way, it does offer some salutary lessons in man's inhumanity, and humanity to our fellow man!",
         "id": "65b669282faf4d00c9dc1689"
       }
-    ],
-    "id": 4
+    ]
   },
   {
     "tmdb_movie_id": 389,
@@ -289,7 +285,7 @@ module.exports.moviesData = [
         "author": "John Chard",
         "avatar": "/utEXl2EDiXBK6f41wCLsvprvMg4.jpg",
         "rating": 9,
-        "content": "Unlikely, but it is possible.\r\n\r\n12 Angry Men is directed by Sidney Lumet and adapted from a teleplay of the same name by Reginald Rose. The cast is headed by Henry Fonda and Lee J. Cobb. The film tells the story of a jury made up of 12 men as they deliberate the guilt or innocence of a defendant on the basis of reasonable doubt. Except for two short scenes at the beginning and end of the film, it's filmed entirely on one set, that of the jury deliberation room.\r\n\r\nSweaty, gritty, claustrophobic - all words that sit snugly in the context of Lumet's excellently crafted deconstruction of 12 men trying to arrive at one verdict in the case of a Puerto Rican youth on trial for the murder of his father. The evidence appears overwhelming, there's witnesses, a murder weapon and motive, the boy is surely on his way to the electric chair. 11 of the men are convinced he's guilty, only one man stands alone, Henry Fonda's juror number 8, who refuses to turn in a vote of guilty until the evidence and facts are discussed at length. As the others rail against him and tempers get frayed, juror number 8 prompts the others to examine their own prejudices and commitment to justice.\r\n\r\nA lesson in tight direction and editing, and with performances to match, 12 Angry Men is quite simply not to be missed by those seeking to venture into classic cinema. 9/10",
+        "content": "Unlikely, but it is possible.\r\n\r\n12 Angry Men is directed by Sidney Lumet and adapted from a teleplay of the same name by Reginald Rose. As the others rail against him and tempers get frayed, juror number 8 prompts the others to examine their own prejudices and commitment to justice.\r\n\r\nA lesson in tight direction and editing, and with performances to match, 12 Angry Men is quite simply not to be missed by those seeking to venture into classic cinema. 9/10",
         "id": "5e80b7301d6c5f00141d8798"
       },
       {
@@ -299,8 +295,7 @@ module.exports.moviesData = [
         "content": "Jurors:\r\n\r\nMartin Balsam\r\n\r\nJohn Fiedler\r\n\r\nLee J. Cobb\r\n\r\nE.G. Marshall\r\n\r\nJack Klugman\r\n\r\nEdward Binns\r\n\r\nJack Warden\r\n\r\nHenry Fonda\r\n\r\nJoseph Sweeney\r\n\r\nEd Begley\r\n\r\nGeorge Voskovec\r\n\r\nRobert Webber\r\n\r\n12 jurors deliberate on the guilt or innocence of a young Spanish-American man accused of murdering his father. As the moments tick by, the discussion becomes an expose of each individual man's thoughts, feelings, prejudices, and secrets.\r\n\r\nThis is Fonda at his best, backed up with excellent support from all 11 of his fellow jurors. Lee J. Cobb is also a standout.\r\n\r\nCrackling script by Reginald Rose, with superb direction by Sidney Lumet.  Full of memorable moments and great dialogue and character development; this is one of the greatest courtroom dramas this reviewer has ever seen.",
         "id": "61ae32a80d2f53001cd78752"
       }
-    ],
-    "id": 5
+    ]
   },
   {
     "tmdb_movie_id": 129,
@@ -348,8 +343,7 @@ module.exports.moviesData = [
         "content": "One of the great \"masters\" of the anime art. Somehow, if I would personally associate \"Akira\" to \"self-destruction\", then this anime would be the opposite :)",
         "id": "5d17c91385702e001eb921db"
       }
-    ],
-    "id": 6
+    ]
   },
   {
     "tmdb_movie_id": 19404,
@@ -397,8 +391,7 @@ module.exports.moviesData = [
         "content": "The Dilwale Dulhania Le Jayenge is a film considered by most to be one of the greatest ever made. From The American Film Institute to as voted by users on the Internet Movie Database (IMDB) it is consider to be one of the best.",
         "id": "59eb3d42925141565100e901"
       }
-    ],
-    "id": 7
+    ]
   },
   {
     "tmdb_movie_id": 155,
@@ -461,8 +454,7 @@ module.exports.moviesData = [
         "content": "Perhaps the best Batman movie of all times. I think that this Batman trilogy presents the well-known superhero history in an unexpected way with the capable to maintain on the edge of the chair all time.\r\n**Heath Ledger** present an excellent impersonification of a psychopath.\r\nAll support roles are magnificent.\r\nAnd Bruce Wayne role played by Christian Bale, shows a human being behind of the mask.",
         "id": "5be161edc3a3680a00009915"
       }
-    ],
-    "id": 8
+    ]
   },
   {
     "tmdb_movie_id": 496243,
@@ -514,7 +506,7 @@ module.exports.moviesData = [
         "author": "dalboz",
         "avatar": "/d9fi8H0uBIhn9B9WY8Avo5L1vzm.jpg",
         "rating": 10,
-        "content": "The working class and down on their luck Kim family struggle to make ends meet. When a friend of the son, Ki-Woo’s, who is an English tutor for the daughter in the wealthy Park family, has to leave his position, he recommends Ki-Woo for the job. Now having an \"in\" with the wealthy family, the Kims begin plotting the downfall of the current household servants and inserting themselves into those vacant positions, making them all gainfully employed and with money finally flowing into the household. But not everything is as it seems in the Park house or with their previous servants.\r\n\r\nThis movie starts out as a comedy and quickly goes into social commentary, pointing out the differences between the poor working class family and the wealthy privileged family. The differences are ones that get commonly pointed out with the well-to-do having what usually gets termed as first-world-problems, while the poor family is literally trying to survive and save meager possessions in a flood. It doesn’t shy away or try to be subtle about it, but interestingly enough, we don’t feel beaten over the head with it either, which is a major change from the ham-fisted approach taken by most filmmakers. Couching this in a comedy is a good approach, as well, as the audience’s guard is let down and we become more receptive to the ideas.\r\n\r\nHowever, I do say it’s MOSTLY a comedy. The third act takes a dark, dark turn, and the contrast, not to mention general disdain and even indifference, between the classes becomes much more severe. This gets into some hard territory, and characters that we’ve found quirky and even come to like in some ways show very different sides of themselves. At the same time, it doesn’t feel unexpected, almost like we could tell that this was under the surface all the time and tried to ignore it, but aren’t surprised by it when it does show up. This is some masterful characterization!\r\n\r\nAnother aspect of note is that this film is rich in allegory and metaphor. It’s a smart film, yet at the same time the filmmakers are not condescending about it. They give the audience credit for being able to understand the symbolism and don’t spoon feed you everything, which is a refreshing change from the usual head-beating most filmmakers go for. At the same time, they understand that not every audience member will understand or immediately pick up on every symbol, but they have crafted this so carefully and so perfectly that you don’t have to understand each and every one. That understanding merely enriches the experience, but isn’t essential to it.\r\n\r\nThis film has gotten some recognition, and deservedly so. It is rich, intelligent, and polished to a degree that we sadly don’t see as often as we should nowadays, showing the filmmakers are masters of their craft. This is easily one of the best films I’ve seen in 2019. Highly recommended!",
+        "content": "The working class and down on their luck Kim family struggle to make ends meet. When a friend of the son, Ki-Woo’s, who is an English tutor for the daughter in the wealthy Park family, has to leave his position, he recommends Ki-Woo for the job. Now having an \"in\" with the wealthy family, the Kims begin plotting the downfall of the current household servants and inserting themselves into those vacant positions, making them all gainfully employed and with money finally flowing into the household. But not everything is as it seems in the Park house or with their previous servants.\r\n\r\nThis movie starts out as a comedy and quickly goes into social commentary, pointing out the differences between the poor working class family and the wealthy privileged family. The differences are ones that get commonly pointed out with the well-to-do having what usually gets termed as first-world-problems, while the poor family is literally trying to survive and save meager possessions in a flood. It doesn’t shy away or try to be subtle about it, but interestingly enough, we don’t feel beaten over the head with it either, which is a major change from the ham-fisted approach taken by most filmmakers. Couching this in a comedy is a good approach, as well, as the audience’s guard is let down and we become more receptive to the ideas.\r\n\r\nHowever, I do say it’s MOSTLY a comedy. It is rich, intelligent, and polished to a degree that we sadly don’t see as often as we should nowadays, showing the filmmakers are masters of their craft. This is easily one of the best films I’ve seen in 2019. Highly recommended!",
         "id": "5daaf2d59661fc001241a1d8"
       },
       {
@@ -524,8 +516,7 @@ module.exports.moviesData = [
         "content": "This is VERY HIGHLY OVERRATED. \r\nThe most part of the movie is foul-playing, most of those scenes seem to have been copied from the 1999/old Vijay’s movie: Minsaara Kannan [IMDB: https://www.imdb.com/title/tt7562630/?ref_=nv_sr_srsg_2], (Warning: This again might be a copy of some other movie as well]. \r\n“Morse code” has been used in a much better way in 2017 Ajith’s film: Vivegam [IMDB:https://www.imdb.com/title/tt6878378/?ref_=nv_sr_srsg_0] [Letterboxd: https://letterboxd.com/film/vivegam/]\r\nI just don’t understand what makes this movie so special that it has been appraised so highly. It is not even 10% of the Tamil movies at this level/standard.\r\nPeople who’re praising this movie must start watching Tamil movies instead of Korean, there are so many gems that have gone unnoticed.\r\nThere is really nothing special in this movie that stands out. \r\nCannot digest that an average movie like this has got so much limelight. Btw: Where does this kinda BS trend start off?",
         "id": "5e1b2ab13520e8001735adfa"
       }
-    ],
-    "id": 9
+    ]
   },
   {
     "tmdb_movie_id": 497,
@@ -570,19 +561,18 @@ module.exports.moviesData = [
         "author": "Wuchak",
         "avatar": "/4KVM1VkqmXLOuwj1jjaSdxbvBDk.jpg",
         "rating": 9,
-        "content": "**_A Masterpiece of Cinematic Art -- Captivating and Reverent_**\r\n\r\nThe head Death Row guard at a Tennessee prison during the Depression (Tom Hanks) observes a new inmate, a black man named John Coffey (Michael Clarke Duncan), who is condemned to death for the rape and murder of two little girls. He and his fellow guards become intrigued by the gentle giant and conclude that there's no way he could be guilty of the crime. Who, then, is guilty? And will the guilty party get away with it.\r\n\r\n\"The Green Mile\" expertly mixes film genres: It's part prison flick, part supernatural mystery and part drama. It was adapted from Stephen King's novel by director/writer Frank Darabont and released in 1999. If you're not an admirer of Stephen King books/films (I'm not), DON'T let that deter you from viewing this beautiful and spiritually-profound film; it's by no means a typical horror story, although it does have a couple of horrific scenes.\r\n\r\nRunning 3-hours, it's over my limited attention span, and yet it's somehow utterly engrossing, even on repeat viewings. It's character/dialogue driven, unique and unpredictable. Don't mistake this for a run-of-the-mill prison flick. The fact that it largely takes place in a prison in the 1930s is a secondary issue. This is a powerful supernatural mystery/drama.\r\n\r\n**SPOILER ALERT** (Don't read this next paragraph unless you want to consider possibilities about the character John Coffey)\r\n\r\nJohn Coffey's last name is, evidently, derived from an ancient Sumerian word, kophi, which means \"winged creature.\" Hence, John could be viewed as a angel or messenger from the Almighty. Actually, John is a type of Jesus Christ verified in six ways: (1) His initials are JC. (2) He's good-hearted and can easily recognize true evil. (3) He miraculously heals people. (4) He pronounces and executes divine judgment. (5) He is sacrificed even though completely innocent. And (6) He offers eternal life (in a sense), as evidenced by the extended life-span of the Hanks character and the mouse \"Mr. Jingles.\"\r\n\r\n**End SPOILER ALERT**\r\n\r\nDon't miss out on this cinematic masterpiece.",
+        "content": "**_A Masterpiece of Cinematic Art -- Captivating and Reverent_**\r\n\r\nThe head Death Row guard at a Tennessee prison during the Depression (Tom Hanks) observes a new inmate, a black man named John Coffey (Michael Clarke Duncan), who is condemned to death for the rape and murder of two little girls. He and his fellow guards become intrigued by the gentle giant and conclude that there's no way he could be guilty of the crime. Who, then, is guilty? And will the guilty party get away with it.\r\n\r\n\"The Green Mile\" expertly mixes film genres: It's part prison flick, part supernatural mystery and part drama. (5) He is sacrificed even though completely innocent. And (6) He offers eternal life (in a sense), as evidenced by the extended life-span of the Hanks character and the mouse \"Mr. Jingles.\"\r\n\r\n**End SPOILER ALERT**\r\n\r\nDon't miss out on this cinematic masterpiece.",
         "id": "6613705b5437f501647d5e92"
       },
       {
         "author": "Geronimo1967",
         "avatar": "/yz2HPme8NPLne0mM8tBnZ5ZWJzf.jpg",
         "rating": 7,
-        "content": "\"Edgecomb\" (Tom Hanks) is in charge of the prison officers who tend to the inmates on death row. He's a decent man who, with the help of his partner \"Howell\" (David Morse) tries to carry out his task as humanely as possible. Their team also numbers the truly odious \"Percy\" (Doug Hutchinson). He's an incompetent coward, but he also happens to be the nephew of the state governor, so tends to get away with his obnoxiousness towards the prisoners. That nasty behaviour becomes more pronounced when the giant \"Coffey\" (Michael Clarke Duncan) arrives. Also newly arrived is a small mouse which befriends, much to the chagrin of \"Percy\", a fellow inmate (Harry Dean Stanton) and oddly enough it seems to help keep the peace as people come and go. Things take quite an intriguing turn when some physical contact between their gentle giant and \"Edgecomb\" seems to cure his liver complaint. As the officer realises that this man may well possess healing hands, he and his team begins to bond with him. Meantime, the ghastly little \"Percy\" screws up his first execution causing an effect straight out of a Wes Craven film and Sam Rockwell's psychopathic \"Wild Bill\" arrives to liven things up. It's actually Rockwell who steal this for me. His performance is viscerally effective and he really does commit to the role. It's over 3 hours long but the acting is almost perfect as these characters develop and the story unfolds reconciling the brutality of racism, crime and punishment with the attempts at humanity and decency applied by virtually everyone whose lives are touched by these scenarios - even amongst the staff who struggle at times to keep their own priorities in kilter. One of Stephen King's much better stories with depth to the personas, a good baddie to loathe and a message of redemption delivered subtly but powerfully.",
+        "content": "\"Edgecomb\" (Tom Hanks) is in charge of the prison officers who tend to the inmates on death row. He's a decent man who, with the help of his partner \"Howell\" (David Morse) tries to carry out his task as humanely as possible. Their team also numbers the truly odious \"Percy\" (Doug Hutchinson). He's an incompetent coward, but he also happens to be the nephew of the state governor, so tends to get away with his obnoxiousness towards the prisoners. One of Stephen King's much better stories with depth to the personas, a good baddie to loathe and a message of redemption delivered subtly but powerfully.",
         "id": "662f583f028f140128694b64"
       }
-    ],
-    "id": 10
-  },
+    ]
+  }
 ]
 
 module.exports.commentsData = [
@@ -642,43 +632,31 @@ module.exports.usersData = [
   {
     "username": "Check User",
     "email": "check@example.com",
-    "password_hash": "checkpassphrase",
-    "created_at": new Date(),
-    "updated_at": new Date(),
+    "password": "checkpassphrase",
   },
   {
     "username": "Check User1",
     "email": "check@example1.com",
-    "password_hash": "checkpassphrase1",
-    "created_at": new Date(),
-    "updated_at": new Date(),
+    "password": "checkpassphrase1",
   },
   {
     "username": "Check User2",
     "email": "check@example2.com",
-    "password_hash": "checkpassphrase2",
-    "created_at": new Date(),
-    "updated_at": new Date(),
+    "password": "checkpassphrase2",
   },
   {
     "username": "Check User3",
     "email": "check@example3.com",
-    "password_hash": "checkpassphrase3",
-    "created_at": new Date(),
-    "updated_at": new Date(),
+    "password": "checkpassphrase3",
   },
   {
     "username": "Check User4",
     "email": "check@example4.com",
-    "password_hash": "checkpassphrase4",
-    "created_at": new Date(),
-    "updated_at": new Date(),
+    "password": "checkpassphrase4",
   },
   {
     "username": "existingUser",
     "email": "existingUser@example1.com",
-    "password_hash": "passw123!!!",
-    "created_at": new Date(),
-    "updated_at": new Date(),
+    "password": "passw123!!!",
   }
 ]

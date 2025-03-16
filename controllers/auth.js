@@ -27,8 +27,8 @@ module.exports.signup = async (req, res) => {
   }
 
   const result = await authService.signup(username, email, password);
-
-  if (result.error) {
+  
+  if (result.isExist) {
     if (result.existingUser.isEmailMatch) {
       return res
         .status(409)

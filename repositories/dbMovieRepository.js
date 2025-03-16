@@ -82,7 +82,7 @@ class DBMovieRepository {
       limit,
       offset,
     });
-
+    
     return this.paginateData(similarMovies, page, limit, totalCount);
   }
 

@@ -1,12 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const { readJson } = require('../utils/fileUtils');
-const uuid = require('uuid');
-const uuidv4 = uuid.v4;
-
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 
 class FileAuthRepository {
   constructor() {
@@ -22,57 +16,26 @@ class FileAuthRepository {
     return readJson(this.filePath);
   }
 
-  async findUser(email) {
+  async findUserByEmail(email) {
     const users = await this._fetch_users();
-    const userFound = users.find((user) => user.email === email);
-    if (userFound) {
-      return { error: true, message: "Email is already registered." }
-    }
+    return users.find((user) => user.email === email);
+  }
+
+  async findUserByUsername(username) {
+    const users = await this._fetch_users();
+    return users.find((user) => user.username === username);
   }
 
   async createUsers(usersData) {
     const users = await this._fetch_users();
-    let maxId = users.length > 0 ? users[users.length - 1].id : 0;
-
-    usersData.forEach(user => {
-      user.username = user.username.toLowerCase();
-      user.email = user.email.toLowerCase();
-      user.id = maxId += 1;
-    });
-    console.log(usersData);
-    
     users.push(...usersData);
     await fs.promises.writeFile(this.filePath, JSON.stringify(users, null, 2));
-    return usersData
   }
 
-  async signup(username, email, password) {
+  async signup(newUser) {
     const users = await this._fetch_users();
-
-    const userFound = users.find((user) => user.email === email || user.username === username);
-    if (userFound) {
-      return {
-        error: true,
-        existingUser: {
-          isEmailMatch: userFound.email === email,
-          isUsernameMatch: userFound.username === username
-        }
-      };
-    }
-
-    const password_hash = await bcrypt.hash(password, 10);
-    const newUser = {
-      id: uuidv4(),
-      username: username.toLowerCase(),
-      email: email.toLowerCase(),
-      password_hash: password_hash,
-      created_at: new Date(),
-      updated_at: new Date()
-    }
-
     users.push(newUser);
     await fs.promises.writeFile(this.filePath, JSON.stringify(users, null, 2));
-    return { error: false, user: newUser };
   }
 
   async deleteAllUsers() {

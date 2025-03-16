@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const { TABLE_NAMES } = require('../utils/constants');
 
 module.exports = (sequelize, DataTypes) => {
   class Comment extends Model {
@@ -24,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'movies',
+        model: TABLE_NAMES.MOVIE,
         key: 'id',
       },
       onDelete: 'CASCADE',
@@ -44,8 +45,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Comment',
-    tableName: 'comments', // Define the table name explicitly
-    underscored: true, // Use snake_case for database fields
+    tableName: TABLE_NAMES.COMMENT,
+    underscored: true,
     timestamps: false,
   });
 

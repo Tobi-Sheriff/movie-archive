@@ -1,5 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
+const { TABLE_NAMES } = require('../utils/constants');
+
 const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
@@ -50,35 +52,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
-    tableName: 'users', // Define the table name explicitly
-    underscored: true, // Use snake_case for database fields
-    timestamps: true, // Add createdAt and updatedAt fields
-    hooks: {
-      beforeCreate: async (user) => {
-        if (user.password_hash) {
-          user.password_hash = await bcrypt.hash(user.password_hash, 10);
-        }
-        try {
-          user.email = user.email.toLowerCase();
-          user.username = user.username.toLowerCase();
-        } catch {
-          console.error('Error in beforeCreate hook:', error);
-          throw new Error('Failed to convert strings to lowercase');
-        }
-      },
-      beforeUpdate: async (user) => {
-        if (user.changed('password_hash')) {
-          user.password_hash = await bcrypt.hash(user.password_hash, 10);
-        }
-        try {
-          user.email = user.email.toLowerCase();
-          user.username = user.username.toLowerCase();
-        } catch {
-          console.error('Error in beforeCreate hook:', error);
-          throw new Error('Failed to convert strings to lowercase');
-        }
-      },
-    },
+    tableName: TABLE_NAMES.USER,
+    underscored: true,
+    timestamps: true,
   });
 
   return User;
