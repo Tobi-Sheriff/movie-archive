@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { app, server } = require('../index');
+const { app } = require('../index');
 const movieService = require('../services/movieServices');
 const commentService = require('../services/commentServices');
 const { seedMoviesAndComment, destroyMoviesAndComment } = require('./seeds/seedGenerator');
