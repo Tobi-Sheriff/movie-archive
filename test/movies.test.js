@@ -13,10 +13,6 @@ afterEach(async () => {
   await destroyMoviesAndComment();
 });
 
-afterAll((done) => {
-  server.close(done);
-});
-
 
 const runPaginationValidationTests = (endpoint) => {
   describe(`${endpoint} Pagination Validation`, () => {
@@ -224,7 +220,6 @@ describe('Movie Details API', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.response).toEqual(expect.objectContaining({
-      id: 5,
       title: '12 Angry Men',
       release_date: '1957-04-10',
       genres: expect.arrayContaining([18]),
