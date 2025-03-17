@@ -1,5 +1,5 @@
 'use strict';
-const { TABLE_NAMES } = require ('../utils/constants');
+const { TABLE_NAMES } = require('../utils/constants');
 
 /** @type {import('sequelize-cli').Migration} */
 

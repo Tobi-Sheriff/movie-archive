@@ -31,8 +31,11 @@ app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).json({ error: err.message });
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
-});
-
-module.exports = { app, server };
+if (!process.env.JEST_WORKER_ID) {
+  const server = app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
+  });
+  module.exports = { server, app };
+} else {
+  module.exports = { app };
+}

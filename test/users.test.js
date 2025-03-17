@@ -11,9 +11,6 @@ afterEach(async () => {
   await destroyUsers();
 });
 
-afterAll((done) => {
-  server.close(done);
-});
 
 describe('Authentication Tests', () => {
   describe('Users Signup', () => {
