@@ -657,6 +657,6 @@ module.exports.usersData = [
   {
     "username": "existingUser",
     "email": "existingUser@example1.com",
-    "password": "passw123!!!",
+    "password": "passw1phrase",
   }
 ]
