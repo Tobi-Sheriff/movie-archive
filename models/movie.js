@@ -78,6 +78,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Movie',
+    tableName: 'movies',
+    underscored: true,
     timestamps: false,
   });
 

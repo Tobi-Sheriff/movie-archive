@@ -6,11 +6,15 @@ if (process.env.NODE_ENV === 'test') {
 
 const express = require('express');
 const moviesRoutes = require('./routes/movies');
+const authRoutes = require('./routes/auth');
+const cookieParser = require('cookie-parser');
+
 const cors = require('cors');
 
 const app = express();
 const PORT = process.env.NODE_ENV === 'test' ? 8001 : 8000;
 app.use(express.json());
+app.use(cookieParser());
 
 const corsOptions = {
   origin: process.env.URL,
@@ -20,6 +24,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use('/v1/movies', moviesRoutes);
+app.use('/auth', authRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

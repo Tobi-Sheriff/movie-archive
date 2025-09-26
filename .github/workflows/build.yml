@@ -16,6 +16,7 @@ jobs:
       DB_USER: ${{ secrets.POSTGRES_USER }}
       DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       DB_NAME: ${{ secrets.POSTGRES_DB }}
+      AUTH_TEST_PASSWORD: ${{ secrets.AUTH_TEST_PASSWORD }}
 
     services:
       postgres:
@@ -47,6 +48,7 @@ jobs:
         run: 
           PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h localhost -d $DB_NAME -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
           PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h localhost -d $DB_NAME -c "CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;"
+          PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h localhost -d $DB_NAME -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
 
 
       # Step 3: Install dependencies
@@ -57,6 +59,7 @@ jobs:
       - name: Run Jest Tests (File Storage)
         env:
           STORE_TYPE: file
+          TEST_PASSWORD: "${{env.AUTH_TEST_PASSWORD}}"
         run: npm test
 
       # Step 5: Run database migrations
@@ -71,6 +74,7 @@ jobs:
           DB_PASSWORD: "${{env.DB_PASSWORD}}"
           DB_NAME: "${{env.DB_NAME}}"
           STORE_TYPE: db
+          TEST_PASSWORD: "${{env.AUTH_TEST_PASSWORD}}"
         run: npm test
           
       # Step 7: Run Production deployment

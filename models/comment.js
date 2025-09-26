@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Movies',
+        model: 'movies',
         key: 'id',
       },
       onDelete: 'CASCADE',
@@ -44,6 +44,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Comment',
+    tableName: 'comments',
+    underscored: true,
     timestamps: false,
   });
 
