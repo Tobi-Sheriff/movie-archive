@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { app } = require('../index');
+const { app, server } = require('../index');
 const movieService = require('../services/movieServices');
 const commentService = require('../services/commentServices');
 const { seedMoviesAndComment, destroyMoviesAndComment } = require('./seeds/seedGenerator');
@@ -11,6 +11,10 @@ beforeEach(async () => {
 
 afterEach(async () => {
   await destroyMoviesAndComment();
+});
+
+afterAll((done) => {
+  server.close(done);
 });
 
 
@@ -220,6 +224,7 @@ describe('Movie Details API', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.response).toEqual(expect.objectContaining({
+      id: 5,
       title: '12 Angry Men',
       release_date: '1957-04-10',
       genres: expect.arrayContaining([18]),

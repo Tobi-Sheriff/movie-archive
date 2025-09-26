@@ -1,11 +1,9 @@
 'use strict';
-const { TABLE_NAMES } = require('../utils/constants');
-
 /** @type {import('sequelize-cli').Migration} */
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable(TABLE_NAMES.COMMENT, {
+    await queryInterface.createTable('comments', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,7 +13,7 @@ module.exports = {
       movie_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: TABLE_NAMES.MOVIE, // Reference the Movies table
+          model: 'movies', // Reference the Movies table
           key: 'id'
         },
         onDelete: 'CASCADE' // Ensures comments get deleted if the movie is deleted
@@ -34,6 +32,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable(TABLE_NAMES.COMMENT);
+    await queryInterface.dropTable('comments');
   }
 };

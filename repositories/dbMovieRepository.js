@@ -87,7 +87,7 @@ class DBMovieRepository {
   }
 
   async deleteAllMovies() {
-    await sequelize.query('TRUNCATE TABLE "movie" CASCADE');
+    await sequelize.query('TRUNCATE TABLE "movies" CASCADE');
   }
 }
 
